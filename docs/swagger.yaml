@@ -1,0 +1,481 @@
+definitions:
+  response.SwaggerErrorResponse:
+    properties:
+      code:
+        enum:
+        - 400-001
+        - 400-002
+        - 400-003
+        - 400-004
+        - 400-005
+        - 400-006
+        - 401-001
+        - 404-001
+        - 503-001
+        type: string
+      context:
+        additionalProperties: {}
+        type: object
+      message:
+        type: string
+      previousMessage:
+        type: string
+      stacktrace:
+        items:
+          type: string
+        type: array
+    required:
+    - code
+    - message
+    - stacktrace
+    type: object
+  user.EmailLoginResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  user.TokenRefreshRequest:
+    properties:
+      access_token:
+        type: string
+      device:
+        enum:
+        - web
+        - ios
+        - android
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - device
+    - refresh_token
+    type: object
+  user.TokenRefreshResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  user.UserCreateRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  user.UserLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  user.UserLogoutRequest:
+    properties:
+      device:
+        enum:
+        - web
+        - ios
+        - android
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - device
+    - refresh_token
+    type: object
+  user.UserRegisterResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  user.UserSearchData:
+    properties:
+      created_at:
+        type: string
+      email_user:
+        properties:
+          created_at:
+            type: string
+          email:
+            type: string
+          updated_at:
+            type: string
+          user_id:
+            type: integer
+        required:
+        - created_at
+        - email
+        - updated_at
+        - user_id
+        type: object
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - created_at
+    - email_user
+    - id
+    - name
+    - updated_at
+    type: object
+  user.UserSearchResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/user.UserSearchData'
+        type: array
+      last_page:
+        type: integer
+      page:
+        type: integer
+      per_page:
+        type: integer
+      total:
+        type: integer
+    required:
+    - data
+    type: object
+  user.UserUpdateRequest:
+    properties:
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Example API
+  version: "1.0"
+paths:
+  /api/oauth/{provider}/token:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: email login
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserLoginRequest'
+      - description: oauth provider
+        enum:
+        - google
+        in: path
+        name: provider
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.EmailLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+      tags:
+      - user
+  /api/ping:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+  /api/token:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: logout
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserLogoutRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: email login
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.EmailLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: refresh token
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.TokenRefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.TokenRefreshResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+      tags:
+      - user
+  /api/user:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - enum:
+        - email
+        in: query
+        name: orderBy
+        type: string
+      - in: query
+        minimum: 1
+        name: page
+        type: integer
+      - in: query
+        minimum: 1
+        name: perPage
+        type: integer
+      - description: name
+        in: query
+        name: filter.name
+        type: string
+      - description: email
+        in: query
+        name: filter.email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserSearchResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: register user
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserRegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: update user
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+      tags:
+      - user
+  /scheduler/refresh-token-record:
+    delete:
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+      tags:
+      - user
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.SwaggerErrorResponse'
+schemes:
+- http
+- https
+swagger: "2.0"
