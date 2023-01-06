@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/app/http/middleware"
+	"github.com/ChanJuiHuang/go-backend-framework/app/http/scheduler/user"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,5 +24,7 @@ func AttachSchedulerRoutes(router *gin.Engine) {
 				"message": "welcome",
 			})
 		})
+
+		schedulerRoutes.DELETE("/refresh-token-record", user.DeleteRefreshTokenRecord)
 	}
 }
