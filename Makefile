@@ -1,17 +1,17 @@
 include .env
 
-.PHONY: all run clean test
+.PHONY: all clean test
 SHELL:=/bin/bash
 SERVER_BIN:=server
 SERVER_FILE:=${PWD}/cmd/server/main.go
 
-KIT_BIN:=kit
-KIT_FILE:=${PWD}/cmd/kit/*.go
+BIN_DIR:=${PWD}/bin
+KIT_DIR:=${PWD}/cmd/kit
 
 GOFILES:=$(shell find . -type f -name "*.go")
 TAGS:="jsoniter"
 
-OBJECTS:=kit
+OBJECTS:=jwt
 
 all:${OBJECTS}
 	go build -o ${PWD}/bin/${SERVER_BIN} -v -tags ${TAGS} -ldflags "-s -w" ${SERVER_FILE}
@@ -22,8 +22,8 @@ run:
 debug-server:
 	go build -o ${PWD}/bin/${SERVER_BIN}-debug -v -race -tags ${TAGS} -gcflags="-dwarflocationlists=true" ${SERVER_FILE}
 
-kit:
-	go build -o ${PWD}/bin/${KIT_BIN} -v -race -tags ${TAGS} -ldflags "-s -w" ${KIT_FILE}
+jwt:
+	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
 clean:
 	rm -rf ${PWD}/bin/*
