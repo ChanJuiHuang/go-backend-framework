@@ -11,7 +11,7 @@ KIT_DIR:=${PWD}/cmd/kit
 GOFILES:=$(shell find . -type f -name "*.go")
 TAGS:="jsoniter"
 
-OBJECTS:=jwt
+OBJECTS:=jwt database_seeder
 
 all:${OBJECTS}
 	go build -o ${PWD}/bin/${SERVER_BIN} -v -tags ${TAGS} -ldflags "-s -w" ${SERVER_FILE}
@@ -25,17 +25,20 @@ debug-server:
 jwt:
 	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
+database_seeder:
+	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
+
 clean:
 	rm -rf ${PWD}/bin/*
 
 mysql-migration:
-	goose -dir database/migration -allow-missing -s mysql "${DB_USERNAME}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_DATABASE}?parseTime=true&loc=UTC" ${args}
+	goose -dir internal/migration -allow-missing mysql "${DB_USERNAME}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_DATABASE}?parseTime=true&loc=UTC" ${args}
 
 pgsql-migration:
-	goose -dir database/migration -allow-missing -s postgres "user=${DB_USERNAME} password=${DB_PASSWORD} host=${DB_HOST} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable" ${args}
+	goose -dir internal/migration -allow-missing postgres "user=${DB_USERNAME} password=${DB_PASSWORD} host=${DB_HOST} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable" ${args}
 
 sqlite-migration:
-	goose -dir database/migration -allow-missing -s sqlite3 ${DB_DATABASE} ${args}
+	goose -dir internal/migration -allow-missing sqlite3 ${DB_DATABASE} ${args}
 
 test:
 	$(eval args?=./test/...)
