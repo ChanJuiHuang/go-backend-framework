@@ -7,13 +7,13 @@ tmp_dir = "tmp"
 
 [build]
 # Just plain old shell command. You could use `make` as well.
-cmd = "swag init -g cmd/server/main.go && make debug-server"
+cmd = "make debug-app"
 # Binary file yields from `cmd`.
-bin = "bin/server-debug"
+bin = "bin/debug-app"
 # Customize binary, can setup environment variables when run your app.
-full_bin = "./bin/server-debug"
+full_bin = "./bin/debug-app -debug"
 # Watch these filename extensions.
-include_ext = ["go", "tpl", "tmpl", "html"]
+include_ext = ["go", "tpl", "tmpl", "html", "yaml", "yml"]
 # Ignore these filename extensions or directories.
 exclude_dir = ["bin", "database", "storage", "test", "docs"]
 # Watch these directories if you specified.
