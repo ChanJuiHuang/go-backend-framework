@@ -8,6 +8,7 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
@@ -63,6 +64,7 @@ func registerConfig(globalConfig global.Config) {
 		"redis":                        &redis.Config{},
 		"authentication.authenticator": &authentication.Config{},
 		"httpServer":                   &http.ServerConfig{},
+		"middleware.csrf":              &middleware.CsrfConfig{},
 	})
 }
 
