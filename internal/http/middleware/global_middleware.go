@@ -9,6 +9,7 @@ func AttachGlobalMiddleware(router *gin.Engine) {
 	csrfConfig := config.Registry.Get("middleware.csrf").(CsrfConfig)
 
 	handlerFunctions := []gin.HandlerFunc{
+		AccessLogger(),
 		VerifyCsrfToken(csrfConfig),
 	}
 
