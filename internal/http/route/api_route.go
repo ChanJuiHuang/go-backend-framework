@@ -3,12 +3,15 @@ package route
 import (
 	"net/http"
 
+	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route/user"
 	"github.com/gin-gonic/gin"
 )
 
 type attachApiRouteFunc func(router *gin.Engine)
 
-var apiRouteGroups = []attachApiRouteFunc{}
+var apiRouteGroups = []attachApiRouteFunc{
+	user.AttachApiRoute,
+}
 
 // @produce json
 // @success 200 {string} string "{"message": "pong"}"
