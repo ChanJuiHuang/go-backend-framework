@@ -11,7 +11,7 @@ KIT_DIR:=${PWD}/cmd/kit
 GOFILES:=$(shell find . -type f -name "*.go")
 TAGS:="jsoniter"
 
-OBJECTS:=jwt database_seeder
+OBJECTS:=jwt database_seeder http_route
 
 all:${OBJECTS}
 	go build -o ${PWD}/bin/${SERVER_BIN} -v -tags ${TAGS} -ldflags "-s -w" ${SERVER_FILE}
@@ -26,6 +26,9 @@ jwt:
 	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
 database_seeder:
+	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
+
+http_route:
 	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
 clean:
