@@ -1,4 +1,5 @@
 .vscode
 bin
 .env
+.env.testing
 .air.toml
