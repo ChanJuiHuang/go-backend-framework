@@ -65,6 +65,7 @@ func registerConfig(globalConfig global.Config) {
 		"authentication.authenticator": &authentication.Config{},
 		"httpServer":                   &http.ServerConfig{},
 		"middleware.csrf":              &middleware.CsrfConfig{},
+		"middleware.rateLimit":         &middleware.RateLimitConfig{},
 	})
 }
 
