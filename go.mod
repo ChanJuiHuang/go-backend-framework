@@ -5,6 +5,7 @@ go 1.21
 require (
 	github.com/casbin/casbin/v2 v2.77.2
 	github.com/casbin/gorm-adapter/v3 v3.19.0
+	github.com/fatih/structs v1.1.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/form/v4 v4.2.1
 	github.com/go-playground/mold/v4 v4.5.0

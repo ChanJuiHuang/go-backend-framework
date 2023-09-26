@@ -26,3 +26,15 @@ func Get(query any, args ...any) (*model.User, error) {
 
 	return user, nil
 }
+
+func Update(id uint, values map[string]any) (int, error) {
+	db := provider.Registry.DB().
+		Table("users").
+		Where("id = ?", id).
+		Updates(values)
+	if err := db.Error; err != nil {
+		return 0, errors.WithStack(err)
+	}
+
+	return int(db.RowsAffected), nil
+}
