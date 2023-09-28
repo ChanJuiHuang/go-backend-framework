@@ -51,4 +51,13 @@ func (dt *migration) Reset() {
 	if err := goose.Reset(db, dt.dir); err != nil {
 		panic(err)
 	}
+
+	err = provider.Registry.DB().Exec("DELETE FROM casbin_rules").Error
+	if err != nil {
+		panic(err)
+	}
+
+	if err := provider.Registry.Casbin().LoadPolicy(); err != nil {
+		panic(err)
+	}
 }

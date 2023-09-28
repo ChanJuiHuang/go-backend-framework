@@ -6,6 +6,7 @@ const (
 	RequestValidationFailed = "request validation failed"
 	EmailIsWrong            = "email is wrong"
 	PasswordIsWrong         = "password is wrong"
+	OneOfPolicyIsRepeat     = "one of policy is repeat"
 
 	// 401
 	Unauthorized = "Unauthorized"
@@ -25,6 +26,7 @@ var MessageToCode = map[string]string{
 	RequestValidationFailed: "400-002",
 	EmailIsWrong:            "400-003",
 	PasswordIsWrong:         "400-004",
+	OneOfPolicyIsRepeat:     "400-005",
 	Unauthorized:            "401-001",
 	Forbidden:               "403-001",
 	InternalServerError:     "500-001",

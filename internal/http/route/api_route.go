@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 
+	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route/admin"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route/user"
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +12,7 @@ type attachApiRouteFunc func(router *gin.Engine)
 
 var apiRouteGroups = []attachApiRouteFunc{
 	user.AttachApiRoute,
+	admin.AttachApiRoute,
 }
 
 // @produce json
