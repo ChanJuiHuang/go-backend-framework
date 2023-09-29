@@ -16,90 +16,8 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/oauth/{provider}/token": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "email login",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user.UserLoginRequest"
-                        }
-                    },
-                    {
-                        "enum": [
-                            "google"
-                        ],
-                        "type": "string",
-                        "description": "oauth provider",
-                        "name": "provider",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/user.EmailLoginResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/ping": {
+        "/api/admin/grouping-policy": {
             "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/token": {
-            "put": {
                 "consumes": [
                     "application/json"
                 ],
@@ -107,49 +25,40 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "admin"
                 ],
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
+                        "description": "bearer token",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
-                    },
-                    {
-                        "description": "refresh token",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user.TokenRefreshRequest"
-                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.TokenRefreshResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/admin.AdminGetGroupingPolicyResponse"
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "code: 401-001(access token is wrong)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
-                    "503": {
-                        "description": "Service Unavailable",
+                    "403": {
+                        "description": "code: 403-001(casbin authorization failed)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -162,7 +71,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "admin"
                 ],
                 "parameters": [
                     {
@@ -173,12 +82,19 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "email login",
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create grouping policy",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UserLoginRequest"
+                            "$ref": "#/definitions/admin.AdminCreateGroupingPolicyRequest"
                         }
                     }
                 ],
@@ -186,25 +102,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.EmailLoginResponse"
+                            "$ref": "#/definitions/admin.AdminCreateGroupingPolicyResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "code: 400-001(add grouping policy is failed), 400-002(request validation failed)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
-                    "503": {
-                        "description": "Service Unavailable",
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -217,7 +139,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "admin"
                 ],
                 "parameters": [
                     {
@@ -228,41 +150,253 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "logout",
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "delete grouping policy",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UserLogoutRequest"
+                            "$ref": "#/definitions/admin.AdminDeleteGroupingPolicyRequest"
                         }
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "No Content"
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminDeleteGroupingPolicyResponse"
+                        }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "code: 400-001(delete grouping policy failed), 400-002(request validation failed)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "code: 401-001(access token is wrong)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
-                    "503": {
-                        "description": "Service Unavailable",
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
             }
         },
-        "/api/user": {
+        "/api/admin/policy": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create policy",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminCreatePolicyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminCreatePolicyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(add policy is failed), 400-002(request validation failed), 400-005(one of policy is repeat)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "delete policy",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminDeletePolicyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminDeletePolicyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(delete policy failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/policy/reload": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "no content"
+                    },
+                    "400": {
+                        "description": "code: 400-001(load policy is failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/policy/subject": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -271,63 +405,178 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "admin"
                 ],
                 "parameters": [
                     {
-                        "enum": [
-                            "email"
-                        ],
                         "type": "string",
-                        "name": "orderBy",
-                        "in": "query"
-                    },
-                    {
-                        "minimum": 1,
-                        "type": "integer",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "minimum": 1,
-                        "type": "integer",
-                        "name": "perPage",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "name",
-                        "name": "filter.name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "email",
-                        "name": "filter.email",
-                        "in": "query"
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserSearchResponse"
+                            "$ref": "#/definitions/admin.AdminSearchPolicySubjectResponse"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
-                    "503": {
-                        "description": "Service Unavailable",
+                    "403": {
+                        "description": "code: 403-001(casbin authorization failed)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
             },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "delete policy subject",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminDeletePolicySubjectRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminDeletePolicySubjectResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/policy/subject/{subject}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "subject",
+                        "name": "subject",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminGetPolicySubjectResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ping": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"pong\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user": {
             "put": {
                 "consumes": [
                     "application/json"
@@ -343,6 +592,13 @@ const docTemplate = `{
                         "type": "string",
                         "description": "csrf token",
                         "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
@@ -357,29 +613,139 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "No Content"
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.UserUpdateResponse"
+                        }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "code: 400-001(update user failed, get user failed), 400-002(request validation failed)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "code: 401-001(access token is wrong)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
-                    "503": {
-                        "description": "Service Unavailable",
+                    "500": {
+                        "description": "code: 500-001",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/user/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "login user",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.UserLoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(issue access token failed, issue refresh token failed), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/me": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.UserMeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(get user failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/register": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -404,7 +770,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UserCreateRequest"
+                            "$ref": "#/definitions/user.UserRegisterRequest"
                         }
                     }
                 ],
@@ -416,61 +782,21 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "code: 400-001(issue access token failed, issue refresh token failed), 400-002(request validation failed)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
-                    "503": {
-                        "description": "Service Unavailable",
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch)",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/scheduler/refresh-token-record": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "500": {
+                        "description": "code: 500-001",
                         "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/response.SwaggerErrorResponse"
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     }
                 }
@@ -478,37 +804,260 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "response.SwaggerErrorResponse": {
+        "admin.AdminCreateGroupingPolicyRequest": {
             "type": "object",
             "required": [
-                "code",
-                "message",
+                "subjects",
+                "user_id"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin.AdminCreateGroupingPolicyResponse": {
+            "type": "object",
+            "required": [
+                "subjects",
+                "user_id"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin.AdminCreatePolicyRequest": {
+            "type": "object",
+            "required": [
+                "rules",
+                "subject"
+            ],
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin.Rule"
+                    }
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin.AdminCreatePolicyResponse": {
+            "type": "object",
+            "required": [
+                "rules",
+                "subject"
+            ],
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin.Rule"
+                    }
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin.AdminDeleteGroupingPolicyRequest": {
+            "type": "object",
+            "required": [
+                "subjects",
+                "user_id"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin.AdminDeleteGroupingPolicyResponse": {
+            "type": "object",
+            "required": [
+                "subjects",
+                "user_id"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin.AdminDeletePolicyRequest": {
+            "type": "object",
+            "required": [
+                "rules",
+                "subject"
+            ],
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin.Rule"
+                    }
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin.AdminDeletePolicyResponse": {
+            "type": "object",
+            "required": [
+                "rules",
+                "subject"
+            ],
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin.Rule"
+                    }
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin.AdminDeletePolicySubjectRequest": {
+            "type": "object",
+            "required": [
+                "subjects"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "admin.AdminDeletePolicySubjectResponse": {
+            "type": "object",
+            "required": [
+                "subjects"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "admin.AdminGetGroupingPolicyResponse": {
+            "type": "object",
+            "required": [
+                "subjects",
+                "user_id"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin.AdminGetPolicySubjectResponse": {
+            "type": "object",
+            "required": [
+                "rules",
+                "subject"
+            ],
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/admin.Rule"
+                    }
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "admin.AdminSearchPolicySubjectResponse": {
+            "type": "object",
+            "required": [
+                "subjects"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "admin.Rule": {
+            "type": "object",
+            "required": [
+                "action",
+                "object"
+            ],
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "enum": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE"
+                    ]
+                },
+                "object": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.Debug": {
+            "type": "object",
+            "required": [
+                "error",
                 "stacktrace"
             ],
             "properties": {
-                "code": {
+                "error": {
                     "type": "string",
-                    "enum": [
-                        "400-001",
-                        "400-002",
-                        "400-003",
-                        "400-004",
-                        "400-005",
-                        "400-006",
-                        "401-001",
-                        "404-001",
-                        "503-001"
-                    ]
-                },
-                "context": {
-                    "type": "object",
-                    "additionalProperties": {}
-                },
-                "message": {
-                    "type": "string"
-                },
-                "previousMessage": {
-                    "type": "string"
+                    "example": "error message"
                 },
                 "stacktrace": {
                     "type": "array",
@@ -518,76 +1067,25 @@ const docTemplate = `{
                 }
             }
         },
-        "user.EmailLoginResponse": {
+        "response.ErrorResponse": {
             "type": "object",
             "required": [
-                "access_token",
-                "refresh_token"
+                "code",
+                "message"
             ],
             "properties": {
-                "access_token": {
+                "code": {
                     "type": "string"
                 },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.TokenRefreshRequest": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "device",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
+                "context": {
+                    "type": "object",
+                    "additionalProperties": {}
                 },
-                "device": {
-                    "type": "string",
-                    "enum": [
-                        "web",
-                        "ios",
-                        "android"
-                    ]
+                "debug": {
+                    "$ref": "#/definitions/response.Debug"
                 },
-                "refresh_token": {
+                "message": {
                     "type": "string"
-                }
-            }
-        },
-        "user.TokenRefreshResponse": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UserCreateRequest": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "minLength": 8
                 }
             }
         },
@@ -606,23 +1104,65 @@ const docTemplate = `{
                 }
             }
         },
-        "user.UserLogoutRequest": {
+        "user.UserLoginResponse": {
             "type": "object",
             "required": [
-                "device",
+                "access_token",
                 "refresh_token"
             ],
             "properties": {
-                "device": {
-                    "type": "string",
-                    "enum": [
-                        "web",
-                        "ios",
-                        "android"
-                    ]
+                "access_token": {
+                    "type": "string"
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "user.UserMeResponse": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "email",
+                "id",
+                "name",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UserRegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
                 }
             }
         },
@@ -641,11 +1181,26 @@ const docTemplate = `{
                 }
             }
         },
-        "user.UserSearchData": {
+        "user.UserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                }
+            }
+        },
+        "user.UserUpdateResponse": {
             "type": "object",
             "required": [
                 "created_at",
-                "email_user",
+                "email",
                 "id",
                 "name",
                 "updated_at"
@@ -654,28 +1209,8 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
-                "email_user": {
-                    "type": "object",
-                    "required": [
-                        "created_at",
-                        "email",
-                        "updated_at",
-                        "user_id"
-                    ],
-                    "properties": {
-                        "created_at": {
-                            "type": "string"
-                        },
-                        "email": {
-                            "type": "string"
-                        },
-                        "updated_at": {
-                            "type": "string"
-                        },
-                        "user_id": {
-                            "type": "integer"
-                        }
-                    }
+                "email": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -685,44 +1220,6 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
-                }
-            }
-        },
-        "user.UserSearchResponse": {
-            "type": "object",
-            "required": [
-                "data"
-            ],
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/user.UserSearchData"
-                    }
-                },
-                "last_page": {
-                    "type": "integer"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "per_page": {
-                    "type": "integer"
-                },
-                "total": {
-                    "type": "integer"
-                }
-            }
-        },
-        "user.UserUpdateRequest": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "minLength": 8
                 }
             }
         }
