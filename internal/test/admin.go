@@ -60,6 +60,7 @@ func AdminAddPolicies() {
 	policies := [][]string{
 		{"admin", "/api/admin/policy", "POST"},
 		{"admin", "/api/admin/policy/subject", "GET"},
+		{"admin", "/api/admin/policy/subject/:subject", "GET"},
 	}
 	result, err := provider.Registry.Casbin().AddPolicies(policies)
 	if err != nil {
