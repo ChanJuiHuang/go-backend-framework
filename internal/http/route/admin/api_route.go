@@ -40,4 +40,12 @@ func AttachApiRoute(router *gin.Engine) {
 			admin.DeletePolicySubject,
 		)
 	}
+	{
+		adminRouter.POST(
+			"/grouping-policy",
+			middleware.Authenticate(),
+			middleware.Authorize(),
+			admin.CreateGroupingPolicy,
+		)
+	}
 }

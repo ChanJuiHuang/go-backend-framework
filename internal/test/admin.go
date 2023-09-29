@@ -63,6 +63,7 @@ func AdminAddPolicies() {
 		{"admin", "/api/admin/policy/subject", "GET"},
 		{"admin", "/api/admin/policy/subject/:subject", "GET"},
 		{"admin", "/api/admin/policy/subject", "DELETE"},
+		{"admin", "/api/admin/grouping-policy", "POST"},
 	}
 	result, err := provider.Registry.Casbin().AddPolicies(policies)
 	if err != nil {
