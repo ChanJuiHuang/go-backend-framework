@@ -15,5 +15,11 @@ func AttachApiRoute(router *gin.Engine) {
 			middleware.Authorize(),
 			admin.CreatePolicy,
 		)
+		adminRouter.GET(
+			"/policy/subject",
+			middleware.Authenticate(),
+			middleware.Authorize(),
+			admin.SearchPolicySubject,
+		)
 	}
 }
