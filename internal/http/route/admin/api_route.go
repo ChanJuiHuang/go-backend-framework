@@ -15,6 +15,12 @@ func AttachApiRoute(router *gin.Engine) {
 			middleware.Authorize(),
 			admin.CreatePolicy,
 		)
+		adminRouter.DELETE(
+			"/policy",
+			middleware.Authenticate(),
+			middleware.Authorize(),
+			admin.DeletePolicy,
+		)
 		adminRouter.GET(
 			"/policy/subject",
 			middleware.Authenticate(),

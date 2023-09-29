@@ -59,6 +59,7 @@ func AdminLogin() (string, string) {
 func AdminAddPolicies() {
 	policies := [][]string{
 		{"admin", "/api/admin/policy", "POST"},
+		{"admin", "/api/admin/policy", "DELETE"},
 		{"admin", "/api/admin/policy/subject", "GET"},
 		{"admin", "/api/admin/policy/subject/:subject", "GET"},
 		{"admin", "/api/admin/policy/subject", "DELETE"},
