@@ -47,5 +47,11 @@ func AttachApiRoute(router *gin.Engine) {
 			middleware.Authorize(),
 			admin.CreateGroupingPolicy,
 		)
+		adminRouter.GET(
+			"/grouping-policy/:userId",
+			middleware.Authenticate(),
+			middleware.Authorize(),
+			admin.GetGroupingPolicy,
+		)
 	}
 }
