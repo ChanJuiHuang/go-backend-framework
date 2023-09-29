@@ -53,5 +53,11 @@ func AttachApiRoute(router *gin.Engine) {
 			middleware.Authorize(),
 			admin.GetGroupingPolicy,
 		)
+		adminRouter.DELETE(
+			"/grouping-policy",
+			middleware.Authenticate(),
+			middleware.Authorize(),
+			admin.DeleteGroupingPolicy,
+		)
 	}
 }
