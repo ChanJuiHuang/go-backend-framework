@@ -63,6 +63,7 @@ func AdminAddPolicies() {
 		{"admin", "/api/admin/policy/subject", "GET"},
 		{"admin", "/api/admin/policy/subject/:subject", "GET"},
 		{"admin", "/api/admin/policy/subject", "DELETE"},
+		{"admin", "/api/admin/policy/reload", "POST"},
 		{"admin", "/api/admin/grouping-policy", "POST"},
 		{"admin", "/api/admin/grouping-policy/:userId", "GET"},
 		{"admin", "/api/admin/grouping-policy", "DELETE"},

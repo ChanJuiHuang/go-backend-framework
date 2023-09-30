@@ -39,6 +39,12 @@ func AttachApiRoute(router *gin.Engine) {
 			middleware.Authorize(),
 			admin.DeletePolicySubject,
 		)
+		adminRouter.POST(
+			"/policy/reload",
+			middleware.Authenticate(),
+			middleware.Authorize(),
+			admin.ReloadPolicy,
+		)
 	}
 	{
 		adminRouter.POST(
