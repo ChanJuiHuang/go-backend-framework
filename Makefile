@@ -14,7 +14,7 @@ APP_BIN:=app
 GOFILES:=$(shell find . -type f -name "*.go")
 TAGS:="jsoniter"
 
-OBJECTS:=jwt database_seeder http_route
+OBJECTS:=jwt database_seeder http_route policy_seeder
 
 all:${OBJECTS}
 	go build -o ${BIN_DIR}/${APP_BIN} -v -tags ${TAGS} -ldflags "-s -w" ${APP_DIR}
@@ -32,6 +32,9 @@ database_seeder:
 	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
 http_route:
+	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
+
+policy_seeder:
 	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
 clean:
