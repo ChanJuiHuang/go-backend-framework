@@ -1,46 +1,61 @@
 include .env
 
-.PHONY: all run clean test
+.PHONY: all clean test
 SHELL:=/bin/bash
-SERVER_BIN:=server
-SERVER_FILE:=${PWD}/cmd/server/main.go
 
-KIT_BIN:=kit
-KIT_FILE:=${PWD}/cmd/kit/*.go
+BIN_DIR:=${PWD}/bin
+CMD_DIR:=${PWD}/cmd
+KIT_DIR:=${CMD_DIR}/kit
+
+APP_DIR:=${CMD_DIR}/app
+APP_BIN:=app
+
 
 GOFILES:=$(shell find . -type f -name "*.go")
 TAGS:="jsoniter"
 
-OBJECTS:=kit
+OBJECTS:=jwt database_seeder http_route policy_seeder
 
 all:${OBJECTS}
-	go build -o ${PWD}/bin/${SERVER_BIN} -v -tags ${TAGS} -ldflags "-s -w" ${SERVER_FILE}
+	go build -o ${BIN_DIR}/${APP_BIN} -v -tags ${TAGS} -ldflags "-s -w" ${APP_DIR}
 
 run:
-	go run -race -tags ${TAGS} ${SERVER_FILE}
+	go run -race -tags ${TAGS} ${APP_DIR}
 
-debug-server:
-	go build -o ${PWD}/bin/${SERVER_BIN}-debug -v -race -tags ${TAGS} -gcflags="-dwarflocationlists=true" ${SERVER_FILE}
+debug-app:
+	go build -o ${BIN_DIR}/$@ -v -race -tags ${TAGS} ${APP_DIR}
 
-kit:
-	go build -o ${PWD}/bin/${KIT_BIN} -v -race -tags ${TAGS} -ldflags "-s -w" ${KIT_FILE}
+jwt:
+	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
+
+database_seeder:
+	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
+
+http_route:
+	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
+
+policy_seeder:
+	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
 clean:
-	rm -rf ${PWD}/bin/*
+	rm -rf ${BIN_DIR}
 
 mysql-migration:
-	goose -dir database/migration -allow-missing -s mysql "${DB_USERNAME}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_DATABASE}?parseTime=true&loc=UTC" ${args}
+	goose -dir internal/migration -allow-missing mysql "${DB_USERNAME}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_DATABASE}?parseTime=true&loc=UTC" ${args}
 
 pgsql-migration:
-	goose -dir database/migration -allow-missing -s postgres "user=${DB_USERNAME} password=${DB_PASSWORD} host=${DB_HOST} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable" ${args}
+	goose -dir internal/migration -allow-missing postgres "user=${DB_USERNAME} password=${DB_PASSWORD} host=${DB_HOST} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable" ${args}
 
 sqlite-migration:
-	goose -dir database/migration -allow-missing -s sqlite3 ${DB_DATABASE} ${args}
+	goose -dir internal/migration -allow-missing sqlite3 ${DB_DATABASE} ${args}
+
+swagger:
+	swag init -g cmd/app/main.go
 
 test:
-	$(eval args?=./test/...)
+	$(eval args?=./...)
 	go test ${args}
 
 benchmark:
-	$(eval args?=./test/...)
+	$(eval args?=./...)
 	go test -bench=. -run=none -benchmem ${args}

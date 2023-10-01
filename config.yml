@@ -1,0 +1,62 @@
+logger:
+  # log type can be [console], [file]
+  type: console
+  console:
+    level: debug
+  file:
+    logPath: storage/log/app.log
+    # the unit of max size is byte
+    maxSize: 104857600
+    maxBackups: 30
+    maxAge: 720h
+    compress: false
+    # log level can be [debug], [info], [warn], [error], [dpanic], [panic], [fatal]
+    level: debug
+
+database:
+  driver: mysql
+  username: ${DB_USERNAME}
+  password: ${DB_PASSWORD}
+  host: ${DB_HOST}
+  port: ${DB_PORT}
+  database: ${DB_DATABASE}
+  maxOpenConns: 50
+  maxIdleConns: 20
+  connMaxLifetime: 2h
+  # log level can be [info], [warn], [error], [silent]
+  logLevel: info
+
+authentication:
+  authenticator:
+    privateKey: ${JWT_PRIVATE_KEY}
+    publicKey: ${JWT_PUBLIC_KEY}
+    accessTokenLifeTime: 24h
+    refreshTokenLifeTime: 336h
+
+redis:
+  address: ${REDIS_ADDRESS}
+  password: ${REDIS_PASSWORD}
+  db: 0
+  minIdleConns: 10
+  connMaxLifetime: 2h
+
+httpServer:
+  address: ${HTTP_ADDRESS}
+  gracefulShutdownTtl: 30s
+
+middleware:
+  csrf:
+    cookie:
+      name: "XSRF-TOKEN"
+      path: "/"
+      domain: ""
+      maxAge: 3600
+      secure: false
+      httpOnly: false
+      # SameSiteDefaultMode = 1, SameSiteLaxMode = 2, SameSiteStrictMode = 3, SameSiteNoneMode = 4
+      sameSite: 2
+    header: "X-XSRF-TOKEN"
+  rateLimit:
+    # if put token rate is [100] that mean [every 1 second] put [100] tokens to the bucket
+    putTokenRate: 2000
+    burstNumber: 10000

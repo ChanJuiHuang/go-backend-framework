@@ -1,83 +1,194 @@
 definitions:
-  response.SwaggerErrorResponse:
+  admin.AdminCreateGroupingPolicyRequest:
     properties:
-      code:
+      subjects:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    required:
+    - subjects
+    - user_id
+    type: object
+  admin.AdminCreateGroupingPolicyResponse:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    required:
+    - subjects
+    - user_id
+    type: object
+  admin.AdminCreatePolicyRequest:
+    properties:
+      rules:
+        items:
+          $ref: '#/definitions/admin.Rule'
+        type: array
+      subject:
+        type: string
+    required:
+    - rules
+    - subject
+    type: object
+  admin.AdminCreatePolicyResponse:
+    properties:
+      rules:
+        items:
+          $ref: '#/definitions/admin.Rule'
+        type: array
+      subject:
+        type: string
+    required:
+    - rules
+    - subject
+    type: object
+  admin.AdminDeleteGroupingPolicyRequest:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    required:
+    - subjects
+    - user_id
+    type: object
+  admin.AdminDeleteGroupingPolicyResponse:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    required:
+    - subjects
+    - user_id
+    type: object
+  admin.AdminDeletePolicyRequest:
+    properties:
+      rules:
+        items:
+          $ref: '#/definitions/admin.Rule'
+        type: array
+      subject:
+        type: string
+    required:
+    - rules
+    - subject
+    type: object
+  admin.AdminDeletePolicyResponse:
+    properties:
+      rules:
+        items:
+          $ref: '#/definitions/admin.Rule'
+        type: array
+      subject:
+        type: string
+    required:
+    - rules
+    - subject
+    type: object
+  admin.AdminDeletePolicySubjectRequest:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+    required:
+    - subjects
+    type: object
+  admin.AdminDeletePolicySubjectResponse:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+    required:
+    - subjects
+    type: object
+  admin.AdminGetGroupingPolicyResponse:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    required:
+    - subjects
+    - user_id
+    type: object
+  admin.AdminGetPolicySubjectResponse:
+    properties:
+      rules:
+        items:
+          $ref: '#/definitions/admin.Rule'
+        type: array
+      subject:
+        type: string
+    required:
+    - rules
+    - subject
+    type: object
+  admin.AdminSearchPolicySubjectResponse:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+    required:
+    - subjects
+    type: object
+  admin.Rule:
+    properties:
+      action:
         enum:
-        - 400-001
-        - 400-002
-        - 400-003
-        - 400-004
-        - 400-005
-        - 400-006
-        - 401-001
-        - 404-001
-        - 503-001
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
         type: string
-      context:
-        additionalProperties: {}
-        type: object
-      message:
+      object:
         type: string
-      previousMessage:
+    required:
+    - action
+    - object
+    type: object
+  response.Debug:
+    properties:
+      error:
+        example: error message
         type: string
       stacktrace:
         items:
           type: string
         type: array
     required:
-    - code
-    - message
+    - error
     - stacktrace
     type: object
-  user.EmailLoginResponse:
+  response.ErrorResponse:
     properties:
-      access_token:
+      code:
         type: string
-      refresh_token:
+      context:
+        additionalProperties: {}
+        type: object
+      debug:
+        $ref: '#/definitions/response.Debug'
+      message:
         type: string
     required:
-    - access_token
-    - refresh_token
-    type: object
-  user.TokenRefreshRequest:
-    properties:
-      access_token:
-        type: string
-      device:
-        enum:
-        - web
-        - ios
-        - android
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - device
-    - refresh_token
-    type: object
-  user.TokenRefreshResponse:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
-    type: object
-  user.UserCreateRequest:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      password:
-        minLength: 8
-        type: string
-    required:
-    - email
-    - password
+    - code
+    - message
     type: object
   user.UserLoginRequest:
     properties:
@@ -89,19 +200,48 @@ definitions:
     - email
     - password
     type: object
-  user.UserLogoutRequest:
+  user.UserLoginResponse:
     properties:
-      device:
-        enum:
-        - web
-        - ios
-        - android
+      access_token:
         type: string
       refresh_token:
         type: string
     required:
-    - device
+    - access_token
     - refresh_token
+    type: object
+  user.UserMeResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - created_at
+    - email
+    - id
+    - name
+    - updated_at
+    type: object
+  user.UserRegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - name
+    - password
     type: object
   user.UserRegisterResponse:
     properties:
@@ -113,26 +253,22 @@ definitions:
     - access_token
     - refresh_token
     type: object
-  user.UserSearchData:
+  user.UserUpdateRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    type: object
+  user.UserUpdateResponse:
     properties:
       created_at:
         type: string
-      email_user:
-        properties:
-          created_at:
-            type: string
-          email:
-            type: string
-          updated_at:
-            type: string
-          user_id:
-            type: integer
-        required:
-        - created_at
-        - email
-        - updated_at
-        - user_id
-        type: object
+      email:
+        type: string
       id:
         type: integer
       name:
@@ -141,35 +277,10 @@ definitions:
         type: string
     required:
     - created_at
-    - email_user
+    - email
     - id
     - name
     - updated_at
-    type: object
-  user.UserSearchResponse:
-    properties:
-      data:
-        items:
-          $ref: '#/definitions/user.UserSearchData'
-        type: array
-      last_page:
-        type: integer
-      page:
-        type: integer
-      per_page:
-        type: integer
-      total:
-        type: integer
-    required:
-    - data
-    type: object
-  user.UserUpdateRequest:
-    properties:
-      name:
-        type: string
-      password:
-        minLength: 8
-        type: string
     type: object
 host: localhost:8080
 info:
@@ -177,60 +288,7 @@ info:
   title: Example API
   version: "1.0"
 paths:
-  /api/oauth/{provider}/token:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: csrf token
-        in: header
-        name: X-XSRF-TOKEN
-        required: true
-        type: string
-      - description: email login
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/user.UserLoginRequest'
-      - description: oauth provider
-        enum:
-        - google
-        in: path
-        name: provider
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user.EmailLoginResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-      tags:
-      - user
-  /api/ping:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-  /api/token:
+  /api/admin/grouping-policy:
     delete:
       consumes:
       - application/json
@@ -240,31 +298,73 @@ paths:
         name: X-XSRF-TOKEN
         required: true
         type: string
-      - description: logout
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete grouping policy
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/user.UserLogoutRequest'
+          $ref: '#/definitions/admin.AdminDeleteGroupingPolicyRequest'
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin.AdminDeleteGroupingPolicyResponse'
         "400":
-          description: Bad Request
+          description: 'code: 400-001(delete grouping policy failed), 400-002(request
+            validation failed)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
+            $ref: '#/definitions/response.ErrorResponse'
         "401":
-          description: Unauthorized
+          description: 'code: 401-001(access token is wrong)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "503":
-          description: Service Unavailable
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       tags:
-      - user
+      - admin
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin.AdminGetGroupingPolicyResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin
     post:
       consumes:
       - application/json
@@ -274,7 +374,345 @@ paths:
         name: X-XSRF-TOKEN
         required: true
         type: string
-      - description: email login
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create grouping policy
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/admin.AdminCreateGroupingPolicyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin.AdminCreateGroupingPolicyResponse'
+        "400":
+          description: 'code: 400-001(add grouping policy is failed), 400-002(request
+            validation failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin
+  /api/admin/policy:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete policy
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/admin.AdminDeletePolicyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin.AdminDeletePolicyResponse'
+        "400":
+          description: 'code: 400-001(delete policy failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create policy
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/admin.AdminCreatePolicyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin.AdminCreatePolicyResponse'
+        "400":
+          description: 'code: 400-001(add policy is failed), 400-002(request validation
+            failed), 400-005(one of policy is repeat)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin
+  /api/admin/policy/reload:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: no content
+        "400":
+          description: 'code: 400-001(load policy is failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin
+  /api/admin/policy/subject:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete policy subject
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/admin.AdminDeletePolicySubjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin.AdminDeletePolicySubjectResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin.AdminSearchPolicySubjectResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin
+  /api/admin/policy/subject/{subject}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: subject
+        in: path
+        name: subject
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin.AdminGetPolicySubjectResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin
+  /api/ping:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "pong"}'
+          schema:
+            type: string
+  /api/user:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update user
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserUpdateResponse'
+        "400":
+          description: 'code: 400-001(update user failed, get user failed), 400-002(request
+            validation failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - user
+  /api/user/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: login user
         in: body
         name: request
         required: true
@@ -286,82 +724,32 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.EmailLoginResponse'
+            $ref: '#/definitions/user.UserLoginResponse'
         "400":
-          description: Bad Request
+          description: 'code: 400-001(issue access token failed, issue refresh token
+            failed), 400-002(request validation failed), 400-003(email is wrong),
+            400-004(password is wrong)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "404":
-          description: Not Found
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "503":
-          description: Service Unavailable
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
+            $ref: '#/definitions/response.ErrorResponse'
       tags:
       - user
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: csrf token
-        in: header
-        name: X-XSRF-TOKEN
-        required: true
-        type: string
-      - description: refresh token
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/user.TokenRefreshRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user.TokenRefreshResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-      tags:
-      - user
-  /api/user:
+  /api/user/me:
     get:
       consumes:
       - application/json
       parameters:
-      - enum:
-        - email
-        in: query
-        name: orderBy
-        type: string
-      - in: query
-        minimum: 1
-        name: page
-        type: integer
-      - in: query
-        minimum: 1
-        name: perPage
-        type: integer
-      - description: name
-        in: query
-        name: filter.name
-        type: string
-      - description: email
-        in: query
-        name: filter.email
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
         type: string
       produces:
       - application/json
@@ -369,17 +757,22 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserSearchResponse'
+            $ref: '#/definitions/user.UserMeResponse'
         "400":
-          description: Bad Request
+          description: 'code: 400-001(get user failed)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "503":
-          description: Service Unavailable
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       tags:
       - user
+  /api/user/register:
     post:
       consumes:
       - application/json
@@ -394,7 +787,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/user.UserCreateRequest'
+          $ref: '#/definitions/user.UserRegisterRequest'
       produces:
       - application/json
       responses:
@@ -403,78 +796,20 @@ paths:
           schema:
             $ref: '#/definitions/user.UserRegisterResponse'
         "400":
-          description: Bad Request
+          description: 'code: 400-001(issue access token failed, issue refresh token
+            failed), 400-002(request validation failed)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "503":
-          description: Service Unavailable
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch)'
           schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       tags:
       - user
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: csrf token
-        in: header
-        name: X-XSRF-TOKEN
-        required: true
-        type: string
-      - description: update user
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/user.UserUpdateRequest'
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-      tags:
-      - user
-  /scheduler/refresh-token-record:
-    delete:
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
-      tags:
-      - user
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/response.SwaggerErrorResponse'
 schemes:
 - http
 - https
