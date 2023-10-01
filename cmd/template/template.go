@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -16,5 +14,4 @@ func init() {
 }
 
 func main() {
-	fmt.Println(123)
 }
