@@ -4,7 +4,7 @@
 ### Download go-backend-framework installer and install framework
 You can see the whole versions in [release page](https://github.com/ChanJuiHuang/go-backend-framework/releases).
 ```bash
-VERSION=<version-id> # ex: VERSION=2.0.2
+VERSION=<version-id> # ex: VERSION=2.X.X
 curl -L https://github.com/ChanJuiHuang/go-backend-framework/archive/refs/tags/v$VERSION.tar.gz | tar -zxv --strip-components=1 go-backend-framework-$VERSION/gbf-installer.sh
 ./gbf-installer.sh
 
