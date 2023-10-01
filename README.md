@@ -3,7 +3,7 @@
 ## Quick Start
 ### Download go-backend-framework installer and install framework
 ```bash
-VERSION=<version-id> # ex: VERSION=1.0.0
+VERSION=<version-id> # ex: VERSION=2.0.0
 curl -L https://github.com/ChanJuiHuang/go-backend-framework/archive/refs/tags/v$VERSION.tar.gz | tar -zxv --strip-components=1 go-backend-framework-$VERSION/gbf-installer.sh
 ./gbf-installer.sh
 
@@ -18,12 +18,14 @@ cd <project-name> && make
 
 ### Set .env
 1. fill the db environment variable in [.env] file
-2. execute the [./bin/seeder]
-3. execute the [./bin/policy_seeder]
-4. execute the [./bin/jwt]
+2. make mysql-migration args=up
+3. execute the [./bin/database_seeder]
+4. execute the [./bin/policy_seeder]
+5. execute the [./bin/jwt]
+6. execute the [./bin/jwt -env=.env.testing]
 
 ### Run test case
-1. cd \<project-name\> && make test
+1. make test
 
 ### Run the app
 1. go run cmd/app/*
