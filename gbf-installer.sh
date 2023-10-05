@@ -10,6 +10,7 @@ read VERSION
 
 curl -L https://github.com/ChanJuiHuang/go-backend-framework/archive/refs/tags/v$VERSION.tar.gz | tar -zxv -C $PROJECT_NAME --strip-components=1
 cd $PROJECT_NAME
+rm LICENSE
 cp .env.example .env
 cp .env.testing.example .env.testing
 cp .air.exmaple.toml .air.toml
