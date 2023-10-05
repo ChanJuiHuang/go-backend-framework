@@ -5,7 +5,7 @@ read PROJECT_NAME
 PROJECT_NAME=${PROJECT_NAME:=go-backend}
 mkdir $PROJECT_NAME
 
-printf "Enter the framework version what you want(EX: 2.0.0):"
+printf "Enter the framework version what you want (release page: https://github.com/ChanJuiHuang/go-backend-framework/releases ):"
 read VERSION
 
 curl -L https://github.com/ChanJuiHuang/go-backend-framework/archive/refs/tags/v$VERSION.tar.gz | tar -zxv -C $PROJECT_NAME --strip-components=1
