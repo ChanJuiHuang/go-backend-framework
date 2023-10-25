@@ -40,22 +40,23 @@ redis:
   minIdleConns: 10
   connMaxLifetime: 2h
 
-http:
+httpServer:
   address: ${HTTP_ADDRESS}
   gracefulShutdownTtl: 30s
-  middleware:
-    csrf:
-      cookie:
-        name: "XSRF-TOKEN"
-        path: "/"
-        domain: ""
-        maxAge: 3600
-        secure: true
-        httpOnly: false
-        # SameSiteDefaultMode = 1, SameSiteLaxMode = 2, SameSiteStrictMode = 3, SameSiteNoneMode = 4
-        sameSite: 2
-      header: "X-XSRF-TOKEN"
-    rateLimit:
-      # if put token rate is [100] that mean [every 1 second] put [100] tokens to the bucket
-      putTokenRate: 2000
-      burstNumber: 10000
+
+middleware:
+  csrf:
+    cookie:
+      name: "XSRF-TOKEN"
+      path: "/"
+      domain: ""
+      maxAge: 3600
+      secure: true
+      httpOnly: false
+      # SameSiteDefaultMode = 1, SameSiteLaxMode = 2, SameSiteStrictMode = 3, SameSiteNoneMode = 4
+      sameSite: 2
+    header: "X-XSRF-TOKEN"
+  rateLimit:
+    # if put token rate is [100] that mean [every 1 second] put [100] tokens to the bucket
+    putTokenRate: 2000
+    burstNumber: 10000
