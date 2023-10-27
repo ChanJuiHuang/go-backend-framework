@@ -6,14 +6,20 @@ import (
 
 type runSeederFunc func(tx *gorm.DB) error
 
-func Run(db *gorm.DB) {
-	runSeederFuncs := []runSeederFunc{
-		runUserSeeder,
+func Run(db *gorm.DB, seeders []string) {
+	runSeederFuncs := map[string]runSeederFunc{
+		"user": runUserSeeder,
+	}
+	if len(seeders) == 1 && seeders[0] == "" {
+		seeders = make([]string, 0, len(runSeederFuncs))
+		for seeder := range runSeederFuncs {
+			seeders = append(seeders, seeder)
+		}
 	}
 
 	err := db.Transaction(func(tx *gorm.DB) error {
-		for _, runSeeder := range runSeederFuncs {
-			if err := runSeeder(tx); err != nil {
+		for _, seeder := range seeders {
+			if err := runSeederFuncs[seeder](tx); err != nil {
 				return err
 			}
 		}
