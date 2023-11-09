@@ -2,7 +2,6 @@ package pagination
 
 import (
 	"math"
-	"strings"
 
 	"gorm.io/gorm"
 )
@@ -58,13 +57,9 @@ func (p *Paginator) AddWhereConditions(wm map[string]any) *Paginator {
 }
 
 func (p *Paginator) OrderBy(orderBy string) *Paginator {
-	order := strings.Trim(orderBy, "-")
-	order, ok := p.orders[order]
+	order, ok := p.orders[orderBy]
 	if !ok {
 		return p
-	}
-	if strings.HasPrefix(orderBy, "-") {
-		order = order + " DESC"
 	}
 	p.db.Order(order)
 
