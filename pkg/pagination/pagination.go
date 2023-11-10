@@ -2,7 +2,6 @@ package pagination
 
 import (
 	"math"
-	"strings"
 
 	"gorm.io/gorm"
 )
@@ -58,13 +57,9 @@ func (p *Paginator) AddWhereConditions(wm map[string]any) *Paginator {
 }
 
 func (p *Paginator) OrderBy(orderBy string) *Paginator {
-	order := strings.Trim(orderBy, "-")
-	order, ok := p.orders[order]
+	order, ok := p.orders[orderBy]
 	if !ok {
 		return p
-	}
-	if strings.HasPrefix(orderBy, "-") {
-		order = order + " DESC"
 	}
 	p.db.Order(order)
 
@@ -78,10 +73,14 @@ func (p *Paginator) GetTotalAndLastPage() (int64, int) {
 	return total, int(math.Ceil(float64(total) / float64(p.perPage)))
 }
 
-func (p *Paginator) Execute(data any, query any, args ...any) {
-	p.db.Session(&gorm.Session{}).
+func (p *Paginator) Execute(data any, query any, args ...any) *gorm.DB {
+	return p.db.Session(&gorm.Session{}).
 		Offset((p.page-1)*p.perPage).
 		Limit(p.perPage).
 		Select(query, args...).
 		Find(data)
+}
+
+func (p *Paginator) CloneDB() *gorm.DB {
+	return p.db.Session(&gorm.Session{})
 }
