@@ -72,7 +72,7 @@ func Register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &UserRegisterResponse{
-		AccessToken:  accessToken,
+		AccessToken:  fmt.Sprintf("Bearer %s", accessToken),
 		RefreshToken: refreshToken,
 	})
 }

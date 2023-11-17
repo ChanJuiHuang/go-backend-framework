@@ -72,7 +72,7 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &UserLoginResponse{
-		AccessToken:  accessToken,
+		AccessToken:  fmt.Sprintf("Bearer %s", accessToken),
 		RefreshToken: refreshToken,
 	})
 }
