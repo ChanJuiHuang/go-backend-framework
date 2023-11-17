@@ -60,5 +60,5 @@ func AddCsrfToken(req *http.Request) {
 }
 
 func AddBearerToken(req *http.Request, token string) {
-	req.Header.Add("Authorization", "Bearer "+token)
+	req.Header.Add("Authorization", token)
 }
