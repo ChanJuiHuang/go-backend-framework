@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
+	internalConfig "github.com/ChanJuiHuang/go-backend-framework/internal/config"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
 	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
@@ -18,7 +19,7 @@ func init() {
 	globalConfig := newGlobalConfig()
 	registerGlobalConfig(globalConfig)
 	setEnv(*globalConfig)
-	registerConfig(*globalConfig)
+	internalConfig.RegisterConfig(*globalConfig)
 	internalProvider.RegisterService()
 }
 

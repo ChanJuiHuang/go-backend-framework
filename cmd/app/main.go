@@ -4,6 +4,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"go.uber.org/zap"
 
+	internalConfig "github.com/ChanJuiHuang/go-backend-framework/internal/config"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
 	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/app"
@@ -15,7 +16,7 @@ func init() {
 	globalConfig := newGlobalConfig()
 	registerGlobalConfig(globalConfig)
 	setEnv(*globalConfig)
-	registerConfig(*globalConfig)
+	internalConfig.RegisterConfig(*globalConfig)
 	internalProvider.RegisterService()
 }
 
