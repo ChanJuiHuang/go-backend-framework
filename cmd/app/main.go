@@ -2,11 +2,13 @@ package main
 
 import (
 	_ "github.com/joho/godotenv/autoload"
+	"go.uber.org/zap"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/app"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 )
 
 func init() {
@@ -14,8 +16,7 @@ func init() {
 	registerGlobalConfig(globalConfig)
 	setEnv(*globalConfig)
 	registerConfig(*globalConfig)
-
-	registerProvider()
+	internalProvider.RegisterService()
 }
 
 // @title Example API
@@ -24,18 +25,19 @@ func init() {
 // @host localhost:8080
 func main() {
 	httpServer := http.NewServer(config.Registry.Get("httpServer").(http.ServerConfig))
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 	app := app.New(
 		[]app.StartingCallback{
 			httpServer.GracefulShutdown,
 		},
 		[]app.StartedCallback{
 			func() {
-				provider.Registry.Logger().Info("app is started")
+				logger.Info("app is started")
 			},
 		},
 		[]app.TerminatedCallback{
 			func() {
-				provider.Registry.Logger().Info("app is terminated")
+				logger.Info("app is terminated")
 			},
 		},
 		httpServer.Run,

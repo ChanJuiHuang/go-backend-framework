@@ -4,10 +4,11 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/random"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 type CsrfConfig struct {
@@ -27,6 +28,7 @@ func VerifyCsrfToken(config CsrfConfig) gin.HandlerFunc {
 	skipPaths := map[string]bool{
 		"/skip-path": true,
 	}
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 
 	return func(c *gin.Context) {
 		setCsrfToken(c, config)
@@ -38,7 +40,7 @@ func VerifyCsrfToken(config CsrfConfig) gin.HandlerFunc {
 		}
 
 		errResp := response.NewErrorResponse(response.Forbidden, errors.New("csrf token mismatch"), nil)
-		provider.Registry.Logger().Warn(response.Forbidden, errResp.MakeLogFields(c.Request)...)
+		logger.Warn(response.Forbidden, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 	}
 }

@@ -5,9 +5,11 @@ import (
 	"strings"
 
 	_ "github.com/joho/godotenv/autoload"
+	"gorm.io/gorm"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/migration/seeder"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 )
 
 func init() {
@@ -15,8 +17,7 @@ func init() {
 	registerGlobalConfig(globalConfig)
 	setEnv(*globalConfig)
 	registerConfig(*globalConfig)
-
-	registerProvider()
+	internalProvider.RegisterService()
 }
 
 func main() {
@@ -24,5 +25,6 @@ func main() {
 	flag.StringVar(&seeders, "seeders", "", "Type the seeders. EX: seeder1,seeder2")
 	flag.Parse()
 
-	seeder.Run(provider.Registry.DB(), strings.Split(seeders, ","))
+	db := provider.Registry.Get("database").(*gorm.DB)
+	seeder.Run(db, strings.Split(seeders, ","))
 }

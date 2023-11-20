@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -31,7 +33,7 @@ type AdminDeletePolicySubjectResponse struct {
 // @router /api/admin/policy/subject [delete]
 func DeletePolicySubject(c *gin.Context) {
 	reqBody := new(AdminDeletePolicySubjectRequest)
-	logger := provider.Registry.Logger()
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		errResp := response.NewErrorResponse(response.RequestValidationFailed, errors.WithStack(err), nil)
 		logger.Warn(response.RequestValidationFailed, errResp.MakeLogFields(c.Request)...)
@@ -39,8 +41,8 @@ func DeletePolicySubject(c *gin.Context) {
 		return
 	}
 
-	db := provider.Registry.DB()
-	err := db.Transaction(func(tx *gorm.DB) error {
+	database := provider.Registry.Get("database").(*gorm.DB)
+	err := database.Transaction(func(tx *gorm.DB) error {
 		tx1 := tx.Table("casbin_rules").
 			Where("ptype = ?", "p").
 			Where(map[string]any{"v0": reqBody.Subjects}).
@@ -64,12 +66,12 @@ func DeletePolicySubject(c *gin.Context) {
 
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
-		provider.Registry.Logger().Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
+		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
 
-	enforcer := provider.Registry.Casbin()
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	if err := enforcer.LoadPolicy(); err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)

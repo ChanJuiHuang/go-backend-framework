@@ -9,8 +9,9 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -33,7 +34,8 @@ func (suite *AdminCreateGroupingPolicyTestSuite) TestCreateGroupingPolicy() {
 	policies := [][]string{
 		{subject, "/api1", "GET"},
 	}
-	_, err := provider.Registry.Casbin().AddPolicies(policies)
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	_, err := enforcer.AddPolicies(policies)
 	if err != nil {
 		panic(err)
 	}

@@ -9,8 +9,9 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -30,7 +31,8 @@ func (suite *AdminDeletePolicyTestSuite) TestDeletePolicy() {
 	accessToken, _ := test.AdminLogin()
 
 	subject := "role1"
-	_, err := provider.Registry.Casbin().AddPolicies([][]string{
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	_, err := enforcer.AddPolicies([][]string{
 		{subject, "/api1", "GET"},
 		{subject, "/api2", "GET"},
 	})

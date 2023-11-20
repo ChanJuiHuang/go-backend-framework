@@ -9,7 +9,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/database"
@@ -67,19 +66,4 @@ func registerConfig(globalConfig global.Config) {
 		"middleware.csrf":              &middleware.CsrfConfig{},
 		"middleware.rateLimit":         &middleware.RateLimitConfig{},
 	})
-}
-
-func registerProvider() {
-	logger, consoleLogger, fileLogger := provider.ProvideLogger()
-	db := provider.ProvideDB()
-
-	provider.Registry.Register(
-		logger,
-		consoleLogger,
-		fileLogger,
-		db,
-		provider.ProvideRedis(),
-		provider.ProvideAuthenticator(),
-		provider.ProvideCasbin(db),
-	)
 }

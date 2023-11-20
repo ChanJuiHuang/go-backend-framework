@@ -7,8 +7,10 @@ import (
 	"strconv"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
+	"gorm.io/gorm"
 )
 
 func AdminRegister() {
@@ -68,7 +70,8 @@ func AdminAddPolicies() {
 		{"admin", "/api/admin/grouping-policy/:userId", "GET"},
 		{"admin", "/api/admin/grouping-policy", "DELETE"},
 	}
-	result, err := provider.Registry.Casbin().AddPolicies(policies)
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	result, err := enforcer.AddPolicies(policies)
 	if err != nil {
 		panic(err)
 	}
@@ -79,14 +82,15 @@ func AdminAddPolicies() {
 
 func AdminAddRole() {
 	user := &model.User{}
-	db := provider.Registry.DB().
-		Where("email = ?", "admin@test.com").
+	database := provider.Registry.Get("database").(*gorm.DB)
+	db := database.Where("email = ?", "admin@test.com").
 		First(user)
 	if err := db.Error; err != nil {
 		panic(err)
 	}
 
-	result, err := provider.Registry.Casbin().AddRoleForUser(strconv.Itoa(int(user.Id)), "admin")
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	result, err := enforcer.AddRoleForUser(strconv.Itoa(int(user.Id)), "admin")
 	if err != nil {
 		panic(err)
 	}

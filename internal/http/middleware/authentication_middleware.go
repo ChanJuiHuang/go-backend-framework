@@ -5,14 +5,16 @@ import (
 	"strings"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 func Authenticate() gin.HandlerFunc {
-	logger := provider.Registry.Logger()
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 	return func(c *gin.Context) {
 		authorizationHeader := c.GetHeader("Authorization")
 		if !strings.HasPrefix(authorizationHeader, "Bearer") {
@@ -45,7 +47,8 @@ func Authenticate() gin.HandlerFunc {
 }
 
 func verifyAccessToken(c *gin.Context, accessTokenString string) (string, error) {
-	accessToken, err := provider.Registry.Authenticator().VerifyJwt(accessTokenString)
+	authenticator := provider.Registry.Get("authenticator").(*authentication.Authenticator)
+	accessToken, err := authenticator.VerifyJwt(accessTokenString)
 	if err != nil {
 		return "", errors.WithStack(err)
 	}
