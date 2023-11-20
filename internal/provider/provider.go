@@ -67,7 +67,7 @@ func ProvideAuthenticator() *authentication.Authenticator {
 	return authenticator
 }
 
-func ProvideCasbin(db *gorm.DB) *casbin.SyncedCachedEnforcer {
+func ProvideCasbinEnforcer(db *gorm.DB) *casbin.SyncedCachedEnforcer {
 	adapter, err := gormadapter.NewAdapterByDBUseTableName(db, "", "casbin_rules")
 	if err != nil {
 		panic(err)
