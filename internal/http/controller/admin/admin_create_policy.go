@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 type Rule struct {
@@ -38,7 +40,7 @@ type AdminCreatePolicyResponse struct {
 // @router /api/admin/policy [post]
 func CreatePolicy(c *gin.Context) {
 	reqBody := new(AdminCreatePolicyRequest)
-	logger := provider.Registry.Logger()
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		errResp := response.NewErrorResponse(response.RequestValidationFailed, errors.WithStack(err), nil)
 		logger.Warn(response.RequestValidationFailed, errResp.MakeLogFields(c.Request)...)
@@ -51,7 +53,7 @@ func CreatePolicy(c *gin.Context) {
 		policies = append(policies, []string{reqBody.Subject, rule.Object, rule.Action})
 	}
 
-	enforcer := provider.Registry.Casbin()
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	result, err := enforcer.AddPolicies(policies)
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)

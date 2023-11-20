@@ -3,7 +3,8 @@ package admin
 import (
 	"net/http"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,7 +23,8 @@ type AdminSearchPolicySubjectResponse struct {
 // @router /api/admin/policy/subject [get]
 func SearchPolicySubject(c *gin.Context) {
 	respBody := new(AdminSearchPolicySubjectResponse)
-	respBody.Subjects = provider.Registry.Casbin().GetAllSubjects()
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	respBody.Subjects = enforcer.GetAllSubjects()
 
 	c.JSON(http.StatusOK, respBody)
 }

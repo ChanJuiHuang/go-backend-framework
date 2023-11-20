@@ -4,16 +4,19 @@ import (
 	"strconv"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 func Authorize() gin.HandlerFunc {
-	logger := provider.Registry.Logger()
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 	return func(c *gin.Context) {
 		userId := c.GetUint("user_id")
-		ok, err := provider.Registry.Casbin().Enforce(strconv.FormatUint(uint64(userId), 10), c.Request.URL.Path, c.Request.Method)
+		enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+		ok, err := enforcer.Enforce(strconv.FormatUint(uint64(userId), 10), c.Request.URL.Path, c.Request.Method)
 		if err != nil {
 			errResp := response.NewErrorResponse(response.Forbidden, errors.WithStack(err), nil)
 			logger.Warn(response.Forbidden, errResp.MakeLogFields(c.Request)...)

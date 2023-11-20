@@ -8,8 +8,9 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -38,7 +39,8 @@ func (suite *AdminSearchPolicySubjectTestSuite) TestSearchPolicySubject() {
 	if err := json.Unmarshal(resp.Body.Bytes(), respBody); err != nil {
 		panic(err)
 	}
-	subjects := provider.Registry.Casbin().GetAllSubjects()
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	subjects := enforcer.GetAllSubjects()
 
 	assert.Equal(suite.T(), http.StatusOK, resp.Code)
 	assert.Equal(suite.T(), len(subjects), len(respBody.Subjects))

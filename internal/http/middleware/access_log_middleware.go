@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/logger"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -27,7 +27,7 @@ func AccessLogger() gin.HandlerFunc {
 	var accessLogger *zap.Logger
 	switch logger.Type(v.GetString("logger.type")) {
 	case logger.Console:
-		accessLogger = provider.Registry.ConsoleLogger()
+		accessLogger = provider.Registry.Get("consoleLogger").(*zap.Logger)
 	case "file":
 		var err error
 		accessLogger, err = logger.NewFileLogger(fileConfig, logger.JsonEncoder, []zap.Option{}...)
@@ -35,7 +35,7 @@ func AccessLogger() gin.HandlerFunc {
 			panic(err)
 		}
 	default:
-		accessLogger = provider.Registry.ConsoleLogger()
+		accessLogger = provider.Registry.Get("consoleLogger").(*zap.Logger)
 	}
 
 	return func(c *gin.Context) {

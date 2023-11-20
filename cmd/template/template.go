@@ -2,6 +2,8 @@ package main
 
 import (
 	_ "github.com/joho/godotenv/autoload"
+
+	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
 )
 
 func init() {
@@ -9,8 +11,7 @@ func init() {
 	registerGlobalConfig(globalConfig)
 	setEnv(*globalConfig)
 	registerConfig(*globalConfig)
-
-	registerProvider()
+	internalProvider.RegisterService()
 }
 
 func main() {

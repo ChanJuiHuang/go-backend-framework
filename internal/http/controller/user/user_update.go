@@ -5,12 +5,13 @@ import (
 	"time"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 type UserUpdateRequest struct {
@@ -39,7 +40,7 @@ type UserUpdateResponse struct {
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
 // @router /api/user [put]
 func Update(c *gin.Context) {
-	logger := provider.Registry.Logger()
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 	reqBody := new(UserUpdateRequest)
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		errResp := response.NewErrorResponse(response.RequestValidationFailed, errors.WithStack(err), nil)

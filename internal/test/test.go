@@ -9,7 +9,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/database"
@@ -31,8 +31,7 @@ func init() {
 	registerGlobalConfig(globalConfig)
 	setEnv(*globalConfig)
 	registerConfig(*globalConfig)
-
-	registerProvider()
+	internalProvider.RegisterService()
 
 	HttpHandler = NewHttpHandler()
 	Migration = NewMigration()
@@ -87,19 +86,4 @@ func registerConfig(globalConfig global.Config) {
 		"middleware.csrf":              &middleware.CsrfConfig{},
 		"middleware.rateLimit":         &middleware.RateLimitConfig{},
 	})
-}
-
-func registerProvider() {
-	logger, consoleLogger, _ := provider.ProvideLogger()
-	db := provider.ProvideDB()
-
-	provider.Registry.Register(
-		logger,
-		consoleLogger,
-		nil,
-		db,
-		provider.ProvideRedis(),
-		provider.ProvideAuthenticator(),
-		provider.ProvideCasbin(db),
-	)
 }

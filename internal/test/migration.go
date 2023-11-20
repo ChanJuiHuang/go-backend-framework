@@ -4,10 +4,12 @@ import (
 	"path"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/database"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/pressly/goose/v3"
+	"gorm.io/gorm"
 )
 
 type migration struct {
@@ -26,7 +28,8 @@ func NewMigration() *migration {
 
 func (dt *migration) Run(callbacks ...func()) {
 	databaseConfig := config.Registry.Get("database").(database.Config)
-	db, err := provider.Registry.DB().DB()
+	database := provider.Registry.Get("database").(*gorm.DB)
+	db, err := database.DB()
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +47,8 @@ func (dt *migration) Run(callbacks ...func()) {
 }
 
 func (dt *migration) Reset() {
-	db, err := provider.Registry.DB().DB()
+	database := provider.Registry.Get("database").(*gorm.DB)
+	db, err := database.DB()
 	if err != nil {
 		panic(err)
 	}
@@ -52,12 +56,13 @@ func (dt *migration) Reset() {
 		panic(err)
 	}
 
-	err = provider.Registry.DB().Exec("DELETE FROM casbin_rules").Error
+	err = database.Exec("DELETE FROM casbin_rules").Error
 	if err != nil {
 		panic(err)
 	}
 
-	if err := provider.Registry.Casbin().LoadPolicy(); err != nil {
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	if err := enforcer.LoadPolicy(); err != nil {
 		panic(err)
 	}
 }

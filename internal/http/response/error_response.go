@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/stacktrace"
 	"go.uber.org/zap"
 )
@@ -63,7 +63,8 @@ func (er *ErrorResponse) StatusCode() int {
 		0,
 	)
 	if err != nil {
-		provider.Registry.Logger().Error(err.Error())
+		logger := provider.Registry.Get("logger").(*zap.Logger)
+		logger.Error(err.Error())
 		code = http.StatusBadRequest
 	}
 
@@ -73,14 +74,16 @@ func (er *ErrorResponse) StatusCode() int {
 func (er *ErrorResponse) MakeLogFields(req *http.Request) []zap.Field {
 	requestBody, err := io.ReadAll(req.Body)
 	if err != nil {
-		provider.Registry.Logger().Error(err.Error())
+		logger := provider.Registry.Get("logger").(*zap.Logger)
+		logger.Error(err.Error())
 		requestBody = nil
 	}
 	if requestBody != nil && json.Valid(requestBody) {
 		buffer := bytes.NewBuffer(make([]byte, 0, len(requestBody)))
 		err = json.Compact(buffer, requestBody)
 		if err != nil {
-			provider.Registry.Logger().Error(err.Error())
+			logger := provider.Registry.Get("logger").(*zap.Logger)
+			logger.Error(err.Error())
 			requestBody = nil
 		} else {
 			requestBody = buffer.Bytes()

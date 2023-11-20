@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 type AdminDeletePolicyRequest struct {
@@ -33,7 +35,7 @@ type AdminDeletePolicyResponse struct {
 // @router /api/admin/policy [delete]
 func DeletePolicy(c *gin.Context) {
 	reqBody := new(AdminDeletePolicyRequest)
-	logger := provider.Registry.Logger()
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		errResp := response.NewErrorResponse(response.RequestValidationFailed, errors.WithStack(err), nil)
 		logger.Warn(response.RequestValidationFailed, errResp.MakeLogFields(c.Request)...)
@@ -46,7 +48,7 @@ func DeletePolicy(c *gin.Context) {
 		policies = append(policies, []string{reqBody.Subject, rule.Object, rule.Action})
 	}
 
-	enforcer := provider.Registry.Casbin()
+	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	result, err := enforcer.RemovePolicies(policies)
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
@@ -55,7 +57,7 @@ func DeletePolicy(c *gin.Context) {
 		return
 	}
 	if !result {
-		provider.Registry.Logger().Warn("the policies has been deleted PROBABLY")
+		logger.Warn("the policies has been deleted PROBABLY")
 	}
 
 	policies = enforcer.GetFilteredPolicy(0, reqBody.Subject)

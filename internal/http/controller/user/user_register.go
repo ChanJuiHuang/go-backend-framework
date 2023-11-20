@@ -5,12 +5,14 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 type UserRegisterRequest struct {
@@ -35,7 +37,7 @@ type UserRegisterResponse struct {
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
 // @router /api/user/register [post]
 func Register(c *gin.Context) {
-	logger := provider.Registry.Logger()
+	logger := provider.Registry.Get("logger").(*zap.Logger)
 	reqBody := new(UserRegisterRequest)
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		errResp := response.NewErrorResponse(response.RequestValidationFailed, errors.WithStack(err), nil)
@@ -56,14 +58,15 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	accessToken, err := provider.Registry.Authenticator().IssueAccessToken(fmt.Sprintf("%v", u.Id))
+	authenticator := provider.Registry.Get("authenticator").(*authentication.Authenticator)
+	accessToken, err := authenticator.IssueAccessToken(fmt.Sprintf("%v", u.Id))
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
-	refreshToken, err := provider.Registry.Authenticator().IssueRefreshToken(fmt.Sprintf("%v", u.Id))
+	refreshToken, err := authenticator.IssueRefreshToken(fmt.Sprintf("%v", u.Id))
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)

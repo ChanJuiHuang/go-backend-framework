@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/provider"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/database"
@@ -60,19 +59,4 @@ func registerConfig(globalConfig global.Config) {
 		"redis":                        &redis.Config{},
 		"authentication.authenticator": &authentication.Config{},
 	})
-}
-
-func registerProvider() {
-	logger, consoleLogger, fileLogger := provider.ProvideLogger()
-	db := provider.ProvideDB()
-
-	provider.Registry.Register(
-		logger,
-		consoleLogger,
-		fileLogger,
-		db,
-		provider.ProvideRedis(),
-		provider.ProvideAuthenticator(),
-		provider.ProvideCasbin(db),
-	)
 }
