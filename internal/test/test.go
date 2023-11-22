@@ -1,7 +1,6 @@
 package test
 
 import (
-	"os"
 	"path"
 	"runtime"
 
@@ -32,10 +31,9 @@ func init() {
 
 func newGlobalConfig(rootDir string) *global.Config {
 	return &global.Config{
-		RootDir:  rootDir,
-		Timezone: "UTC",
-		Debug:    false,
-		Testing:  true,
+		RootDir: rootDir,
+		Debug:   false,
+		Testing: true,
 	}
 }
 
@@ -45,11 +43,6 @@ func registerGlobalConfig(globalConfig *global.Config) {
 
 func setEnv(globalConfig global.Config) {
 	err := godotenv.Load(path.Join(globalConfig.RootDir, ".env.testing"))
-	if err != nil {
-		panic(err)
-	}
-
-	err = os.Setenv("TZ", globalConfig.Timezone)
 	if err != nil {
 		panic(err)
 	}

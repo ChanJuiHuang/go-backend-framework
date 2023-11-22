@@ -13,10 +13,9 @@ func newGlobalConfig() *global.Config {
 		panic(err)
 	}
 	globalConfig := &global.Config{
-		RootDir:  wd,
-		Timezone: "UTC",
-		Debug:    false,
-		Testing:  false,
+		RootDir: wd,
+		Debug:   false,
+		Testing: false,
 	}
 
 	return globalConfig
@@ -24,11 +23,4 @@ func newGlobalConfig() *global.Config {
 
 func registerGlobalConfig(globalConfig *global.Config) {
 	config.Registry.Set("global", globalConfig)
-}
-
-func setEnv(globalConfig global.Config) {
-	err := os.Setenv("TZ", globalConfig.Timezone)
-	if err != nil {
-		panic(err)
-	}
 }
