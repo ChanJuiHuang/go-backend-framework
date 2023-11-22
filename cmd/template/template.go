@@ -10,7 +10,6 @@ import (
 func init() {
 	globalConfig := newGlobalConfig()
 	registerGlobalConfig(globalConfig)
-	setEnv(*globalConfig)
 	internalConfig.RegisterConfig(*globalConfig)
 	internalProvider.RegisterService()
 }
