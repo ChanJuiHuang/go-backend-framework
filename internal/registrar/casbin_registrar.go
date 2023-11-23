@@ -1,0 +1,49 @@
+package registrar
+
+import (
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v2/model"
+	gormadapter "github.com/casbin/gorm-adapter/v3"
+	"gorm.io/gorm"
+)
+
+type CasbinRegistrar struct{}
+
+func (*CasbinRegistrar) Register() {
+	adapter, err := gormadapter.NewAdapterByDBUseTableName(
+		service.Registry.Get("database").(*gorm.DB),
+		"",
+		"casbin_rules",
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	m, err := model.NewModelFromString(`
+[request_definition]
+r = sub, obj, act
+
+[policy_definition]
+p = sub, obj, act
+
+[role_definition]
+g = _, _
+
+[policy_effect]
+e = some(where (p.eft == allow))
+
+[matchers]
+m = g(r.sub, p.sub) && keyMatch2(r.obj, p.obj) && r.act == p.act
+`)
+	if err != nil {
+		panic(err)
+	}
+
+	enforcer, err := casbin.NewSyncedCachedEnforcer(m, adapter)
+	if err != nil {
+		panic(err)
+	}
+
+	service.Registry.Set("casbinEnforcer", enforcer)
+}
