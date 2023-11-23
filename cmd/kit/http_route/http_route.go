@@ -4,8 +4,19 @@ import (
 	"fmt"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
 	"github.com/gin-gonic/gin"
 )
+
+func init() {
+	booter.Boot(
+		func() {},
+		booter.NewDefaultConfig,
+		&registrar.ConfigRegistrar,
+		&registrar.SimpleServiceRegistrar,
+	)
+}
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
