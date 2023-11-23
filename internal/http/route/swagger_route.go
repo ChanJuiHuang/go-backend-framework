@@ -2,8 +2,8 @@ package route
 
 import (
 	_ "github.com/ChanJuiHuang/go-backend-framework/docs"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -12,8 +12,8 @@ import (
 
 // type [http://localhost:8080/swagger/index.html] in browser to watch the swagger api doc
 func AttachSwaggerRoute(router *gin.Engine) {
-	globalConfig := config.Registry.Get("global").(global.Config)
-	if !globalConfig.Debug {
+	booterConfig := config.Registry.Get("booter").(booter.Config)
+	if !booterConfig.Debug {
 		return
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -4,19 +4,21 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"go.uber.org/zap"
 
-	internalConfig "github.com/ChanJuiHuang/go-backend-framework/internal/config"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
-	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/app"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 )
 
 func init() {
-	globalConfig := newGlobalConfig()
-	registerGlobalConfig(globalConfig)
-	internalConfig.RegisterConfig(*globalConfig)
-	internalProvider.RegisterService()
+	booter.Boot(
+		func() {},
+		booter.NewConfigWithCommand,
+		&registrar.ConfigRegistrar,
+		&registrar.ServiceRegistrar,
+	)
 }
 
 // @title Example API
@@ -25,7 +27,7 @@ func init() {
 // @host localhost:8080
 func main() {
 	httpServer := http.NewServer(config.Registry.Get("httpServer").(http.ServerConfig))
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 	app := app.New(
 		[]app.StartingCallback{
 			httpServer.GracefulShutdown,

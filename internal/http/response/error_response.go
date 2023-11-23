@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/stacktrace"
 	"go.uber.org/zap"
 )
@@ -38,8 +38,8 @@ func NewErrorResponse(message string, err error, context map[string]any) *ErrorR
 		debug.Error = err.Error()
 	}
 
-	globalConfig := config.Registry.Get("global").(global.Config)
-	if globalConfig.Debug {
+	booterConfig := config.Registry.Get("booter").(booter.Config)
+	if booterConfig.Debug {
 		return &ErrorResponse{
 			Message: message,
 			Code:    MessageToCode[message],
@@ -63,7 +63,7 @@ func (er *ErrorResponse) StatusCode() int {
 		0,
 	)
 	if err != nil {
-		logger := provider.Registry.Get("logger").(*zap.Logger)
+		logger := service.Registry.Get("logger").(*zap.Logger)
 		logger.Error(err.Error())
 		code = http.StatusBadRequest
 	}
@@ -74,7 +74,7 @@ func (er *ErrorResponse) StatusCode() int {
 func (er *ErrorResponse) MakeLogFields(req *http.Request) []zap.Field {
 	requestBody, err := io.ReadAll(req.Body)
 	if err != nil {
-		logger := provider.Registry.Get("logger").(*zap.Logger)
+		logger := service.Registry.Get("logger").(*zap.Logger)
 		logger.Error(err.Error())
 		requestBody = nil
 	}
@@ -82,7 +82,7 @@ func (er *ErrorResponse) MakeLogFields(req *http.Request) []zap.Field {
 		buffer := bytes.NewBuffer(make([]byte, 0, len(requestBody)))
 		err = json.Compact(buffer, requestBody)
 		if err != nil {
-			logger := provider.Registry.Get("logger").(*zap.Logger)
+			logger := service.Registry.Get("logger").(*zap.Logger)
 			logger.Error(err.Error())
 			requestBody = nil
 		} else {
@@ -91,8 +91,8 @@ func (er *ErrorResponse) MakeLogFields(req *http.Request) []zap.Field {
 	}
 
 	var debug *Debug
-	globalConfig := config.Registry.Get("global").(global.Config)
-	if globalConfig.Debug {
+	booterConfig := config.Registry.Get("booter").(booter.Config)
+	if booterConfig.Debug {
 		debug = er.Debug
 	} else {
 		debug = er.debug

@@ -3,7 +3,7 @@ package admin
 import (
 	"net/http"
 
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +25,7 @@ type AdminGetPolicySubjectResponse struct {
 // @router /api/admin/policy/subject/{subject} [get]
 func GetPolicySubject(c *gin.Context) {
 	subject := c.Param("subject")
-	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	policies := enforcer.GetFilteredPolicy(0, subject)
 	rules := make([]Rule, len(policies))
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
@@ -14,7 +14,8 @@ import (
 )
 
 func Authenticate() gin.HandlerFunc {
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	logger := service.Registry.Get("logger").(*zap.Logger)
+	authenticator := service.Registry.Get("authentication.authenticator").(*authentication.Authenticator)
 	return func(c *gin.Context) {
 		authorizationHeader := c.GetHeader("Authorization")
 		if !strings.HasPrefix(authorizationHeader, "Bearer") {
@@ -25,7 +26,7 @@ func Authenticate() gin.HandlerFunc {
 		}
 
 		accessTokenString := strings.Replace(authorizationHeader, "Bearer ", "", 1)
-		userIdString, err := verifyAccessToken(c, accessTokenString)
+		userIdString, err := verifyAccessToken(authenticator, accessTokenString)
 		if err != nil {
 			errResp := response.NewErrorResponse(response.Unauthorized, err, nil)
 			logger.Warn(response.Unauthorized, errResp.MakeLogFields(c.Request)...)
@@ -46,8 +47,7 @@ func Authenticate() gin.HandlerFunc {
 	}
 }
 
-func verifyAccessToken(c *gin.Context, accessTokenString string) (string, error) {
-	authenticator := provider.Registry.Get("authenticator").(*authentication.Authenticator)
+func verifyAccessToken(authenticator *authentication.Authenticator, accessTokenString string) (string, error) {
 	accessToken, err := authenticator.VerifyJwt(accessTokenString)
 	if err != nil {
 		return "", errors.WithStack(err)

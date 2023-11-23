@@ -1,17 +1,18 @@
 package main
 
 import (
+	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
 	_ "github.com/joho/godotenv/autoload"
-
-	internalConfig "github.com/ChanJuiHuang/go-backend-framework/internal/config"
-	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
 )
 
 func init() {
-	globalConfig := newGlobalConfig()
-	registerGlobalConfig(globalConfig)
-	internalConfig.RegisterConfig(*globalConfig)
-	internalProvider.RegisterService()
+	booter.Boot(
+		func() {},
+		booter.NewDefaultConfig,
+		&registrar.ConfigRegistrar,
+		&registrar.ServiceRegistrar,
+	)
 }
 
 func main() {

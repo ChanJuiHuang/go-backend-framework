@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -36,7 +36,7 @@ type AdminDeleteGroupingPolicyResponse struct {
 // @router /api/admin/grouping-policy [delete]
 func DeleteGroupingPolicy(c *gin.Context) {
 	reqBody := new(AdminDeleteGroupingPolicyRequest)
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		errResp := response.NewErrorResponse(response.RequestValidationFailed, errors.WithStack(err), nil)
 		logger.Warn(response.RequestValidationFailed, errResp.MakeLogFields(c.Request)...)
@@ -50,7 +50,7 @@ func DeleteGroupingPolicy(c *gin.Context) {
 		groupingPolicies = append(groupingPolicies, []string{userId, subject})
 	}
 
-	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	result, err := enforcer.RemoveGroupingPolicies(groupingPolicies)
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)

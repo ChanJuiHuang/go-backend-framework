@@ -2,13 +2,13 @@ package user
 
 import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
 func Create(user any) error {
-	database := provider.Registry.Get("database").(*gorm.DB)
+	database := service.Registry.Get("database").(*gorm.DB)
 	if err := database.Create(user).Error; err != nil {
 		return errors.WithStack(err)
 	}
@@ -18,7 +18,7 @@ func Create(user any) error {
 
 func Get(query any, args ...any) (*model.User, error) {
 	user := &model.User{}
-	database := provider.Registry.Get("database").(*gorm.DB)
+	database := service.Registry.Get("database").(*gorm.DB)
 	err := database.Where(query, args...).
 		First(user).
 		Error
@@ -30,7 +30,7 @@ func Get(query any, args ...any) (*model.User, error) {
 }
 
 func Update(id uint, values map[string]any) (int, error) {
-	database := provider.Registry.Get("database").(*gorm.DB)
+	database := service.Registry.Get("database").(*gorm.DB)
 	db := database.Table("users").
 		Where("id = ?", id).
 		Updates(values)

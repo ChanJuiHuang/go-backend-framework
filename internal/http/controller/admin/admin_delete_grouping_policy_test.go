@@ -11,7 +11,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -34,7 +34,7 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestDeleteGroupingPolicy() {
 	userId := "999"
 	subject1 := "role1"
 	subject2 := "role2"
-	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	_, err := enforcer.AddGroupingPolicies([][]string{
 		{userId, subject1},
 		{userId, subject2},
