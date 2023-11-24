@@ -8,29 +8,20 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"gorm.io/gorm"
 )
 
 func AdminRegister() {
-	userRegisterRequest := user.UserRegisterRequest{
+	database := service.Registry.Get("database").(*gorm.DB)
+	db := database.Create(&model.User{
 		Name:     "admin",
 		Email:    "admin@test.com",
-		Password: "abcABC123",
-	}
-	reqBody, err := json.Marshal(userRegisterRequest)
-	if err != nil {
-		panic(err)
-	}
-
-	req := httptest.NewRequest("POST", "/api/user/register", bytes.NewReader(reqBody))
-	AddCsrfToken(req)
-	resp := httptest.NewRecorder()
-	HttpHandler.ServeHTTP(resp, req)
-
-	respBody := &user.UserRegisterResponse{}
-	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
+		Password: argon2.MakeArgon2IdHash("abcABC123"),
+	})
+	if err := db.Error; err != nil {
 		panic(err)
 	}
 }
