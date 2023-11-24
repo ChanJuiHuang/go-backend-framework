@@ -9,7 +9,7 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -57,7 +57,7 @@ func (srv *Server) Run(wg *sync.WaitGroup) {
 	route.AttachApiRoutes(engine)
 	route.AttachSwaggerRoute(engine)
 	srv.server.Handler = engine.Handler()
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 
 	if err := srv.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		logger.Error(err.Error())
@@ -71,7 +71,7 @@ func (srv *Server) GracefulShutdown(ctx context.Context, wg *sync.WaitGroup) {
 	ctx, cancel := context.WithTimeout(context.Background(), srv.config.GracefulShutdownTtl)
 	defer cancel()
 
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 	logger.Info("server start to shutdown")
 	if err := srv.server.Shutdown(ctx); err != nil {
 		logger.Error(err.Error())

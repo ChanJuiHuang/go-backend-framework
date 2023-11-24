@@ -7,19 +7,21 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
-	internalConfig "github.com/ChanJuiHuang/go-backend-framework/internal/config"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
-	internalProvider "github.com/ChanJuiHuang/go-backend-framework/internal/provider"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 )
 
 func init() {
-	globalConfig := newGlobalConfig()
-	registerGlobalConfig(globalConfig)
-	internalConfig.RegisterConfig(*globalConfig)
-	internalProvider.RegisterService()
+	booter.Boot(
+		func() {},
+		booter.NewDefaultConfig,
+		&registrar.ConfigRegistrar,
+		&registrar.ServiceRegistrar,
+	)
 }
 
 func addPolicies() {
@@ -34,8 +36,8 @@ func addPolicies() {
 		{"admin", "/api/admin/grouping-policy/:userId", "GET"},
 		{"admin", "/api/admin/grouping-policy", "DELETE"},
 	}
-	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 
 	err := enforcer.GetAdapter().(*gormadapter.Adapter).Transaction(enforcer, func(e casbin.IEnforcer) error {
 		result, err := e.RemovePolicies(policies)
@@ -66,7 +68,7 @@ func addPolicies() {
 
 func addGroupingPolicies() {
 	user := &model.User{}
-	database := provider.Registry.Get("database").(*gorm.DB)
+	database := service.Registry.Get("database").(*gorm.DB)
 	db := database.Where("email = ?", "admin@admin.com").
 		First(user)
 	if err := db.Error; err != nil {
@@ -77,8 +79,8 @@ func addGroupingPolicies() {
 		{strconv.Itoa(int(user.Id)), "admin"},
 	}
 
-	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 
 	err := enforcer.GetAdapter().(*gormadapter.Adapter).Transaction(enforcer, func(e casbin.IEnforcer) error {
 		result, err := e.RemoveGroupingPolicies(groupingPolicies)

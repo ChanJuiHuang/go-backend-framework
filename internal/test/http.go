@@ -6,7 +6,7 @@ import (
 	pkgHttp "github.com/ChanJuiHuang/go-backend-framework/internal/http"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
 	"github.com/gin-gonic/gin"
 )
 

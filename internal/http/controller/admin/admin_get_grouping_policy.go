@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -28,13 +28,13 @@ type AdminGetGroupingPolicyResponse struct {
 // @router /api/admin/grouping-policy [get]
 func GetGroupingPolicy(c *gin.Context) {
 	userId := c.Param("userId")
-	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	groupingPolicies := enforcer.GetFilteredGroupingPolicy(0, userId)
 
 	id, err := strconv.Atoi(userId)
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
-		logger := provider.Registry.Get("logger").(*zap.Logger)
+		logger := service.Registry.Get("logger").(*zap.Logger)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return

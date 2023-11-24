@@ -2,13 +2,9 @@ package middleware
 
 import (
 	"fmt"
-	"path"
 	"time"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/logger"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -18,25 +14,7 @@ func AccessLogger() gin.HandlerFunc {
 	skipPaths := map[string]bool{
 		"/skip-path": true,
 	}
-
-	globalConfig := config.Registry.Get("global").(global.Config)
-	fileConfig := config.Registry.Get("logger.file").(logger.FileConfig)
-	fileConfig.LogPath = path.Join(globalConfig.RootDir, "storage/log/access.log")
-
-	v := config.Registry.GetViper()
-	var accessLogger *zap.Logger
-	switch logger.Type(v.GetString("logger.type")) {
-	case logger.Console:
-		accessLogger = provider.Registry.Get("consoleLogger").(*zap.Logger)
-	case "file":
-		var err error
-		accessLogger, err = logger.NewFileLogger(fileConfig, logger.JsonEncoder, []zap.Option{}...)
-		if err != nil {
-			panic(err)
-		}
-	default:
-		accessLogger = provider.Registry.Get("consoleLogger").(*zap.Logger)
-	}
+	accessLogger := service.Registry.Get("accessLogger").(*zap.Logger)
 
 	return func(c *gin.Context) {
 		now := time.Now()

@@ -52,14 +52,25 @@ var ConsoleEncoder zapcore.Encoder = zapcore.NewConsoleEncoder(zapcore.EncoderCo
 	EncodeCaller:   zapcore.ShortCallerEncoder,
 })
 
-func NewFileLogger(fileConfig FileConfig, encoder zapcore.Encoder, options ...zap.Option) (*zap.Logger, error) {
+func NewLogger(config Config, encoder zapcore.Encoder, options ...zap.Option) (*zap.Logger, error) {
+	switch config.Type {
+	case File:
+		return NewFileLogger(config, encoder, options...)
+	case Console:
+		return NewConsoleLogger(config, encoder, options...), nil
+	default:
+		return NewConsoleLogger(config, encoder, options...), nil
+	}
+}
+
+func NewFileLogger(config Config, encoder zapcore.Encoder, options ...zap.Option) (*zap.Logger, error) {
 	roller, err := lumberjack.NewRoller(
-		fileConfig.LogPath,
-		fileConfig.MaxSize,
+		config.LogPath,
+		config.MaxSize,
 		&lumberjack.Options{
-			MaxBackups: fileConfig.MaxBackups,
-			MaxAge:     fileConfig.MaxAge,
-			Compress:   fileConfig.Compress,
+			MaxBackups: config.MaxBackups,
+			MaxAge:     config.MaxAge,
+			Compress:   config.Compress,
 		},
 	)
 	if err != nil {
@@ -67,16 +78,16 @@ func NewFileLogger(fileConfig FileConfig, encoder zapcore.Encoder, options ...za
 	}
 
 	logger := zap.New(
-		zapcore.NewCore(encoder, zapcore.AddSync(roller), GetLevel(fileConfig.Level)),
+		zapcore.NewCore(encoder, zapcore.AddSync(roller), GetLevel(config.Level)),
 		options...,
 	)
 
 	return logger, nil
 }
 
-func NewConsoleLogger(consoleConfig ConsoleConfig, encoder zapcore.Encoder, options ...zap.Option) *zap.Logger {
+func NewConsoleLogger(config Config, encoder zapcore.Encoder, options ...zap.Option) *zap.Logger {
 	return zap.New(
-		zapcore.NewCore(encoder, os.Stdout, GetLevel(consoleConfig.Level)),
+		zapcore.NewCore(encoder, os.Stdout, GetLevel(config.Level)),
 		options...,
 	)
 }

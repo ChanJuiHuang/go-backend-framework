@@ -2,7 +2,6 @@ package config
 
 import (
 	"reflect"
-	"sync"
 
 	"github.com/spf13/viper"
 )
@@ -10,7 +9,6 @@ import (
 type registry struct {
 	viper   *viper.Viper
 	configs map[string]any
-	once    sync.Once
 }
 
 var Registry *registry
@@ -28,20 +26,31 @@ func NewRegistry(v *viper.Viper) *registry {
 	}
 }
 
-func (r *registry) Register(configs map[string]any) {
-	r.once.Do(func() {
-		for key, config := range configs {
-			err := r.viper.UnmarshalKey(key, config)
-			if err != nil {
-				panic(err)
-			}
-			r.configs[key] = config
-		}
-	})
+func (r *registry) Register(key string, config any) {
+	err := r.viper.UnmarshalKey(key, config)
+	if err != nil {
+		panic(err)
+	}
+	r.configs[key] = config
+}
+
+func (r *registry) RegisterMany(configs map[string]any) {
+	for key, config := range configs {
+		r.Register(key, config)
+	}
 }
 
 func (r *registry) Set(key string, config any) {
+	if !(reflect.ValueOf(config).Kind() == reflect.Pointer) {
+		panic("config is not the pointer")
+	}
 	r.configs[key] = config
+}
+
+func (r *registry) SetMany(configs map[string]any) {
+	for key, config := range configs {
+		r.Set(key, config)
+	}
 }
 
 func (r *registry) Get(key string) any {

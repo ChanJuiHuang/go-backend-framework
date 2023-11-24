@@ -25,17 +25,14 @@ const (
 	File         = "file"
 )
 
-type FileConfig struct {
+type Config struct {
+	Type       Type
 	LogPath    string
 	MaxSize    int64
 	MaxBackups int
 	MaxAge     time.Duration
 	Compress   bool
 	Level      Level
-}
-
-type ConsoleConfig struct {
-	Level Level
 }
 
 func GetLevel(level Level) zapcore.Level {

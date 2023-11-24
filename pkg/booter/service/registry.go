@@ -1,13 +1,9 @@
-package provider
+package service
 
-import (
-	"reflect"
-	"sync"
-)
+import "reflect"
 
 type registry struct {
 	services map[string]any
-	once     sync.Once
 }
 
 var Registry *registry
@@ -24,16 +20,17 @@ func NewRegistry() *registry {
 	}
 }
 
-func (r *registry) Register(services map[string]any) {
-	r.once.Do(func() {
-		for key, service := range services {
-			r.services[key] = service
-		}
-	})
+func (r *registry) Set(key string, service any) {
+	if !(reflect.ValueOf(service).Kind() == reflect.Pointer) {
+		panic("config is not the pointer")
+	}
+	r.services[key] = service
 }
 
-func (r *registry) Set(key string, service any) {
-	r.services[key] = service
+func (r *registry) SetMany(services map[string]any) {
+	for key, service := range services {
+		r.Set(key, service)
+	}
 }
 
 func (r *registry) Get(key string) any {

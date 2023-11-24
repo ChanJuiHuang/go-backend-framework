@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/random"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -28,7 +28,7 @@ func VerifyCsrfToken(config CsrfConfig) gin.HandlerFunc {
 	skipPaths := map[string]bool{
 		"/skip-path": true,
 	}
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 
 	return func(c *gin.Context) {
 		setCsrfToken(c, config)

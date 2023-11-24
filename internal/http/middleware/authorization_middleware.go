@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -12,10 +12,10 @@ import (
 )
 
 func Authorize() gin.HandlerFunc {
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 	return func(c *gin.Context) {
 		userId := c.GetUint("user_id")
-		enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+		enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 		ok, err := enforcer.Enforce(strconv.FormatUint(uint64(userId), 10), c.Request.URL.Path, c.Request.Method)
 		if err != nil {
 			errResp := response.NewErrorResponse(response.Forbidden, errors.WithStack(err), nil)

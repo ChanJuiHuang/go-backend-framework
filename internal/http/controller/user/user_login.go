@@ -8,7 +8,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -35,7 +35,7 @@ type UserLoginResponse struct {
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
 // @router /api/user/login [post]
 func Login(c *gin.Context) {
-	logger := provider.Registry.Get("logger").(*zap.Logger)
+	logger := service.Registry.Get("logger").(*zap.Logger)
 	reqBody := new(UserLoginRequest)
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		errResp := response.NewErrorResponse(response.RequestValidationFailed, errors.WithStack(err), nil)
@@ -58,7 +58,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	authenticator := provider.Registry.Get("authenticator").(*authentication.Authenticator)
+	authenticator := service.Registry.Get("authentication.authenticator").(*authentication.Authenticator)
 	accessToken, err := authenticator.IssueAccessToken(fmt.Sprintf("%v", u.Id))
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)

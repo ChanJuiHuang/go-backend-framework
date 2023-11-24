@@ -3,10 +3,10 @@ package test
 import (
 	"path"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/global"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/config"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/database"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/provider"
 	"github.com/casbin/casbin/v2"
 	"github.com/pressly/goose/v3"
 	"gorm.io/gorm"
@@ -19,16 +19,16 @@ type migration struct {
 var Migration *migration
 
 func NewMigration() *migration {
-	globalConfig := config.Registry.Get("global").(global.Config)
+	booterConfig := config.Registry.Get("booter").(booter.Config)
 
 	return &migration{
-		dir: path.Join(globalConfig.RootDir, "internal/migration/test"),
+		dir: path.Join(booterConfig.RootDir, "internal/migration/test"),
 	}
 }
 
 func (dt *migration) Run(callbacks ...func()) {
 	databaseConfig := config.Registry.Get("database").(database.Config)
-	database := provider.Registry.Get("database").(*gorm.DB)
+	database := service.Registry.Get("database").(*gorm.DB)
 	db, err := database.DB()
 	if err != nil {
 		panic(err)
@@ -47,7 +47,7 @@ func (dt *migration) Run(callbacks ...func()) {
 }
 
 func (dt *migration) Reset() {
-	database := provider.Registry.Get("database").(*gorm.DB)
+	database := service.Registry.Get("database").(*gorm.DB)
 	db, err := database.DB()
 	if err != nil {
 		panic(err)
@@ -61,7 +61,7 @@ func (dt *migration) Reset() {
 		panic(err)
 	}
 
-	enforcer := provider.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	if err := enforcer.LoadPolicy(); err != nil {
 		panic(err)
 	}
