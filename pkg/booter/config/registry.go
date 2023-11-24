@@ -26,20 +26,6 @@ func NewRegistry(v *viper.Viper) *registry {
 	}
 }
 
-func (r *registry) Register(key string, config any) {
-	err := r.viper.UnmarshalKey(key, config)
-	if err != nil {
-		panic(err)
-	}
-	r.configs[key] = config
-}
-
-func (r *registry) RegisterMany(configs map[string]any) {
-	for key, config := range configs {
-		r.Register(key, config)
-	}
-}
-
 func (r *registry) Set(key string, config any) {
 	if !(reflect.ValueOf(config).Kind() == reflect.Pointer) {
 		panic("config is not the pointer")
@@ -50,6 +36,20 @@ func (r *registry) Set(key string, config any) {
 func (r *registry) SetMany(configs map[string]any) {
 	for key, config := range configs {
 		r.Set(key, config)
+	}
+}
+
+func (r *registry) Register(key string, config any) {
+	err := r.viper.UnmarshalKey(key, config)
+	if err != nil {
+		panic(err)
+	}
+	r.Set(key, config)
+}
+
+func (r *registry) RegisterMany(configs map[string]any) {
+	for key, config := range configs {
+		r.Register(key, config)
 	}
 }
 
