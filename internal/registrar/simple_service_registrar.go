@@ -20,7 +20,6 @@ func (*simpleServiceRegistrar) Register() {
 	registrars := []booter.ServiceRegistrar{
 		&LoggerRegistrar{},
 		&AuthenticationRegistrar{},
-		&CasbinRegistrar{},
 	}
 
 	for _, registrar := range registrars {
