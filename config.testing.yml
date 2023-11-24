@@ -1,9 +1,12 @@
 logger:
-  # log type can be [console], [file]
-  type: console
+  # define the default logger
+  default: console
   console:
+    # log type can be [console], [file]
+    type: console
     level: error
   file:
+    type: file
     logPath: storage/log/app.log
     # the unit of max size is byte
     maxSize: 104857600
@@ -11,6 +14,14 @@ logger:
     maxAge: 720h
     compress: false
     # log level can be [debug], [info], [warn], [error], [dpanic], [panic], [fatal]
+    level: error
+  access:
+    type: console
+    logPath: storage/log/access.log
+    maxSize: 104857600
+    maxBackups: 30
+    maxAge: 720h
+    compress: false
     level: error
 
 database:
