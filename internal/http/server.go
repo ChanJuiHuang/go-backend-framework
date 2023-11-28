@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"sync"
 	"time"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
@@ -49,9 +48,7 @@ func NewServer(config ServerConfig) *Server {
 	return srv
 }
 
-func (srv *Server) Run(wg *sync.WaitGroup) {
-	defer wg.Done()
-
+func (srv *Server) Run() {
 	engine := NewEngine()
 	middleware.AttachGlobalMiddleware(engine)
 	route.AttachApiRoutes(engine)
@@ -64,8 +61,7 @@ func (srv *Server) Run(wg *sync.WaitGroup) {
 	}
 }
 
-func (srv *Server) GracefulShutdown(ctx context.Context, wg *sync.WaitGroup) {
-	defer wg.Done()
+func (srv *Server) GracefulShutdown(ctx context.Context) {
 	<-ctx.Done()
 
 	ctx, cancel := context.WithTimeout(context.Background(), srv.config.GracefulShutdownTtl)
