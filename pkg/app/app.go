@@ -2,74 +2,95 @@ package app
 
 import (
 	"context"
+	"os"
 	"os/signal"
 	"sync"
-	"syscall"
 )
 
-type StartingCallback func(ctx context.Context, wg *sync.WaitGroup)
-type StartedCallback func()
-type RunnerFunc func(wg *sync.WaitGroup)
-type TerminatedCallback func()
+type SignalCallback struct {
+	Signals      []os.Signal
+	CallbackFunc func(ctx context.Context)
+}
 
 type App struct {
-	wg                  *sync.WaitGroup
-	startingCallbacks   []StartingCallback
-	startedCallbacks    []StartedCallback
-	terminatedCallbacks []TerminatedCallback
-	runnerFunc          RunnerFunc
+	wg                  sync.WaitGroup
+	startingCallbacks   []func()
+	startedCallbacks    []func()
+	signalCallbacks     []SignalCallback
+	asyncCallbacks      []func()
+	terminatedCallbacks []func()
 }
 
 func New(
-	startingCallbacks []StartingCallback,
-	startedCallbacks []StartedCallback,
-	terminatedCallbacks []TerminatedCallback,
-	runnerFunc RunnerFunc,
+	startingCallbacks []func(),
+	startedCallbacks []func(),
+	signalCallbacks []SignalCallback,
+	asyncCallbacks []func(),
+	terminatedCallbacks []func(),
 ) *App {
 	return &App{
-		wg:                  &sync.WaitGroup{},
+		wg:                  sync.WaitGroup{},
 		startingCallbacks:   startingCallbacks,
 		startedCallbacks:    startedCallbacks,
+		signalCallbacks:     signalCallbacks,
+		asyncCallbacks:      asyncCallbacks,
 		terminatedCallbacks: terminatedCallbacks,
-		runnerFunc:          runnerFunc,
 	}
 }
 
 func (app *App) runStartingCallbacks() {
-	ctx, stop := signal.NotifyContext(
-		context.Background(),
-		syscall.SIGINT,
-		syscall.SIGTERM,
-	)
-	go func() {
-		<-ctx.Done()
-		stop()
-	}()
-
-	app.wg.Add(len(app.startingCallbacks))
-	for _, callback := range app.startingCallbacks {
-		go callback(ctx, app.wg)
+	for _, startingCallback := range app.startingCallbacks {
+		startingCallback()
 	}
 }
 
-func (app *App) runStartedCallback() {
+func (app *App) runStartedCallbacks() {
 	for _, startedCallback := range app.startedCallbacks {
-		go startedCallback()
+		startedCallback()
 	}
 }
 
-func (app *App) runTerminatedCallback() {
+func (app *App) runSignalCallBacks() {
+	app.wg.Add(len(app.signalCallbacks))
+
+	for _, signalCallback := range app.signalCallbacks {
+		ctx, stop := signal.NotifyContext(context.Background(), signalCallback.Signals...)
+		go func() {
+			<-ctx.Done()
+			stop()
+		}()
+
+		callback := signalCallback.CallbackFunc
+		go func() {
+			defer app.wg.Done()
+			callback(ctx)
+		}()
+	}
+}
+
+func (app *App) runAsyncCallbacks() {
+	for _, asyncCallback := range app.asyncCallbacks {
+		go asyncCallback()
+	}
+}
+
+func (app *App) runTerminatedCallbacks() {
 	for _, terminatedCallback := range app.terminatedCallbacks {
 		terminatedCallback()
 	}
 }
 
-func (app *App) Run() {
+func (app *App) Run(executerFunc func()) {
 	app.runStartingCallbacks()
 	app.wg.Add(1)
-	go app.runnerFunc(app.wg)
-	app.runStartedCallback()
+	go func() {
+		defer app.wg.Done()
+		executerFunc()
+	}()
+	app.runStartedCallbacks()
+	app.runSignalCallBacks()
+	app.runAsyncCallbacks()
 
 	app.wg.Wait()
-	app.runTerminatedCallback()
+	app.runTerminatedCallbacks()
 }

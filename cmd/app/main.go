@@ -1,6 +1,9 @@
 package main
 
 import (
+	"os"
+	"syscall"
+
 	_ "github.com/joho/godotenv/autoload"
 	"go.uber.org/zap"
 
@@ -28,22 +31,40 @@ func init() {
 func main() {
 	httpServer := http.NewServer(config.Registry.Get("httpServer").(http.ServerConfig))
 	logger := service.Registry.Get("logger").(*zap.Logger)
+
+	startingCallbacks := []func(){
+		func() {
+			logger.Info("app is starting")
+		},
+	}
+	startedCallbacks := []func(){
+		func() {
+			logger.Info("app is started")
+		},
+	}
+	signalCallbacks := []app.SignalCallback{
+		{
+			Signals: []os.Signal{
+				syscall.SIGINT,
+				syscall.SIGTERM,
+			},
+			CallbackFunc: httpServer.GracefulShutdown,
+		},
+	}
+	asyncCallbacks := []func(){}
+	terminatedCallbacks := []func(){
+		func() {
+			logger.Info("app is terminated")
+		},
+	}
+
 	app := app.New(
-		[]app.StartingCallback{
-			httpServer.GracefulShutdown,
-		},
-		[]app.StartedCallback{
-			func() {
-				logger.Info("app is started")
-			},
-		},
-		[]app.TerminatedCallback{
-			func() {
-				logger.Info("app is terminated")
-			},
-		},
-		httpServer.Run,
+		startingCallbacks,
+		startedCallbacks,
+		signalCallbacks,
+		asyncCallbacks,
+		terminatedCallbacks,
 	)
 
-	app.Run()
+	app.Run(httpServer.Run)
 }
