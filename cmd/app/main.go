@@ -9,6 +9,7 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/scheduler"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/app"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
@@ -41,6 +42,7 @@ func main() {
 		func() {
 			logger.Info("app is started")
 		},
+		scheduler.Start,
 	}
 	signalCallbacks := []app.SignalCallback{
 		{
@@ -53,6 +55,7 @@ func main() {
 	}
 	asyncCallbacks := []func(){}
 	terminatedCallbacks := []func(){
+		scheduler.Stop,
 		func() {
 			logger.Info("app is terminated")
 		},
