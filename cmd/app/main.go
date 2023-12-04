@@ -20,8 +20,7 @@ func init() {
 	booter.Boot(
 		func() {},
 		booter.NewConfigWithCommand,
-		&registrar.ConfigRegistrar,
-		&registrar.ServiceRegistrar,
+		&registrar.RegisterExecutor,
 	)
 }
 

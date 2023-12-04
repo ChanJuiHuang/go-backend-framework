@@ -6,8 +6,14 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/redis"
 )
 
-type RedisRegistrar struct{}
+type RedisRegistrar struct {
+	config redis.Config
+}
 
-func (*RedisRegistrar) Register() {
-	service.Registry.Set("redis", redis.New(config.Registry.Get("redis").(redis.Config)))
+func (rr *RedisRegistrar) Boot() {
+	config.Registry.Register("redis", &rr.config)
+}
+
+func (rr *RedisRegistrar) Register() {
+	service.Registry.Set("redis", redis.New(rr.config))
 }
