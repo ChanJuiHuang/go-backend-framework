@@ -56,9 +56,9 @@ func AddCsrfToken(req *http.Request) {
 		SameSite: config.Cookie.SameSite,
 	}
 	req.AddCookie(cookie)
-	req.Header.Add(config.Header, "1234567890")
+	req.Header.Set(config.Header, "1234567890")
 }
 
 func AddBearerToken(req *http.Request, token string) {
-	req.Header.Add("Authorization", token)
+	req.Header.Set("Authorization", token)
 }
