@@ -77,11 +77,36 @@ func NewTestingConfig() *Config {
 type NewConfigFunc func() *Config
 type LoadEnvFunc func()
 
-type ConfigRegistrar interface {
+type Registrar interface {
+	Boot()
 	Register()
 }
-type ServiceRegistrar interface {
-	Register()
+
+type RegistrarCenter struct {
+	registrars []Registrar
+}
+
+func NewRegistrarCenter(registrars []Registrar) *RegistrarCenter {
+	return &RegistrarCenter{
+		registrars: registrars,
+	}
+}
+
+func (r *RegistrarCenter) GetRegistrars() []Registrar {
+	return r.registrars
+}
+
+func (r *RegistrarCenter) Execute() {
+	for _, registrar := range r.registrars {
+		registrar.Boot()
+		registrar.Register()
+	}
+}
+
+type RegisterExecutor interface {
+	BeforeExecute()
+	Execute()
+	AfterExecute()
 }
 
 func bootConfigRegistry(booterConfig *Config) {
@@ -102,11 +127,11 @@ func bootConfigRegistry(booterConfig *Config) {
 func Boot(
 	loadEnvFunc LoadEnvFunc,
 	newConfigFunc NewConfigFunc,
-	configRegistrar ConfigRegistrar,
-	serviceRegistrar ServiceRegistrar,
+	registrarCenter RegisterExecutor,
 ) {
 	loadEnvFunc()
 	bootConfigRegistry(newConfigFunc())
-	configRegistrar.Register()
-	serviceRegistrar.Register()
+	registrarCenter.BeforeExecute()
+	registrarCenter.Execute()
+	registrarCenter.AfterExecute()
 }
