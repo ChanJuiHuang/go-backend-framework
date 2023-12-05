@@ -6,8 +6,14 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/database"
 )
 
-type DatabaseRegistrar struct{}
+type DatabaseRegistrar struct {
+	config database.Config
+}
 
-func (*DatabaseRegistrar) Register() {
-	service.Registry.Set("database", database.New(config.Registry.Get("database").(database.Config)))
+func (dr *DatabaseRegistrar) Boot() {
+	config.Registry.Register("database", &dr.config)
+}
+
+func (dr *DatabaseRegistrar) Register() {
+	service.Registry.Set("database", database.New(dr.config))
 }

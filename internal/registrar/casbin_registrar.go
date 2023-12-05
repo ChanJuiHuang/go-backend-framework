@@ -10,6 +10,9 @@ import (
 
 type CasbinRegistrar struct{}
 
+func (*CasbinRegistrar) Boot() {
+}
+
 func (*CasbinRegistrar) Register() {
 	adapter, err := gormadapter.NewAdapterByDBUseTableName(
 		service.Registry.Get("database").(*gorm.DB),

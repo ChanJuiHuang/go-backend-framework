@@ -14,8 +14,7 @@ func init() {
 	booter.Boot(
 		loadEnv,
 		booter.NewTestingConfig,
-		&registrar.ConfigRegistrar,
-		&registrar.ServiceRegistrar,
+		&registrar.RegisterExecutor,
 	)
 
 	HttpHandler = NewHttpHandler()

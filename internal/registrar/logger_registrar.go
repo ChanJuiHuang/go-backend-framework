@@ -10,11 +10,27 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/logger"
 )
 
-type LoggerRegistrar struct{}
+type LoggerRegistrar struct {
+	consoleConfig logger.Config
+	fileConfig    logger.Config
+	accessConfig  logger.Config
+}
 
-func (*LoggerRegistrar) Register() {
+func (lr *LoggerRegistrar) Boot() {
+	config.Registry.RegisterMany(map[string]any{
+		"logger.console": &logger.Config{},
+		"logger.file":    &logger.Config{},
+		"logger.access":  &logger.Config{},
+	})
+
+	lr.consoleConfig = config.Registry.Get("logger.console").(logger.Config)
+	lr.fileConfig = config.Registry.Get("logger.file").(logger.Config)
+	lr.accessConfig = config.Registry.Get("logger.access").(logger.Config)
+}
+
+func (lr *LoggerRegistrar) Register() {
 	consoleLogger, err := logger.NewLogger(
-		config.Registry.Get("logger.console").(logger.Config),
+		lr.consoleConfig,
 		logger.ConsoleEncoder,
 		logger.DefaultZapOptions...,
 	)
@@ -23,10 +39,9 @@ func (*LoggerRegistrar) Register() {
 	}
 
 	booterConfig := config.Registry.Get("booter").(booter.Config)
-	fileConfig := config.Registry.Get("logger.file").(logger.Config)
-	fileConfig.LogPath = path.Join(booterConfig.RootDir, fileConfig.LogPath)
+	lr.fileConfig.LogPath = path.Join(booterConfig.RootDir, lr.fileConfig.LogPath)
 	fileLogger, err := logger.NewLogger(
-		fileConfig,
+		lr.fileConfig,
 		logger.JsonEncoder,
 		logger.DefaultZapOptions...,
 	)
@@ -34,10 +49,9 @@ func (*LoggerRegistrar) Register() {
 		panic(err)
 	}
 
-	accessConfig := config.Registry.Get("logger.access").(logger.Config)
-	accessConfig.LogPath = path.Join(booterConfig.RootDir, accessConfig.LogPath)
+	lr.accessConfig.LogPath = path.Join(booterConfig.RootDir, lr.accessConfig.LogPath)
 	accessLogger, err := logger.NewLogger(
-		accessConfig,
+		lr.accessConfig,
 		logger.JsonEncoder,
 	)
 	if err != nil {

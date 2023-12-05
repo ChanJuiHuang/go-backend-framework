@@ -6,10 +6,16 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 )
 
-type AuthenticationRegistrar struct{}
+type AuthenticationRegistrar struct {
+	config authentication.Config
+}
 
-func (*AuthenticationRegistrar) Register() {
-	authenticator, err := authentication.NewAuthenticator(config.Registry.Get("authentication.authenticator").(authentication.Config))
+func (ar *AuthenticationRegistrar) Boot() {
+	config.Registry.Register("authentication.authenticator", &ar.config)
+}
+
+func (ar *AuthenticationRegistrar) Register() {
+	authenticator, err := authentication.NewAuthenticator(ar.config)
 	if err != nil {
 		panic(err)
 	}
