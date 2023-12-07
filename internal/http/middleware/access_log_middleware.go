@@ -14,7 +14,7 @@ func AccessLogger() gin.HandlerFunc {
 	skipPaths := map[string]bool{
 		"/skip-path": true,
 	}
-	accessLogger := service.Registry.Get("accessLogger").(*zap.Logger)
+	accessLogger := service.Registry.Get("logger.access").(*zap.Logger)
 
 	return func(c *gin.Context) {
 		now := time.Now()

@@ -58,9 +58,9 @@ func (lr *LoggerRegistrar) Register() {
 		panic(err)
 	}
 	service.Registry.SetMany(map[string]any{
-		"consoleLogger": consoleLogger,
-		"fileLogger":    fileLogger,
-		"accessLogger":  accessLogger,
+		"logger.console": consoleLogger,
+		"logger.file":    fileLogger,
+		"logger.access":  accessLogger,
 	})
 
 	v := config.Registry.GetViper()
@@ -71,7 +71,7 @@ func (lr *LoggerRegistrar) Register() {
 		if defaultSetting == setting {
 			service.Registry.Set(
 				"logger",
-				service.Registry.Get(fmt.Sprintf("%sLogger", defaultSetting)),
+				service.Registry.Get(fmt.Sprintf("logger.%s", defaultSetting)),
 			)
 		}
 	}
