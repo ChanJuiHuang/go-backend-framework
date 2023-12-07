@@ -35,7 +35,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminGetGroupingPolicyResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminGetGroupingPolicyData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -97,7 +109,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminCreateGroupingPolicyResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminCreateGroupingPolicyData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -165,7 +189,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminDeleteGroupingPolicyResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminDeleteGroupingPolicyData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -235,7 +271,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminCreatePolicyResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminCreatePolicyData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -303,7 +351,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminDeletePolicyResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminDeletePolicyData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -415,7 +475,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminSearchPolicySubjectResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminSearchPolicySubjectData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -477,7 +549,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminDeletePolicySubjectResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminDeletePolicySubjectData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -532,7 +616,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminGetPolicySubjectResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminGetPolicySubjectData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -611,7 +707,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserUpdateResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/user.UserUpdateData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -668,7 +776,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserLoginResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/user.UserLoginData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -716,7 +836,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserMeResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/user.UserMeData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -773,7 +905,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserRegisterResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/user.UserRegisterData"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -799,6 +943,24 @@
         }
     },
     "definitions": {
+        "admin.AdminCreateGroupingPolicyData": {
+            "type": "object",
+            "required": [
+                "subjects",
+                "user_id"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "admin.AdminCreateGroupingPolicyRequest": {
             "type": "object",
             "required": [
@@ -817,21 +979,21 @@
                 }
             }
         },
-        "admin.AdminCreateGroupingPolicyResponse": {
+        "admin.AdminCreatePolicyData": {
             "type": "object",
             "required": [
-                "subjects",
-                "user_id"
+                "rules",
+                "subject"
             ],
             "properties": {
-                "subjects": {
+                "rules": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/admin.Rule"
                     }
                 },
-                "user_id": {
-                    "type": "integer"
+                "subject": {
+                    "type": "string"
                 }
             }
         },
@@ -853,21 +1015,21 @@
                 }
             }
         },
-        "admin.AdminCreatePolicyResponse": {
+        "admin.AdminDeleteGroupingPolicyData": {
             "type": "object",
             "required": [
-                "rules",
-                "subject"
+                "subjects",
+                "user_id"
             ],
             "properties": {
-                "rules": {
+                "subjects": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/admin.Rule"
+                        "type": "string"
                     }
                 },
-                "subject": {
-                    "type": "string"
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -889,21 +1051,21 @@
                 }
             }
         },
-        "admin.AdminDeleteGroupingPolicyResponse": {
+        "admin.AdminDeletePolicyData": {
             "type": "object",
             "required": [
-                "subjects",
-                "user_id"
+                "rules",
+                "subject"
             ],
             "properties": {
-                "subjects": {
+                "rules": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/admin.Rule"
                     }
                 },
-                "user_id": {
-                    "type": "integer"
+                "subject": {
+                    "type": "string"
                 }
             }
         },
@@ -925,21 +1087,17 @@
                 }
             }
         },
-        "admin.AdminDeletePolicyResponse": {
+        "admin.AdminDeletePolicySubjectData": {
             "type": "object",
             "required": [
-                "rules",
-                "subject"
+                "subjects"
             ],
             "properties": {
-                "rules": {
+                "subjects": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/admin.Rule"
+                        "type": "string"
                     }
-                },
-                "subject": {
-                    "type": "string"
                 }
             }
         },
@@ -957,21 +1115,7 @@
                 }
             }
         },
-        "admin.AdminDeletePolicySubjectResponse": {
-            "type": "object",
-            "required": [
-                "subjects"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "admin.AdminGetGroupingPolicyResponse": {
+        "admin.AdminGetGroupingPolicyData": {
             "type": "object",
             "required": [
                 "subjects",
@@ -989,7 +1133,7 @@
                 }
             }
         },
-        "admin.AdminGetPolicySubjectResponse": {
+        "admin.AdminGetPolicySubjectData": {
             "type": "object",
             "required": [
                 "rules",
@@ -1007,7 +1151,7 @@
                 }
             }
         },
-        "admin.AdminSearchPolicySubjectResponse": {
+        "admin.AdminSearchPolicySubjectData": {
             "type": "object",
             "required": [
                 "subjects"
@@ -1084,6 +1228,30 @@
                 }
             }
         },
+        "response.Response": {
+            "type": "object",
+            "required": [
+                "data"
+            ],
+            "properties": {
+                "data": {}
+            }
+        },
+        "user.UserLoginData": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
         "user.UserLoginRequest": {
             "type": "object",
             "required": [
@@ -1099,22 +1267,7 @@
                 }
             }
         },
-        "user.UserLoginResponse": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UserMeResponse": {
+        "user.UserMeData": {
             "type": "object",
             "required": [
                 "created_at",
@@ -1137,6 +1290,21 @@
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UserRegisterData": {
+            "type": "object",
+            "required": [
+                "access_token",
+                "refresh_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
                     "type": "string"
                 }
             }
@@ -1161,37 +1329,7 @@
                 }
             }
         },
-        "user.UserRegisterResponse": {
-            "type": "object",
-            "required": [
-                "access_token",
-                "refresh_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UserUpdateRequest": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "minLength": 8
-                }
-            }
-        },
-        "user.UserUpdateResponse": {
+        "user.UserUpdateData": {
             "type": "object",
             "required": [
                 "created_at",
@@ -1215,6 +1353,21 @@
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "user.UserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
                 }
             }
         }
