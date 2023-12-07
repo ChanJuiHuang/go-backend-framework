@@ -13,6 +13,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
+	"github.com/mitchellh/mapstructure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -62,14 +63,19 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestDeleteGroupingPolicy() {
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
-	respBody := &admin.AdminDeleteGroupingPolicyResponse{}
-	if err := json.Unmarshal(resp.Body.Bytes(), respBody); err != nil {
+	respBody := &response.Response{}
+	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
+		panic(err)
+	}
+
+	data := &admin.AdminDeleteGroupingPolicyData{}
+	if err := mapstructure.Decode(respBody.Data, data); err != nil {
 		panic(err)
 	}
 
 	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.Equal(suite.T(), uint(id), respBody.UserId)
-	assert.Equal(suite.T(), []string{subject2}, respBody.Subjects)
+	assert.Equal(suite.T(), uint(id), data.UserId)
+	assert.Equal(suite.T(), []string{subject2}, data.Subjects)
 }
 
 func (suite *AdminDeleteGroupingPolicyTestSuite) TestRequestValidationFailed() {

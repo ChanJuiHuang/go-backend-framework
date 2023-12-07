@@ -6,9 +6,11 @@ import (
 	"net/http/httptest"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/mitchellh/mapstructure"
 	"gorm.io/gorm"
 )
 
@@ -39,10 +41,14 @@ func UserLogin() (string, string) {
 	resp := httptest.NewRecorder()
 	HttpHandler.ServeHTTP(resp, req)
 
-	respBody := &user.UserLoginResponse{}
+	respBody := &response.Response{}
 	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
 		panic(err)
 	}
+	data := &user.UserLoginData{}
+	if err := mapstructure.Decode(respBody.Data, data); err != nil {
+		panic(err)
+	}
 
-	return respBody.AccessToken, respBody.RefreshToken
+	return data.AccessToken, data.RefreshToken
 }

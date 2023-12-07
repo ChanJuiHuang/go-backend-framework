@@ -21,9 +21,9 @@ type AdminCreatePolicyRequest struct {
 	Rules   []Rule `json:"rules" binding:"required,dive"`
 }
 
-type AdminCreatePolicyResponse struct {
-	Subject string `json:"subject" validate:"required"`
-	Rules   []Rule `json:"rules" validate:"required"`
+type AdminCreatePolicyData struct {
+	Subject string `json:"subject" mapstructure:"subject" validate:"required"`
+	Rules   []Rule `json:"rules" mapstructure:"rules" validate:"required"`
 }
 
 // @tags admin
@@ -32,7 +32,7 @@ type AdminCreatePolicyResponse struct {
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param Authorization header string true "bearer token"
 // @param request body admin.AdminCreatePolicyRequest true "create policy"
-// @success 200 {object} admin.AdminCreatePolicyResponse
+// @success 200 {object} response.Response{data=admin.AdminCreatePolicyData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(add policy is failed), 400-002(request validation failed), 400-005(one of policy is repeat)"
 // @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch, casbin authorization failed)"
@@ -81,8 +81,10 @@ func CreatePolicy(c *gin.Context) {
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
-	c.JSON(http.StatusOK, &AdminCreatePolicyResponse{
+
+	respBody := response.NewResponse(AdminCreatePolicyData{
 		Subject: reqBody.Subject,
 		Rules:   rules,
 	})
+	c.JSON(http.StatusOK, respBody)
 }

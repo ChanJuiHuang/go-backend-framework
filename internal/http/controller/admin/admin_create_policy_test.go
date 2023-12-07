@@ -10,6 +10,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	"github.com/mitchellh/mapstructure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -54,14 +55,19 @@ func (suite *AdminCreatePolicyTestSuite) TestCreatePolicy() {
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
-	respBody := &admin.AdminCreatePolicyResponse{}
-	if err := json.Unmarshal(resp.Body.Bytes(), respBody); err != nil {
+	respBody := &response.Response{}
+	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
+		panic(err)
+	}
+
+	data := &admin.AdminCreatePolicyData{}
+	if err := mapstructure.Decode(respBody.Data, data); err != nil {
 		panic(err)
 	}
 
 	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.Equal(suite.T(), subject, respBody.Subject)
-	assert.Equal(suite.T(), rules, respBody.Rules)
+	assert.Equal(suite.T(), subject, data.Subject)
+	assert.Equal(suite.T(), rules, data.Rules)
 }
 
 func (suite *AdminCreatePolicyTestSuite) TestRequestValidationFailed() {

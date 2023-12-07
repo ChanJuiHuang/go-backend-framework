@@ -20,12 +20,12 @@ type UserUpdateRequest struct {
 	Password string `json:"password" binding:"omitempty,gte=8,containsany=abcdefghijklmnopqrstuvwxyz,containsany=ABCDEFGHIJKLMNOPQRSTUVWXYZ,containsany=1234567890" structs:"password,omitempty"`
 }
 
-type UserUpdateResponse struct {
-	Id        uint      `json:"id" validate:"required"`
-	Name      string    `json:"name" validate:"required"`
-	Email     string    `json:"email" validate:"required"`
-	CreatedAt time.Time `json:"created_at" validate:"required"`
-	UpdatedAt time.Time `json:"updated_at" validate:"required"`
+type UserUpdateData struct {
+	Id        uint      `json:"id" mapstructure:"id" validate:"required"`
+	Name      string    `json:"name" mapstructure:"name" validate:"required"`
+	Email     string    `json:"email" mapstructure:"email" validate:"required"`
+	CreatedAt time.Time `json:"created_at" mapstructure:"created_at" validate:"required"`
+	UpdatedAt time.Time `json:"updated_at" mapstructure:"updated_at" validate:"required"`
 }
 
 // @tags user
@@ -34,7 +34,7 @@ type UserUpdateResponse struct {
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param Authorization header string true "bearer token"
 // @param request body user.UserUpdateRequest true "update user"
-// @success 200 {object} user.UserUpdateResponse
+// @success 200 {object} response.Response{data=user.UserUpdateData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(update user failed, get user failed), 400-002(request validation failed)"
 // @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
@@ -69,11 +69,12 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, &UserUpdateResponse{
+	respBody := response.NewResponse(UserUpdateData{
 		Id:        u.Id,
 		Name:      u.Name,
 		Email:     u.Email,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
 	})
+	c.JSON(http.StatusOK, respBody)
 }

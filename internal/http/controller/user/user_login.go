@@ -19,9 +19,9 @@ type UserLoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type UserLoginResponse struct {
-	AccessToken  string `json:"access_token" validate:"required"`
-	RefreshToken string `json:"refresh_token" validate:"required"`
+type UserLoginData struct {
+	AccessToken  string `json:"access_token" mapstructure:"access_token" validate:"required"`
+	RefreshToken string `json:"refresh_token" mapstructure:"refresh_token" validate:"required"`
 }
 
 // @tags user
@@ -29,7 +29,7 @@ type UserLoginResponse struct {
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param request body user.UserLoginRequest true "login user"
-// @success 200 {object} user.UserLoginResponse
+// @success 200 {object} response.Response{data=user.UserLoginData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(issue access token failed, issue refresh token failed), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
@@ -74,8 +74,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, &UserLoginResponse{
+	respBody := response.NewResponse(UserLoginData{
 		AccessToken:  fmt.Sprintf("Bearer %s", accessToken),
 		RefreshToken: refreshToken,
 	})
+	c.JSON(http.StatusOK, respBody)
 }

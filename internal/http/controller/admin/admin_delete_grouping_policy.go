@@ -17,9 +17,9 @@ type AdminDeleteGroupingPolicyRequest struct {
 	Subjects []string `json:"subjects" binding:"required"`
 }
 
-type AdminDeleteGroupingPolicyResponse struct {
-	UserId   uint     `json:"user_id" validate:"required"`
-	Subjects []string `json:"subjects" validate:"required"`
+type AdminDeleteGroupingPolicyData struct {
+	UserId   uint     `json:"user_id" mapstructure:"user_id" validate:"required"`
+	Subjects []string `json:"subjects" mapstructure:"subjects" validate:"required"`
 }
 
 // @tags admin
@@ -28,7 +28,7 @@ type AdminDeleteGroupingPolicyResponse struct {
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param Authorization header string true "bearer token"
 // @param request body admin.AdminDeleteGroupingPolicyRequest true "delete grouping policy"
-// @success 200 {object} admin.AdminDeleteGroupingPolicyResponse
+// @success 200 {object} response.Response{data=admin.AdminDeleteGroupingPolicyData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(delete grouping policy failed), 400-002(request validation failed)"
 // @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch, casbin authorization failed)"
@@ -74,8 +74,10 @@ func DeleteGroupingPolicy(c *gin.Context) {
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
-	c.JSON(http.StatusOK, &AdminDeleteGroupingPolicyResponse{
+
+	respBody := response.NewResponse(AdminDeleteGroupingPolicyData{
 		UserId:   reqBody.UserId,
 		Subjects: subjects,
 	})
+	c.JSON(http.StatusOK, respBody)
 }

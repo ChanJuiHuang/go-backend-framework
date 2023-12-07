@@ -17,9 +17,9 @@ type AdminCreateGroupingPolicyRequest struct {
 	Subjects []string `json:"subjects" binding:"required"`
 }
 
-type AdminCreateGroupingPolicyResponse struct {
-	UserId   uint     `json:"user_id" validate:"required"`
-	Subjects []string `json:"subjects" validate:"required"`
+type AdminCreateGroupingPolicyData struct {
+	UserId   uint     `json:"user_id" mapstructure:"user_id" validate:"required"`
+	Subjects []string `json:"subjects" mapstructure:"subjects" validate:"required"`
 }
 
 // @tags admin
@@ -28,7 +28,7 @@ type AdminCreateGroupingPolicyResponse struct {
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param Authorization header string true "bearer token"
 // @param request body admin.AdminCreateGroupingPolicyRequest true "create grouping policy"
-// @success 200 {object} admin.AdminCreateGroupingPolicyResponse
+// @success 200 {object} response.Response{data=admin.AdminCreateGroupingPolicyData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(add grouping policy is failed), 400-002(request validation failed)"
 // @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch, casbin authorization failed)"
@@ -77,8 +77,10 @@ func CreateGroupingPolicy(c *gin.Context) {
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
-	c.JSON(http.StatusOK, &AdminCreateGroupingPolicyResponse{
+
+	respData := response.NewResponse(AdminCreateGroupingPolicyData{
 		UserId:   reqBody.UserId,
 		Subjects: subjects,
 	})
+	c.JSON(http.StatusOK, respData)
 }
