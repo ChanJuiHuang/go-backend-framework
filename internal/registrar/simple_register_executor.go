@@ -14,6 +14,7 @@ var SimpleRegisterExecutor = simpleRegisterExecutor{
 	registrarCenter: booter.NewRegistrarCenter([]booter.Registrar{
 		&LoggerRegistrar{},
 		&AuthenticationRegistrar{},
+		&MapstructureDecoderRegistrar{},
 	}),
 }
 
