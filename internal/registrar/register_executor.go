@@ -17,6 +17,7 @@ var RegisterExecutor = registerExecutor{
 		&RedisRegistrar{},
 		&AuthenticationRegistrar{},
 		&CasbinRegistrar{},
+		&MapstructureDecoderRegistrar{},
 	}),
 }
 

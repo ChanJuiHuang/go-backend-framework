@@ -10,6 +10,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	"github.com/mitchellh/mapstructure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -38,14 +39,19 @@ func (suite *UserLoginTestSuite) TestLogin() {
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
-	respBody := &user.UserLoginResponse{}
+	respBody := &response.Response{}
 	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
 		panic(err)
 	}
 
+	data := &user.UserLoginData{}
+	if err := mapstructure.Decode(respBody.Data, data); err != nil {
+		panic(err)
+	}
+
 	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), respBody.AccessToken)
-	assert.NotEmpty(suite.T(), respBody.RefreshToken)
+	assert.NotEmpty(suite.T(), data.AccessToken)
+	assert.NotEmpty(suite.T(), data.RefreshToken)
 }
 
 func (suite *UserLoginTestSuite) TestEmailIsWrong() {

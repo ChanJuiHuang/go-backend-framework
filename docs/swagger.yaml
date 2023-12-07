@@ -1,4 +1,16 @@
 definitions:
+  admin.AdminCreateGroupingPolicyData:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    required:
+    - subjects
+    - user_id
+    type: object
   admin.AdminCreateGroupingPolicyRequest:
     properties:
       subjects:
@@ -11,17 +23,17 @@ definitions:
     - subjects
     - user_id
     type: object
-  admin.AdminCreateGroupingPolicyResponse:
+  admin.AdminCreatePolicyData:
     properties:
-      subjects:
+      rules:
         items:
-          type: string
+          $ref: '#/definitions/admin.Rule'
         type: array
-      user_id:
-        type: integer
+      subject:
+        type: string
     required:
-    - subjects
-    - user_id
+    - rules
+    - subject
     type: object
   admin.AdminCreatePolicyRequest:
     properties:
@@ -35,17 +47,17 @@ definitions:
     - rules
     - subject
     type: object
-  admin.AdminCreatePolicyResponse:
+  admin.AdminDeleteGroupingPolicyData:
     properties:
-      rules:
+      subjects:
         items:
-          $ref: '#/definitions/admin.Rule'
+          type: string
         type: array
-      subject:
-        type: string
+      user_id:
+        type: integer
     required:
-    - rules
-    - subject
+    - subjects
+    - user_id
     type: object
   admin.AdminDeleteGroupingPolicyRequest:
     properties:
@@ -59,17 +71,17 @@ definitions:
     - subjects
     - user_id
     type: object
-  admin.AdminDeleteGroupingPolicyResponse:
+  admin.AdminDeletePolicyData:
     properties:
-      subjects:
+      rules:
         items:
-          type: string
+          $ref: '#/definitions/admin.Rule'
         type: array
-      user_id:
-        type: integer
+      subject:
+        type: string
     required:
-    - subjects
-    - user_id
+    - rules
+    - subject
     type: object
   admin.AdminDeletePolicyRequest:
     properties:
@@ -83,17 +95,14 @@ definitions:
     - rules
     - subject
     type: object
-  admin.AdminDeletePolicyResponse:
+  admin.AdminDeletePolicySubjectData:
     properties:
-      rules:
+      subjects:
         items:
-          $ref: '#/definitions/admin.Rule'
+          type: string
         type: array
-      subject:
-        type: string
     required:
-    - rules
-    - subject
+    - subjects
     type: object
   admin.AdminDeletePolicySubjectRequest:
     properties:
@@ -104,16 +113,7 @@ definitions:
     required:
     - subjects
     type: object
-  admin.AdminDeletePolicySubjectResponse:
-    properties:
-      subjects:
-        items:
-          type: string
-        type: array
-    required:
-    - subjects
-    type: object
-  admin.AdminGetGroupingPolicyResponse:
+  admin.AdminGetGroupingPolicyData:
     properties:
       subjects:
         items:
@@ -125,7 +125,7 @@ definitions:
     - subjects
     - user_id
     type: object
-  admin.AdminGetPolicySubjectResponse:
+  admin.AdminGetPolicySubjectData:
     properties:
       rules:
         items:
@@ -137,7 +137,7 @@ definitions:
     - rules
     - subject
     type: object
-  admin.AdminSearchPolicySubjectResponse:
+  admin.AdminSearchPolicySubjectData:
     properties:
       subjects:
         items:
@@ -190,6 +190,22 @@ definitions:
     - code
     - message
     type: object
+  response.Response:
+    properties:
+      data: {}
+    required:
+    - data
+    type: object
+  user.UserLoginData:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
   user.UserLoginRequest:
     properties:
       email:
@@ -200,17 +216,7 @@ definitions:
     - email
     - password
     type: object
-  user.UserLoginResponse:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
-    type: object
-  user.UserMeResponse:
+  user.UserMeData:
     properties:
       created_at:
         type: string
@@ -228,6 +234,16 @@ definitions:
     - id
     - name
     - updated_at
+    type: object
+  user.UserRegisterData:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
     type: object
   user.UserRegisterRequest:
     properties:
@@ -243,27 +259,7 @@ definitions:
     - name
     - password
     type: object
-  user.UserRegisterResponse:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    required:
-    - access_token
-    - refresh_token
-    type: object
-  user.UserUpdateRequest:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      password:
-        minLength: 8
-        type: string
-    type: object
-  user.UserUpdateResponse:
+  user.UserUpdateData:
     properties:
       created_at:
         type: string
@@ -281,6 +277,16 @@ definitions:
     - id
     - name
     - updated_at
+    type: object
+  user.UserUpdateRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -315,7 +321,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/admin.AdminDeleteGroupingPolicyResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminDeleteGroupingPolicyData'
+              type: object
         "400":
           description: 'code: 400-001(delete grouping policy failed), 400-002(request
             validation failed)'
@@ -350,7 +361,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/admin.AdminGetGroupingPolicyResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminGetGroupingPolicyData'
+              type: object
         "401":
           description: 'code: 401-001(access token is wrong)'
           schema:
@@ -391,7 +407,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/admin.AdminCreateGroupingPolicyResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminCreateGroupingPolicyData'
+              type: object
         "400":
           description: 'code: 400-001(add grouping policy is failed), 400-002(request
             validation failed)'
@@ -438,7 +459,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/admin.AdminDeletePolicyResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminDeletePolicyData'
+              type: object
         "400":
           description: 'code: 400-001(delete policy failed), 400-002(request validation
             failed)'
@@ -484,7 +510,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/admin.AdminCreatePolicyResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminCreatePolicyData'
+              type: object
         "400":
           description: 'code: 400-001(add policy is failed), 400-002(request validation
             failed), 400-005(one of policy is repeat)'
@@ -569,7 +600,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/admin.AdminDeletePolicySubjectResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminDeletePolicySubjectData'
+              type: object
         "401":
           description: 'code: 401-001(access token is wrong)'
           schema:
@@ -599,7 +635,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/admin.AdminSearchPolicySubjectResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminSearchPolicySubjectData'
+              type: object
         "401":
           description: 'code: 401-001(access token is wrong)'
           schema:
@@ -635,7 +676,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/admin.AdminGetPolicySubjectResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminGetPolicySubjectData'
+              type: object
         "401":
           description: 'code: 401-001(access token is wrong)'
           schema:
@@ -686,7 +732,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserUpdateResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.UserUpdateData'
+              type: object
         "400":
           description: 'code: 400-001(update user failed, get user failed), 400-002(request
             validation failed)'
@@ -724,7 +775,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserLoginResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.UserLoginData'
+              type: object
         "400":
           description: 'code: 400-001(issue access token failed, issue refresh token
             failed), 400-002(request validation failed), 400-003(email is wrong),
@@ -757,7 +813,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserMeResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.UserMeData'
+              type: object
         "400":
           description: 'code: 400-001(get user failed)'
           schema:
@@ -794,7 +855,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserRegisterResponse'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.UserRegisterData'
+              type: object
         "400":
           description: 'code: 400-001(issue access token failed, issue refresh token
             failed), 400-002(request validation failed)'

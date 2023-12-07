@@ -21,8 +21,8 @@ func NewRegistry() *registry {
 }
 
 func (r *registry) Set(key string, service any) {
-	if !(reflect.ValueOf(service).Kind() == reflect.Pointer) {
-		panic("service is not the pointer")
+	if !(reflect.ValueOf(service).Kind() == reflect.Pointer || reflect.ValueOf(service).Kind() == reflect.Func) {
+		panic("service is not the pointer or function")
 	}
 	r.services[key] = service
 }

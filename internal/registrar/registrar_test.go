@@ -54,6 +54,7 @@ func (suite *RegisterExecutorTestSuite) TestRegisterExecutor() {
 	assert.NotEmpty(suite.T(), service.Registry.Get("redis"))
 	assert.NotEmpty(suite.T(), service.Registry.Get("formDecoder"))
 	assert.NotEmpty(suite.T(), service.Registry.Get("modifier"))
+	assert.NotEmpty(suite.T(), service.Registry.Get("mapstructureDecoder"))
 }
 
 func (suite *RegisterExecutorTestSuite) TestSimpleRegisterExecutor() {
@@ -79,6 +80,7 @@ func (suite *RegisterExecutorTestSuite) TestSimpleRegisterExecutor() {
 	assert.NotEmpty(suite.T(), service.Registry.Get("logger.access"))
 	assert.NotEmpty(suite.T(), service.Registry.Get("formDecoder"))
 	assert.NotEmpty(suite.T(), service.Registry.Get("modifier"))
+	assert.NotEmpty(suite.T(), service.Registry.Get("mapstructureDecoder"))
 }
 
 func (suite *RegisterExecutorTestSuite) TearDownSuite() {

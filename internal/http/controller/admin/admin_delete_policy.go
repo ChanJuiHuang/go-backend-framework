@@ -16,9 +16,9 @@ type AdminDeletePolicyRequest struct {
 	Rules   []Rule `json:"rules" binding:"required,dive"`
 }
 
-type AdminDeletePolicyResponse struct {
-	Subject string `json:"subject" validate:"required"`
-	Rules   []Rule `json:"rules" validate:"required"`
+type AdminDeletePolicyData struct {
+	Subject string `json:"subject" mapstructure:"subject" validate:"required"`
+	Rules   []Rule `json:"rules" mapstructure:"rules" validate:"required"`
 }
 
 // @tags admin
@@ -27,7 +27,7 @@ type AdminDeletePolicyResponse struct {
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param Authorization header string true "bearer token"
 // @param request body admin.AdminDeletePolicyRequest true "delete policy"
-// @success 200 {object} admin.AdminDeletePolicyResponse
+// @success 200 {object} response.Response{data=admin.AdminDeletePolicyData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(delete policy failed), 400-002(request validation failed)"
 // @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch, casbin authorization failed)"
@@ -73,8 +73,10 @@ func DeletePolicy(c *gin.Context) {
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
-	c.JSON(http.StatusOK, &AdminDeletePolicyResponse{
+
+	respBody := response.NewResponse(AdminDeletePolicyData{
 		Subject: reqBody.Subject,
 		Rules:   rules,
 	})
+	c.JSON(http.StatusOK, respBody)
 }

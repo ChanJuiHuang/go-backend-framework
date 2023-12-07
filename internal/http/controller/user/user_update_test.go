@@ -10,6 +10,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -41,17 +42,23 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
-	respBody := &user.UserUpdateResponse{}
+	respBody := &response.Response{}
 	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
 		panic(err)
 	}
 
+	data := &user.UserUpdateData{}
+	decoder := service.Registry.Get("mapstructureDecoder").(func(any, any) error)
+	if err := decoder(respBody.Data, data); err != nil {
+		panic(err)
+	}
+
 	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), respBody.Id)
-	assert.Equal(suite.T(), userUpdateRequest.Name, respBody.Name)
-	assert.Equal(suite.T(), userUpdateRequest.Email, respBody.Email)
-	assert.NotEmpty(suite.T(), respBody.CreatedAt)
-	assert.NotEmpty(suite.T(), respBody.UpdatedAt)
+	assert.NotEmpty(suite.T(), data.Id)
+	assert.Equal(suite.T(), userUpdateRequest.Name, data.Name)
+	assert.Equal(suite.T(), userUpdateRequest.Email, data.Email)
+	assert.NotEmpty(suite.T(), data.CreatedAt)
+	assert.NotEmpty(suite.T(), data.UpdatedAt)
 }
 
 func (suite *UserUpdateTestSuite) TestWrongAccessToken() {

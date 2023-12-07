@@ -21,9 +21,9 @@ type UserRegisterRequest struct {
 	Password string `json:"password" binding:"required,gte=8,containsany=abcdefghijklmnopqrstuvwxyz,containsany=ABCDEFGHIJKLMNOPQRSTUVWXYZ,containsany=1234567890"`
 }
 
-type UserRegisterResponse struct {
-	AccessToken  string `json:"access_token" validate:"required"`
-	RefreshToken string `json:"refresh_token" validate:"required"`
+type UserRegisterData struct {
+	AccessToken  string `json:"access_token" mapstructure:"access_token" validate:"required"`
+	RefreshToken string `json:"refresh_token" mapstructure:"refresh_token" validate:"required"`
 }
 
 // @tags user
@@ -31,7 +31,7 @@ type UserRegisterResponse struct {
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param request body user.UserRegisterRequest true "register user"
-// @success 200 {object} user.UserRegisterResponse
+// @success 200 {object} response.Response{data=user.UserRegisterData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(issue access token failed, issue refresh token failed), 400-002(request validation failed)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
@@ -74,8 +74,9 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, &UserRegisterResponse{
+	respBody := response.NewResponse(UserRegisterData{
 		AccessToken:  fmt.Sprintf("Bearer %s", accessToken),
 		RefreshToken: refreshToken,
 	})
+	c.JSON(http.StatusOK, respBody)
 }

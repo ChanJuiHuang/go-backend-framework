@@ -9,6 +9,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -30,17 +31,23 @@ func (suite *UserMeTestSuite) TestMe() {
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
-	respBody := &user.UserMeResponse{}
+	respBody := &response.Response{}
 	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
 		panic(err)
 	}
 
+	data := &user.UserMeData{}
+	decoder := service.Registry.Get("mapstructureDecoder").(func(any, any) error)
+	if err := decoder(respBody.Data, data); err != nil {
+		panic(err)
+	}
+
 	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), respBody.Id)
-	assert.NotEmpty(suite.T(), respBody.Name)
-	assert.NotEmpty(suite.T(), respBody.Email)
-	assert.NotEmpty(suite.T(), respBody.CreatedAt)
-	assert.NotEmpty(suite.T(), respBody.UpdatedAt)
+	assert.NotEmpty(suite.T(), data.Id)
+	assert.NotEmpty(suite.T(), data.Name)
+	assert.NotEmpty(suite.T(), data.Email)
+	assert.NotEmpty(suite.T(), data.CreatedAt)
+	assert.NotEmpty(suite.T(), data.UpdatedAt)
 }
 
 func (suite *UserMeTestSuite) TestWrongAccessToken() {
