@@ -1,16 +1,16 @@
 package main
 
 import (
-	"flag"
+	"log"
+	"os"
 	"strings"
 
 	_ "github.com/joho/godotenv/autoload"
-	"gorm.io/gorm"
+	"github.com/urfave/cli/v2"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/migration/seeder"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 )
 
 func init() {
@@ -22,10 +22,30 @@ func init() {
 }
 
 func main() {
-	var seeders string
-	flag.StringVar(&seeders, "seeders", "", "Type the seeders. EX: seeder1,seeder2")
-	flag.Parse()
+	seederExecutor := seeder.NewSeederExecutor()
 
-	db := service.Registry.Get("database").(*gorm.DB)
-	seeder.Run(db, strings.Split(seeders, ","))
+	app := &cli.App{
+		Commands: []*cli.Command{
+			{
+				Name:  "show",
+				Usage: "show all seeders",
+				Action: func(cCtx *cli.Context) error {
+					seederExecutor.ShowSeeders()
+					return nil
+				},
+			},
+			{
+				Name:  "run",
+				Usage: "Run the seeders. EX: database_seeder run seeder1,seeder2 (run specific seeders). database_seeder run (run all seeders).",
+				Action: func(cCtx *cli.Context) error {
+					seederExecutor.Run(strings.Split(cCtx.Args().First(), ","))
+					return nil
+				},
+			},
+		},
+	}
+
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
 }
