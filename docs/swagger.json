@@ -872,6 +872,67 @@
                 }
             }
         },
+        "/api/user/password": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "update user",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserUpdatePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "no content"
+                    },
+                    "400": {
+                        "description": "code: 400-001(update password failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/register": {
             "post": {
                 "consumes": [
@@ -1356,6 +1417,22 @@
                 }
             }
         },
+        "user.UserUpdatePasswordRequest": {
+            "type": "object",
+            "required": [
+                "confirm_password",
+                "password"
+            ],
+            "properties": {
+                "confirm_password": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                }
+            }
+        },
         "user.UserUpdateRequest": {
             "type": "object",
             "properties": {
@@ -1364,10 +1441,6 @@
                 },
                 "name": {
                     "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "minLength": 8
                 }
             }
         }

@@ -278,14 +278,22 @@ definitions:
     - name
     - updated_at
     type: object
+  user.UserUpdatePasswordRequest:
+    properties:
+      confirm_password:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - confirm_password
+    - password
+    type: object
   user.UserUpdateRequest:
     properties:
       email:
         type: string
       name:
-        type: string
-      password:
-        minLength: 8
         type: string
     type: object
 host: localhost:8080
@@ -821,6 +829,47 @@ paths:
               type: object
         "400":
           description: 'code: 400-001(get user failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - user
+  /api/user/password:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update user
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserUpdatePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: no content
+        "400":
+          description: 'code: 400-001(update password failed), 400-002(request validation
+            failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "401":

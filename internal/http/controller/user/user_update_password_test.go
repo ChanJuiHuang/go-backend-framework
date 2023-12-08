@@ -10,58 +10,41 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
-type UserUpdateTestSuite struct {
+type UserUpdatePasswordTestSuite struct {
 	suite.Suite
 }
 
-func (suite *UserUpdateTestSuite) SetupSuite() {
+func (suite *UserUpdatePasswordTestSuite) SetupSuite() {
 	test.Migration.Run()
 	test.UserRegister()
 }
 
-func (suite *UserUpdateTestSuite) TestUpdate() {
+func (suite *UserUpdatePasswordTestSuite) TestUpdatePassword() {
 	accessToken, _ := test.UserLogin()
-	userUpdateRequest := user.UserUpdateRequest{
-		Name:  "bob",
-		Email: "bob@test.com",
+	userUpdateRequest := user.UserUpdatePasswordRequest{
+		Password:        "abcABC123",
+		ConfirmPassword: "abcABC123",
 	}
 	reqBody, err := json.Marshal(userUpdateRequest)
 	if err != nil {
 		panic(err)
 	}
 
-	req := httptest.NewRequest("PUT", "/api/user", bytes.NewReader(reqBody))
+	req := httptest.NewRequest("PUT", "/api/user/password", bytes.NewReader(reqBody))
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
-	respBody := &response.Response{}
-	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
-		panic(err)
-	}
-
-	data := &user.UserUpdateData{}
-	decoder := service.Registry.Get("mapstructureDecoder").(func(any, any) error)
-	if err := decoder(respBody.Data, data); err != nil {
-		panic(err)
-	}
-
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), data.Id)
-	assert.Equal(suite.T(), userUpdateRequest.Name, data.Name)
-	assert.Equal(suite.T(), userUpdateRequest.Email, data.Email)
-	assert.NotEmpty(suite.T(), data.CreatedAt)
-	assert.NotEmpty(suite.T(), data.UpdatedAt)
+	assert.Equal(suite.T(), http.StatusNoContent, resp.Code)
 }
 
-func (suite *UserUpdateTestSuite) TestWrongAccessToken() {
-	req := httptest.NewRequest("PUT", "/api/user", nil)
+func (suite *UserUpdatePasswordTestSuite) TestWrongAccessToken() {
+	req := httptest.NewRequest("PUT", "/api/user/password", nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
@@ -76,8 +59,8 @@ func (suite *UserUpdateTestSuite) TestWrongAccessToken() {
 	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
-func (suite *UserUpdateTestSuite) TestCsrfMismatch() {
-	req := httptest.NewRequest("PUT", "/api/user", nil)
+func (suite *UserUpdatePasswordTestSuite) TestCsrfMismatch() {
+	req := httptest.NewRequest("PUT", "/api/user/password", nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
@@ -91,9 +74,18 @@ func (suite *UserUpdateTestSuite) TestCsrfMismatch() {
 	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
-func (suite *UserUpdateTestSuite) TestRequestValidationFailed() {
+func (suite *UserUpdatePasswordTestSuite) TestRequestValidationFailed() {
 	accessToken, _ := test.UserLogin()
-	req := httptest.NewRequest("PUT", "/api/user", bytes.NewReader([]byte{}))
+	userUpdateRequest := user.UserUpdatePasswordRequest{
+		Password:        "abcABC123",
+		ConfirmPassword: "abcABC",
+	}
+	reqBody, err := json.Marshal(userUpdateRequest)
+	if err != nil {
+		panic(err)
+	}
+
+	req := httptest.NewRequest("PUT", "/api/user/password", bytes.NewReader(reqBody))
 	test.AddBearerToken(req, accessToken)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
@@ -109,10 +101,10 @@ func (suite *UserUpdateTestSuite) TestRequestValidationFailed() {
 	assert.Equal(suite.T(), response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
-func (suite *UserUpdateTestSuite) TearDownSuite() {
+func (suite *UserUpdatePasswordTestSuite) TearDownSuite() {
 	test.Migration.Reset()
 }
 
-func TestUserUpdateTestSuite(t *testing.T) {
-	suite.Run(t, new(UserUpdateTestSuite))
+func TestUserUpdatePasswordTestSuite(t *testing.T) {
+	suite.Run(t, new(UserUpdatePasswordTestSuite))
 }

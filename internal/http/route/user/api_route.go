@@ -13,5 +13,6 @@ func AttachApiRoute(router *gin.Engine) {
 		userRouter.POST("/login", user.Login)
 		userRouter.GET("/me", middleware.Authenticate(), user.Me)
 		userRouter.PUT("", middleware.Authenticate(), user.Update)
+		userRouter.PUT("/password", middleware.Authenticate(), user.UpdatePassword)
 	}
 }
