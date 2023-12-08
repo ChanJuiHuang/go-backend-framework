@@ -6,7 +6,6 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
@@ -15,9 +14,8 @@ import (
 )
 
 type UserUpdateRequest struct {
-	Name     string `json:"name" structs:"name,omitempty"`
-	Email    string `json:"email" structs:"email,omitempty"`
-	Password string `json:"password" binding:"omitempty,gte=8,containsany=abcdefghijklmnopqrstuvwxyz,containsany=ABCDEFGHIJKLMNOPQRSTUVWXYZ,containsany=1234567890" structs:"password,omitempty"`
+	Name  string `json:"name" structs:"name,omitempty"`
+	Email string `json:"email" structs:"email,omitempty"`
 }
 
 type UserUpdateData struct {
@@ -49,9 +47,6 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	if reqBody.Password != "" {
-		reqBody.Password = argon2.MakeArgon2IdHash(reqBody.Password)
-	}
 	values := structs.Map(reqBody)
 	_, err := user.Update(c.GetUint("user_id"), values)
 	if err != nil {
