@@ -23,9 +23,8 @@ type PaginationRequest struct {
 }
 
 type PaginationResponse struct {
-	LastPage int   `json:"last_page,omitempty"`
-	Total    int64 `json:"total,omitempty"`
-	Data     any   `json:"data"`
+	LastPage int   `json:"last_page"`
+	Total    int64 `json:"total"`
 }
 
 func NewPaginator(
