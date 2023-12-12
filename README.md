@@ -58,13 +58,14 @@ The makefile contains **build command**, **test command** and **database migrati
 * [jwt-go](https://github.com/golang-jwt/jwt)
 * [gorm](https://github.com/go-gorm/gorm)
 * [goose](https://github.com/pressly/goose)
-* [go-redis](https://github.com/go-redis/redis)
+* [go-redis](https://github.com/redis/go-redis)
 * [zap](https://github.com/uber-go/zap)
 * [lumberjack](https://github.com/natefinch/lumberjack)
 * [godotenv](https://github.com/joho/godotenv)
 * [viper](https://github.com/spf13/viper)
 * [pkg/errors](https://github.com/pkg/errors)
 * [casbin](https://github.com/casbin/casbin)
+* [mapstructure](https://github.com/mitchellh/mapstructure)
 * [structs](https://github.com/fatih/structs)
 * [argon2](https://pkg.go.dev/golang.org/x/crypto@v0.5.0/argon2)
 * [rate-limit](https://pkg.go.dev/golang.org/x/time@v0.3.0/rate)
@@ -74,33 +75,30 @@ The makefile contains **build command**, **test command** and **database migrati
 ## Folder structure
 ```
 go-backend-framework
+├── LICENSE
+├── Makefile
+├── README.md
 ├── bin
-│   ├── app
-│   ├── jwt
-│   ├── policy_seeder
-│   ├── route
-│   └── seeder
 ├── cmd
 │   ├── app
-│   │   ├── init.go
 │   │   └── main.go
 │   ├── kit
+│   │   ├── database_seeder
+│   │   │   └── database_seeder.go
+│   │   ├── http_route
+│   │   │   └── http_route.go
 │   │   ├── jwt
 │   │   │   └── jwt.go
-│   │   ├── policy_seeder
-│   │   │   ├── init.go
-│   │   │   └── policy_seeder.go
-│   │   ├── route
-│   │   │   └── route.go
-│   │   └── seeder
-│   │       ├── init.go
-│   │       └── seeder.go
+│   │   └── policy_seeder
+│   │       └── policy_seeder.go
 │   └── template
-│       ├── init.go
 │       └── template.go
 ├── config.production.yml
 ├── config.testing.yml
 ├── config.yml
+├── deployment
+│   └── docker
+│       └── Dockerfile
 ├── docs
 │   ├── docs.go
 │   ├── swagger.json
@@ -109,8 +107,6 @@ go-backend-framework
 ├── go.mod
 ├── go.sum
 ├── internal
-│   ├── global
-│   │   └── config.go
 │   ├── http
 │   │   ├── controller
 │   │   │   ├── admin
@@ -140,6 +136,8 @@ go-backend-framework
 │   │   │       ├── user_register.go
 │   │   │       ├── user_register_test.go
 │   │   │       ├── user_update.go
+│   │   │       ├── user_update_password.go
+│   │   │       ├── user_update_password_test.go
 │   │   │       └── user_update_test.go
 │   │   ├── middleware
 │   │   │   ├── access_log_middleware.go
@@ -170,21 +168,30 @@ go-backend-framework
 │   │   └── test
 │   │       └── 20230818113729_create_users_table.sql
 │   ├── pkg
-│   │   ├── provider
-│   │   │   ├── provider.go
-│   │   │   └── registry.go
 │   │   └── user
 │   │       ├── model
 │   │       │   └── user.go
 │   │       └── user.go
+│   ├── registrar
+│   │   ├── authentication_registrar.go
+│   │   ├── casbin_registrar.go
+│   │   ├── database_registrar.go
+│   │   ├── logger_registrar.go
+│   │   ├── mapstructure_decoder_registrar.go
+│   │   ├── redis_registrar.go
+│   │   ├── register_executor.go
+│   │   ├── registrar_test.go
+│   │   └── simple_register_executor.go
+│   ├── scheduler
+│   │   ├── job
+│   │   │   └── example_job.go
+│   │   └── scheduler.go
 │   └── test
 │       ├── admin.go
 │       ├── http.go
 │       ├── migration.go
 │       ├── test.go
 │       └── user.go
-├── LICENSE
-├── Makefile
 ├── pkg
 │   ├── app
 │   │   └── app.go
@@ -195,8 +202,12 @@ go-backend-framework
 │   │   ├── authenticator.go
 │   │   ├── authenticator_test.go
 │   │   └── config.go
-│   ├── config
-│   │   └── registry.go
+│   ├── booter
+│   │   ├── booter.go
+│   │   ├── config
+│   │   │   └── registry.go
+│   │   └── service
+│   │       └── registry.go
 │   ├── database
 │   │   ├── config.go
 │   │   └── database.go
@@ -211,9 +222,10 @@ go-backend-framework
 │   ├── redis
 │   │   ├── config.go
 │   │   └── redis.go
+│   ├── scheduler
+│   │   └── scheduler.go
 │   └── stacktrace
 │       └── stacktrace.go
-├── README.md
 └── storage
     └── log
         ├── access.log
@@ -233,10 +245,10 @@ You can add the custom folder in the app folder.
     * The lifecycle has three stage that are **starting**, **started** and **terminated**.
     * You can use callback function at any stage.
 
-2. config
-    * It is a config registry. It must be import by any package to register its config.
-    * Config registry uses viper and config.yml to integrate and defined the default config.
-    * If config.yml has environment variables, you will use [dot env] to integrate.
+2. booter
+    * The booter package define how to boot the your app.
+    * Booter has config registry and service registry to store the config and instance of the struct by singleton pattern.
+    * To store config and instance. You can follow the internal/registrar package. It has the example to show how to do it.
 
 ---
 ### The internal folder
@@ -244,17 +256,6 @@ The internal folder only use for this project. It always design for business log
 
 ### The internal/pkg folder
 Design for reused business logic.
-
-#### The internal/pkg/provider folder
-It is a provider registry. It uses the single pattern to register the instance of struct when the app starts.
-
-If you want to add your instance of struct, you must modify the provider registry.
-
----
-### The internal/global folder
-Currently, It only has a config for this project.
-
-Global means that the config can be use for any where.
 
 ---
 ### The internal/migration folder
