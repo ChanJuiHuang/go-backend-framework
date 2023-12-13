@@ -10,31 +10,33 @@ import (
 type runSeederFunc func(tx *gorm.DB) error
 
 type SeederExecutor struct {
+	order          []string
 	runSeederFuncs map[string]runSeederFunc
 }
 
 func NewSeederExecutor() *SeederExecutor {
+	order := []string{
+		"user",
+	}
 	runSeederFuncs := map[string]runSeederFunc{
 		"user": runUserSeeder,
 	}
 
 	return &SeederExecutor{
+		order:          order,
 		runSeederFuncs: runSeederFuncs,
 	}
 }
 
 func (se *SeederExecutor) ShowSeeders() {
-	for seeder := range se.runSeederFuncs {
+	for _, seeder := range se.order {
 		fmt.Println(seeder)
 	}
 }
 
 func (se *SeederExecutor) Run(seeders []string) {
 	if len(seeders) == 1 && seeders[0] == "" {
-		seeders = make([]string, 0, len(se.runSeederFuncs))
-		for seeder := range se.runSeederFuncs {
-			seeders = append(seeders, seeder)
-		}
+		seeders = se.order
 	}
 
 	database := service.Registry.Get("database").(*gorm.DB)
