@@ -93,6 +93,6 @@ func (suite *RegisterExecutorTestSuite) TearDownSuite() {
 	registrar.RegisterExecutor.BeforeExecute()
 }
 
-func TestUserUpdateTestSuite(t *testing.T) {
+func TestRegistrarTestSuite(t *testing.T) {
 	suite.Run(t, new(RegisterExecutorTestSuite))
 }
