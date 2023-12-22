@@ -20,8 +20,7 @@ type UserLoginRequest struct {
 }
 
 type UserLoginData struct {
-	AccessToken  string `json:"access_token" mapstructure:"access_token" validate:"required"`
-	RefreshToken string `json:"refresh_token" mapstructure:"refresh_token" validate:"required"`
+	AccessToken string `json:"access_token" mapstructure:"access_token" validate:"required"`
 }
 
 // @tags user
@@ -66,17 +65,9 @@ func Login(c *gin.Context) {
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
-	refreshToken, err := authenticator.IssueRefreshToken(fmt.Sprintf("%v", u.Id))
-	if err != nil {
-		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
-		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
-		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
-		return
-	}
 
 	respBody := response.NewResponse(UserLoginData{
-		AccessToken:  fmt.Sprintf("Bearer %s", accessToken),
-		RefreshToken: refreshToken,
+		AccessToken: fmt.Sprintf("Bearer %s", accessToken),
 	})
 	c.JSON(http.StatusOK, respBody)
 }

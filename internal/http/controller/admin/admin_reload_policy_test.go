@@ -24,7 +24,7 @@ func (suite *AdminReloadPolicyTestSuite) SetupTest() {
 func (suite *AdminReloadPolicyTestSuite) TestReloadPolicy() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 
 	req := httptest.NewRequest("POST", "/api/admin/policy/reload", nil)
 	test.AddCsrfToken(req)
@@ -71,7 +71,7 @@ func (suite *AdminReloadPolicyTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *AdminReloadPolicyTestSuite) TestAuthorizationFailed() {
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	req := httptest.NewRequest("POST", "/api/admin/policy/reload", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

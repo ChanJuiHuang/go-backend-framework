@@ -38,20 +38,6 @@ func (suite *AuthenticatorTestSuite) TestVerifyAccessToken() {
 	assert.Equal(suite.T(), "access", claims["aud"].([]any)[0].(string))
 }
 
-func (suite *AuthenticatorTestSuite) TestVerifyRefreshToken() {
-	subject := "john"
-	refreshToken, err := suite.IssueRefreshToken(subject)
-	assert.ErrorIs(suite.T(), err, nil, err)
-
-	token, err := suite.VerifyJwt(refreshToken)
-	assert.ErrorIs(suite.T(), err, nil, err)
-	assert.True(suite.T(), token.Valid)
-
-	claims := token.Claims.(jwt.MapClaims)
-	assert.Equal(suite.T(), subject, claims["sub"].(string))
-	assert.Equal(suite.T(), "refresh", claims["aud"].([]any)[0].(string))
-}
-
 func (suite *AuthenticatorTestSuite) TestInvalidJwtToken() {
 	subject := "john"
 	now := time.Now()

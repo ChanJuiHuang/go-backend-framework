@@ -26,7 +26,7 @@ func UserRegister() {
 	}
 }
 
-func UserLogin() (string, string) {
+func UserLogin() string {
 	userLoginRequest := user.UserLoginRequest{
 		Email:    "john@test.com",
 		Password: "abcABC123",
@@ -50,5 +50,5 @@ func UserLogin() (string, string) {
 		panic(err)
 	}
 
-	return data.AccessToken, data.RefreshToken
+	return data.AccessToken
 }

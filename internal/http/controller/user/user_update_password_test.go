@@ -24,7 +24,7 @@ func (suite *UserUpdatePasswordTestSuite) SetupSuite() {
 }
 
 func (suite *UserUpdatePasswordTestSuite) TestUpdatePassword() {
-	accessToken, _ := test.UserLogin()
+	accessToken := test.UserLogin()
 	userUpdateRequest := user.UserUpdatePasswordRequest{
 		Password:        "abcABC123",
 		ConfirmPassword: "abcABC123",
@@ -75,7 +75,7 @@ func (suite *UserUpdatePasswordTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *UserUpdatePasswordTestSuite) TestRequestValidationFailed() {
-	accessToken, _ := test.UserLogin()
+	accessToken := test.UserLogin()
 	userUpdateRequest := user.UserUpdatePasswordRequest{
 		Password:        "abcABC123",
 		ConfirmPassword: "abcABC",

@@ -29,7 +29,7 @@ func (suite *AdminGetGroupingPolicyTestSuite) SetupTest() {
 func (suite *AdminGetGroupingPolicyTestSuite) TestSearchPolicySubject() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	userId := "1"
 
 	req := httptest.NewRequest("GET", "/api/admin/grouping-policy/"+userId, nil)
@@ -81,7 +81,7 @@ func (suite *AdminGetGroupingPolicyTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *AdminGetGroupingPolicyTestSuite) TestAuthorizationFailed() {
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	userId := "1"
 
 	req := httptest.NewRequest("GET", "/api/admin/grouping-policy/"+userId, nil)

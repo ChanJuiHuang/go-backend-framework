@@ -66,15 +66,3 @@ func (auth *Authenticator) IssueAccessToken(subject string) (string, error) {
 
 	return auth.IssueJwt(claims)
 }
-
-func (auth *Authenticator) IssueRefreshToken(subject string) (string, error) {
-	now := time.Now()
-	claims := jwt.RegisteredClaims{
-		Audience:  jwt.ClaimStrings{"refresh"},
-		Subject:   subject,
-		ExpiresAt: jwt.NewNumericDate(now.Add(auth.refreshTokenLifeTime)),
-		IssuedAt:  jwt.NewNumericDate(now),
-	}
-
-	return auth.IssueJwt(claims)
-}

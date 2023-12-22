@@ -51,7 +51,6 @@ func (suite *UserLoginTestSuite) TestLogin() {
 
 	assert.Equal(suite.T(), http.StatusOK, resp.Code)
 	assert.NotEmpty(suite.T(), data.AccessToken)
-	assert.NotEmpty(suite.T(), data.RefreshToken)
 }
 
 func (suite *UserLoginTestSuite) TestEmailIsWrong() {

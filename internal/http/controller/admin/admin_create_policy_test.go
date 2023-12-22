@@ -27,7 +27,7 @@ func (suite *AdminCreatePolicyTestSuite) SetupTest() {
 func (suite *AdminCreatePolicyTestSuite) TestCreatePolicy() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 
 	subject := "role1"
 	rules := []admin.Rule{
@@ -73,7 +73,7 @@ func (suite *AdminCreatePolicyTestSuite) TestCreatePolicy() {
 func (suite *AdminCreatePolicyTestSuite) TestRequestValidationFailed() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	reqBody, err := json.Marshal(new(admin.AdminCreatePolicyRequest))
 	if err != nil {
 		panic(err)
@@ -98,7 +98,7 @@ func (suite *AdminCreatePolicyTestSuite) TestRequestValidationFailed() {
 func (suite *AdminCreatePolicyTestSuite) TestOneOfPolicyIsRepeat() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	adminCreatePolicyRequest := admin.AdminCreatePolicyRequest{
 		Subject: "role1",
 		Rules: []admin.Rule{
@@ -171,7 +171,7 @@ func (suite *AdminCreatePolicyTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *AdminCreatePolicyTestSuite) TestAuthorizationFailed() {
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	req := httptest.NewRequest("POST", "/api/admin/policy", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
