@@ -29,7 +29,7 @@ type UserLoginData struct {
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param request body user.UserLoginRequest true "login user"
 // @success 200 {object} response.Response{data=user.UserLoginData}
-// @failure 400 {object} response.ErrorResponse "code: 400-001(issue access token failed, issue refresh token failed), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(issue access token failed), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
 // @router /api/user/login [post]

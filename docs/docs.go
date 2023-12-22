@@ -796,7 +796,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(issue access token failed, issue refresh token failed), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)",
+                        "description": "code: 400-001(issue access token failed), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -986,7 +986,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(issue access token failed, issue refresh token failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(issue access token failed), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1305,14 +1305,10 @@ const docTemplate = `{
         "user.UserLoginData": {
             "type": "object",
             "required": [
-                "access_token",
-                "refresh_token"
+                "access_token"
             ],
             "properties": {
                 "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
                     "type": "string"
                 }
             }
@@ -1362,14 +1358,10 @@ const docTemplate = `{
         "user.UserRegisterData": {
             "type": "object",
             "required": [
-                "access_token",
-                "refresh_token"
+                "access_token"
             ],
             "properties": {
                 "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
                     "type": "string"
                 }
             }
@@ -1425,10 +1417,14 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "confirm_password",
+                "current_password",
                 "password"
             ],
             "properties": {
                 "confirm_password": {
+                    "type": "string"
+                },
+                "current_password": {
                     "type": "string"
                 },
                 "password": {
