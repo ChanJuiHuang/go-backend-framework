@@ -26,8 +26,9 @@ func (suite *UserUpdatePasswordTestSuite) SetupSuite() {
 func (suite *UserUpdatePasswordTestSuite) TestUpdatePassword() {
 	accessToken := test.UserLogin()
 	userUpdateRequest := user.UserUpdatePasswordRequest{
-		Password:        "abcABC123",
-		ConfirmPassword: "abcABC123",
+		CurrentPassword: "abcABC123",
+		Password:        "abcABC000",
+		ConfirmPassword: "abcABC000",
 	}
 	reqBody, err := json.Marshal(userUpdateRequest)
 	if err != nil {
