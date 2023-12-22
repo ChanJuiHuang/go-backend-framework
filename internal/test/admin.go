@@ -28,7 +28,7 @@ func AdminRegister() {
 	}
 }
 
-func AdminLogin() (string, string) {
+func AdminLogin() string {
 	userLoginRequest := user.UserLoginRequest{
 		Email:    "admin@test.com",
 		Password: "abcABC123",
@@ -52,7 +52,7 @@ func AdminLogin() (string, string) {
 		panic(err)
 	}
 
-	return data.AccessToken, data.RefreshToken
+	return data.AccessToken
 
 }
 

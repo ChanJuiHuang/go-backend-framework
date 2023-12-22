@@ -25,7 +25,7 @@ func (suite *UserUpdateTestSuite) SetupSuite() {
 }
 
 func (suite *UserUpdateTestSuite) TestUpdate() {
-	accessToken, _ := test.UserLogin()
+	accessToken := test.UserLogin()
 	userUpdateRequest := user.UserUpdateRequest{
 		Name:  "bob",
 		Email: "bob@test.com",
@@ -92,7 +92,7 @@ func (suite *UserUpdateTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *UserUpdateTestSuite) TestRequestValidationFailed() {
-	accessToken, _ := test.UserLogin()
+	accessToken := test.UserLogin()
 	req := httptest.NewRequest("PUT", "/api/user", bytes.NewReader([]byte{}))
 	test.AddBearerToken(req, accessToken)
 	test.AddCsrfToken(req)

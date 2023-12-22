@@ -28,7 +28,7 @@ func (suite *AdminSearchPolicySubjectTestSuite) SetupTest() {
 func (suite *AdminSearchPolicySubjectTestSuite) TestSearchPolicySubject() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 
 	req := httptest.NewRequest("GET", "/api/admin/policy/subject", nil)
 	test.AddCsrfToken(req)
@@ -73,7 +73,7 @@ func (suite *AdminSearchPolicySubjectTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *AdminSearchPolicySubjectTestSuite) TestAuthorizationFailed() {
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	req := httptest.NewRequest("GET", "/api/admin/policy/subject", nil)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()

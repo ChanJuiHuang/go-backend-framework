@@ -26,7 +26,7 @@ func (suite *AdminGetPolicySubjectTestSuite) SetupTest() {
 func (suite *AdminGetPolicySubjectTestSuite) TestGetPolicySubject() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	subject := "admin"
 
 	req := httptest.NewRequest("GET", "/api/admin/policy/subject/"+subject, nil)
@@ -71,7 +71,7 @@ func (suite *AdminGetPolicySubjectTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *AdminGetPolicySubjectTestSuite) TestAuthorizationFailed() {
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	subject := "admin"
 
 	req := httptest.NewRequest("GET", "/api/admin/policy/subject/"+subject, nil)

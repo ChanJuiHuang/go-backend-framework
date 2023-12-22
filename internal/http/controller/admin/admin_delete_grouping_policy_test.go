@@ -30,7 +30,7 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) SetupTest() {
 func (suite *AdminDeleteGroupingPolicyTestSuite) TestDeleteGroupingPolicy() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 
 	userId := "999"
 	subject1 := "role1"
@@ -81,7 +81,7 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestDeleteGroupingPolicy() {
 func (suite *AdminDeleteGroupingPolicyTestSuite) TestRequestValidationFailed() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	reqBody, err := json.Marshal(new(admin.AdminDeleteGroupingPolicyRequest))
 	if err != nil {
 		panic(err)
@@ -139,7 +139,7 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *AdminDeleteGroupingPolicyTestSuite) TestAuthorizationFailed() {
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	req := httptest.NewRequest("DELETE", "/api/admin/grouping-policy", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

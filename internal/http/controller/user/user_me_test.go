@@ -24,7 +24,7 @@ func (suite *UserMeTestSuite) SetupSuite() {
 }
 
 func (suite *UserMeTestSuite) TestMe() {
-	accessToken, _ := test.UserLogin()
+	accessToken := test.UserLogin()
 	req := httptest.NewRequest("GET", "/api/user/me", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

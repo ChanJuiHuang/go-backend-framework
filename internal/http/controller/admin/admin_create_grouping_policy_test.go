@@ -29,7 +29,7 @@ func (suite *AdminCreateGroupingPolicyTestSuite) SetupTest() {
 func (suite *AdminCreateGroupingPolicyTestSuite) TestCreateGroupingPolicy() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 
 	subject := "role1"
 	policies := [][]string{
@@ -76,7 +76,7 @@ func (suite *AdminCreateGroupingPolicyTestSuite) TestCreateGroupingPolicy() {
 func (suite *AdminCreateGroupingPolicyTestSuite) TestRequestValidationFailed() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	reqBody, err := json.Marshal(new(admin.AdminCreateGroupingPolicyRequest))
 	if err != nil {
 		panic(err)
@@ -101,7 +101,7 @@ func (suite *AdminCreateGroupingPolicyTestSuite) TestRequestValidationFailed() {
 func (suite *AdminCreateGroupingPolicyTestSuite) TestOneOfGroupingPolicyIsRepeat() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 
 	var userId uint = 1
 	subjects := []string{"admin"}
@@ -166,7 +166,7 @@ func (suite *AdminCreateGroupingPolicyTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *AdminCreateGroupingPolicyTestSuite) TestAuthorizationFailed() {
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	req := httptest.NewRequest("POST", "/api/admin/grouping-policy", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

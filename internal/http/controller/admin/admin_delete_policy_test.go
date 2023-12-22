@@ -29,7 +29,7 @@ func (suite *AdminDeletePolicyTestSuite) SetupTest() {
 func (suite *AdminDeletePolicyTestSuite) TestDeletePolicy() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 
 	subject := "role1"
 	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
@@ -84,7 +84,7 @@ func (suite *AdminDeletePolicyTestSuite) TestDeletePolicy() {
 func (suite *AdminDeletePolicyTestSuite) TestRequestValidationFailed() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	reqBody, err := json.Marshal(new(admin.AdminDeletePolicyRequest))
 	if err != nil {
 		panic(err)
@@ -142,7 +142,7 @@ func (suite *AdminDeletePolicyTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *AdminDeletePolicyTestSuite) TestAuthorizationFailed() {
-	accessToken, _ := test.AdminLogin()
+	accessToken := test.AdminLogin()
 	req := httptest.NewRequest("DELETE", "/api/admin/policy", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
