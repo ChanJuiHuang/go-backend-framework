@@ -14,6 +14,7 @@ import (
 )
 
 type UserUpdatePasswordRequest struct {
+	CurrentPassword string `json:"current_password" binding:"required" structs:"-"`
 	Password        string `json:"password" binding:"required,gte=8,containsany=abcdefghijklmnopqrstuvwxyz,containsany=ABCDEFGHIJKLMNOPQRSTUVWXYZ,containsany=1234567890" structs:"password"`
 	ConfirmPassword string `json:"confirm_password" binding:"required,eqfield=Password" structs:"-"`
 }
@@ -39,10 +40,24 @@ func UpdatePassword(c *gin.Context) {
 		return
 	}
 
+	u, err := user.Get("id = ?", c.GetUint("user_id"))
+	if err != nil {
+		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
+		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
+		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
+		return
+	}
+
+	if !argon2.VerifyArgon2IdHash(reqBody.CurrentPassword, u.Password) {
+		errResp := response.NewErrorResponse(response.PasswordIsWrong, errors.New(response.PasswordIsWrong), nil)
+		logger.Warn(response.PasswordIsWrong, errResp.MakeLogFields(c.Request)...)
+		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
+		return
+	}
+
 	reqBody.Password = argon2.MakeArgon2IdHash(reqBody.Password)
 	values := structs.Map(reqBody)
-	_, err := user.Update(c.GetUint("user_id"), values)
-	if err != nil {
+	if _, err := user.Update(c.GetUint("user_id"), values); err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
