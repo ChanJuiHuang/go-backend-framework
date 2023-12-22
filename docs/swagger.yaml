@@ -200,11 +200,8 @@ definitions:
     properties:
       access_token:
         type: string
-      refresh_token:
-        type: string
     required:
     - access_token
-    - refresh_token
     type: object
   user.UserLoginRequest:
     properties:
@@ -239,11 +236,8 @@ definitions:
     properties:
       access_token:
         type: string
-      refresh_token:
-        type: string
     required:
     - access_token
-    - refresh_token
     type: object
   user.UserRegisterRequest:
     properties:
@@ -282,11 +276,14 @@ definitions:
     properties:
       confirm_password:
         type: string
+      current_password:
+        type: string
       password:
         minLength: 8
         type: string
     required:
     - confirm_password
+    - current_password
     - password
     type: object
   user.UserUpdateRequest:
@@ -790,9 +787,8 @@ paths:
                   $ref: '#/definitions/user.UserLoginData'
               type: object
         "400":
-          description: 'code: 400-001(issue access token failed, issue refresh token
-            failed), 400-002(request validation failed), 400-003(email is wrong),
-            400-004(password is wrong)'
+          description: 'code: 400-001(issue access token failed), 400-002(request
+            validation failed), 400-003(email is wrong), 400-004(password is wrong)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "403":
@@ -911,8 +907,8 @@ paths:
                   $ref: '#/definitions/user.UserRegisterData'
               type: object
         "400":
-          description: 'code: 400-001(issue access token failed, issue refresh token
-            failed), 400-002(request validation failed)'
+          description: 'code: 400-001(issue access token failed), 400-002(request
+            validation failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "403":

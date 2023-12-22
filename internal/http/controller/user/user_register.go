@@ -31,7 +31,7 @@ type UserRegisterData struct {
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param request body user.UserRegisterRequest true "register user"
 // @success 200 {object} response.Response{data=user.UserRegisterData}
-// @failure 400 {object} response.ErrorResponse "code: 400-001(issue access token failed, issue refresh token failed), 400-002(request validation failed)"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(issue access token failed), 400-002(request validation failed)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
 // @router /api/user/register [post]
