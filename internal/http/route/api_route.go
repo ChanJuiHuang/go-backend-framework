@@ -8,24 +8,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type attachApiRouteFunc func(router *gin.Engine)
+type ApiRouter struct {
+	router  *gin.RouterGroup
+	routers []Router
+}
 
-var apiRouteGroups = []attachApiRouteFunc{
-	user.AttachApiRoute,
-	admin.AttachApiRoute,
+func NewApiRouter(router *gin.Engine) *ApiRouter {
+	routers := []Router{
+		user.NewUserRouter(router),
+		admin.NewAdminRouter(router),
+	}
+
+	return &ApiRouter{
+		router:  router.Group(""),
+		routers: routers,
+	}
 }
 
 // @produce json
 // @success 200 {string} string "{"message": "pong"}"
 // @router /api/ping [get]
-func AttachApiRoutes(router *gin.Engine) {
-	router.GET("/api/ping", func(c *gin.Context) {
+func (ar *ApiRouter) AttachRoutes() {
+	ar.router.GET("api/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
 
-	for _, apiRouteGroup := range apiRouteGroups {
-		apiRouteGroup(router)
+	for _, router := range ar.routers {
+		router.AttachRoutes()
 	}
 }
