@@ -16,65 +16,8 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/admin/grouping-policy": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminGetGroupingPolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            },
             "post": {
+                "description": "grant the roles to user",
                 "consumes": [
                     "application/json"
                 ],
@@ -84,6 +27,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
+                "summary": "grant the roles to user",
                 "parameters": [
                     {
                         "type": "string",
@@ -155,6 +99,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "description": "revoke the roles to user",
                 "consumes": [
                     "application/json"
                 ],
@@ -164,6 +109,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
+                "summary": "revoke the roles to user",
                 "parameters": [
                     {
                         "type": "string",
@@ -237,6 +183,7 @@ const docTemplate = `{
         },
         "/api/admin/policy": {
             "post": {
+                "description": "bind the permissions on the role",
                 "consumes": [
                     "application/json"
                 ],
@@ -246,6 +193,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
+                "summary": "bind the permissions on the role",
                 "parameters": [
                     {
                         "type": "string",
@@ -317,6 +265,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "description": "remove the permissions on the role",
                 "consumes": [
                     "application/json"
                 ],
@@ -326,6 +275,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
+                "summary": "remove the permissions on the role",
                 "parameters": [
                     {
                         "type": "string",
@@ -399,6 +349,7 @@ const docTemplate = `{
         },
         "/api/admin/policy/reload": {
             "post": {
+                "description": "reload the policies",
                 "consumes": [
                     "application/json"
                 ],
@@ -408,6 +359,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
+                "summary": "reload the policies",
                 "parameters": [
                     {
                         "type": "string",
@@ -457,6 +409,7 @@ const docTemplate = `{
         },
         "/api/admin/policy/subject": {
             "get": {
+                "description": "search roles",
                 "consumes": [
                     "application/json"
                 ],
@@ -466,6 +419,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
+                "summary": "search roles",
                 "parameters": [
                     {
                         "type": "string",
@@ -515,6 +469,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "description": "delete roles",
                 "consumes": [
                     "application/json"
                 ],
@@ -524,6 +479,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
+                "summary": "delete roles",
                 "parameters": [
                     {
                         "type": "string",
@@ -591,6 +547,7 @@ const docTemplate = `{
         },
         "/api/admin/policy/subject/{subject}": {
             "get": {
+                "description": "get permissions in the role",
                 "consumes": [
                     "application/json"
                 ],
@@ -600,6 +557,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
+                "summary": "get permissions in the role",
                 "parameters": [
                     {
                         "type": "string",
@@ -629,6 +587,75 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/admin.AdminGetPolicySubjectData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/user/{userId}/grouping-policy": {
+            "get": {
+                "description": "get roles that belong to user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get roles that belong to user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/admin.AdminGetUserGroupingPolicyData"
                                         }
                                     }
                                 }
@@ -1180,24 +1207,6 @@ const docTemplate = `{
                 }
             }
         },
-        "admin.AdminGetGroupingPolicyData": {
-            "type": "object",
-            "required": [
-                "subjects",
-                "user_id"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "admin.AdminGetPolicySubjectData": {
             "type": "object",
             "required": [
@@ -1213,6 +1222,24 @@ const docTemplate = `{
                 },
                 "subject": {
                     "type": "string"
+                }
+            }
+        },
+        "admin.AdminGetUserGroupingPolicyData": {
+            "type": "object",
+            "required": [
+                "subjects",
+                "user_id"
+            ],
+            "properties": {
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },
