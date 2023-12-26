@@ -113,18 +113,6 @@ definitions:
     required:
     - subjects
     type: object
-  admin.AdminGetGroupingPolicyData:
-    properties:
-      subjects:
-        items:
-          type: string
-        type: array
-      user_id:
-        type: integer
-    required:
-    - subjects
-    - user_id
-    type: object
   admin.AdminGetPolicySubjectData:
     properties:
       rules:
@@ -136,6 +124,18 @@ definitions:
     required:
     - rules
     - subject
+    type: object
+  admin.AdminGetUserGroupingPolicyData:
+    properties:
+      subjects:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    required:
+    - subjects
+    - user_id
     type: object
   admin.AdminSearchPolicySubjectData:
     properties:
@@ -303,6 +303,7 @@ paths:
     delete:
       consumes:
       - application/json
+      description: revoke the roles to user
       parameters:
       - description: csrf token
         in: header
@@ -349,46 +350,13 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      tags:
-      - admin
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/admin.AdminGetGroupingPolicyData'
-              type: object
-        "401":
-          description: 'code: 401-001(access token is wrong)'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "403":
-          description: 'code: 403-001(casbin authorization failed)'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "500":
-          description: 'code: 500-001'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
+      summary: revoke the roles to user
       tags:
       - admin
     post:
       consumes:
       - application/json
+      description: grant the roles to user
       parameters:
       - description: csrf token
         in: header
@@ -435,12 +403,14 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+      summary: grant the roles to user
       tags:
       - admin
   /api/admin/policy:
     delete:
       consumes:
       - application/json
+      description: remove the permissions on the role
       parameters:
       - description: csrf token
         in: header
@@ -487,11 +457,13 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+      summary: remove the permissions on the role
       tags:
       - admin
     post:
       consumes:
       - application/json
+      description: bind the permissions on the role
       parameters:
       - description: csrf token
         in: header
@@ -538,12 +510,14 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+      summary: bind the permissions on the role
       tags:
       - admin
   /api/admin/policy/reload:
     post:
       consumes:
       - application/json
+      description: reload the policies
       parameters:
       - description: csrf token
         in: header
@@ -576,12 +550,14 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+      summary: reload the policies
       tags:
       - admin
   /api/admin/policy/subject:
     delete:
       consumes:
       - application/json
+      description: delete roles
       parameters:
       - description: csrf token
         in: header
@@ -623,11 +599,13 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+      summary: delete roles
       tags:
       - admin
     get:
       consumes:
       - application/json
+      description: search roles
       parameters:
       - description: bearer token
         in: header
@@ -658,12 +636,14 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+      summary: search roles
       tags:
       - admin
   /api/admin/policy/subject/{subject}:
     get:
       consumes:
       - application/json
+      description: get permissions in the role
       parameters:
       - description: bearer token
         in: header
@@ -699,6 +679,50 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
+      summary: get permissions in the role
+      tags:
+      - admin
+  /api/admin/user/{userId}/grouping-policy:
+    get:
+      consumes:
+      - application/json
+      description: get roles that belong to user
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: userId
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminGetUserGroupingPolicyData'
+              type: object
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: get roles that belong to user
       tags:
       - admin
   /api/ping:

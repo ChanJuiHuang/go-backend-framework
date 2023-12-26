@@ -21,6 +21,8 @@ type AdminDeletePolicySubjectData struct {
 }
 
 // @tags admin
+// @Summary delete roles
+// @Description delete roles
 // @accept json
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"
