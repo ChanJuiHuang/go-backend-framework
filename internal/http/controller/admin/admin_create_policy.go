@@ -11,11 +11,6 @@ import (
 	"go.uber.org/zap"
 )
 
-type Rule struct {
-	Object string `json:"object" binding:"required"`
-	Action string `json:"action" binding:"required,oneof=GET POST PUT PATCH DELETE"`
-}
-
 type AdminCreatePolicyRequest struct {
 	Subject string `json:"subject" binding:"required"`
 	Rules   []Rule `json:"rules" binding:"required,dive"`
