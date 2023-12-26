@@ -15,8 +15,8 @@ type AdminGetPolicySubjectData struct {
 }
 
 // @tags admin
-// @Summary get permissions in the role
-// @Description get permissions in the role
+// @summary get permissions in the role
+// @description get permissions in the role
 // @accept json
 // @produce json
 // @param Authorization header string true "bearer token"

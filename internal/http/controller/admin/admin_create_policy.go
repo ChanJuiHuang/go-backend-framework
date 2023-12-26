@@ -27,8 +27,8 @@ type AdminCreatePolicyData struct {
 }
 
 // @tags admin
-// @Summary bind the permissions on the role
-// @Description bind the permissions on the role
+// @summary bind the permissions on the role
+// @description bind the permissions on the role
 // @accept json
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"

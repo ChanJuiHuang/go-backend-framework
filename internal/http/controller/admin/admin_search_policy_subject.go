@@ -14,8 +14,8 @@ type AdminSearchPolicySubjectData struct {
 }
 
 // @tags admin
-// @Summary search roles
-// @Description search roles
+// @summary search roles
+// @description search roles
 // @accept json
 // @produce json
 // @param Authorization header string true "bearer token"
