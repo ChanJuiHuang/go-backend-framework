@@ -125,6 +125,15 @@ definitions:
     - rules
     - subject
     type: object
+  admin.AdminGetPolicySubjectUserData:
+    properties:
+      user_ids:
+        items:
+          type: integer
+        type: array
+    required:
+    - user_ids
+    type: object
   admin.AdminGetUserGroupingPolicyData:
     properties:
       subjects:
@@ -680,6 +689,49 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: get permissions in the role
+      tags:
+      - admin
+  /api/admin/policy/subject/{subject}/user:
+    get:
+      consumes:
+      - application/json
+      description: get user ids in the role
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: subject
+        in: path
+        name: subject
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/admin.AdminGetPolicySubjectUserData'
+              type: object
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: get user ids in the role
       tags:
       - admin
   /api/admin/user/{userId}/grouping-policy:

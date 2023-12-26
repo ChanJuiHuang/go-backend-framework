@@ -33,6 +33,12 @@ func AttachApiRoute(router *gin.Engine) {
 			middleware.Authorize(),
 			admin.GetPolicySubject,
 		)
+		adminRouter.GET(
+			"/policy/subject/:subject/user",
+			middleware.Authenticate(),
+			middleware.Authorize(),
+			admin.GetPolicySubjectUser,
+		)
 		adminRouter.DELETE(
 			"/policy/subject",
 			middleware.Authenticate(),
