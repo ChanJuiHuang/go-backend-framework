@@ -2,6 +2,7 @@ package admin_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -17,22 +18,22 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type AdminGetGroupingPolicyTestSuite struct {
+type AdminGetUserGroupingPolicyTestSuite struct {
 	suite.Suite
 }
 
-func (suite *AdminGetGroupingPolicyTestSuite) SetupTest() {
+func (suite *AdminGetUserGroupingPolicyTestSuite) SetupTest() {
 	test.Migration.Run()
 	test.AdminRegister()
 }
 
-func (suite *AdminGetGroupingPolicyTestSuite) TestSearchPolicySubject() {
+func (suite *AdminGetUserGroupingPolicyTestSuite) TestGetUserGroupingPolicy() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
 	accessToken := test.AdminLogin()
 	userId := "1"
 
-	req := httptest.NewRequest("GET", "/api/admin/grouping-policy/"+userId, nil)
+	req := httptest.NewRequest("GET", fmt.Sprintf("/api/admin/user/%s/grouping-policy", userId), nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()
@@ -43,7 +44,7 @@ func (suite *AdminGetGroupingPolicyTestSuite) TestSearchPolicySubject() {
 		panic(err)
 	}
 
-	data := &admin.AdminGetGroupingPolicyData{}
+	data := &admin.AdminGetUserGroupingPolicyData{}
 	if err := mapstructure.Decode(respBody.Data, data); err != nil {
 		panic(err)
 	}
@@ -60,12 +61,12 @@ func (suite *AdminGetGroupingPolicyTestSuite) TestSearchPolicySubject() {
 	assert.Equal(suite.T(), len(subjects), len(data.Subjects))
 }
 
-func (suite *AdminGetGroupingPolicyTestSuite) TestWrongAccessToken() {
+func (suite *AdminGetUserGroupingPolicyTestSuite) TestWrongAccessToken() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
 	userId := "1"
 
-	req := httptest.NewRequest("GET", "/api/admin/grouping-policy/"+userId, nil)
+	req := httptest.NewRequest("GET", fmt.Sprintf("/api/admin/user/%s/grouping-policy", userId), nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
@@ -80,11 +81,11 @@ func (suite *AdminGetGroupingPolicyTestSuite) TestWrongAccessToken() {
 	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
-func (suite *AdminGetGroupingPolicyTestSuite) TestAuthorizationFailed() {
+func (suite *AdminGetUserGroupingPolicyTestSuite) TestAuthorizationFailed() {
 	accessToken := test.AdminLogin()
 	userId := "1"
 
-	req := httptest.NewRequest("GET", "/api/admin/grouping-policy/"+userId, nil)
+	req := httptest.NewRequest("GET", fmt.Sprintf("/api/admin/user/%s/grouping-policy", userId), nil)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
@@ -99,10 +100,10 @@ func (suite *AdminGetGroupingPolicyTestSuite) TestAuthorizationFailed() {
 	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
-func (suite *AdminGetGroupingPolicyTestSuite) TearDownTest() {
+func (suite *AdminGetUserGroupingPolicyTestSuite) TearDownTest() {
 	test.Migration.Reset()
 }
 
-func TestAdminGetGroupingPolicyTestSuite(t *testing.T) {
-	suite.Run(t, new(AdminGetGroupingPolicyTestSuite))
+func TestAdminGetUserGroupingPolicyTestSuite(t *testing.T) {
+	suite.Run(t, new(AdminGetUserGroupingPolicyTestSuite))
 }

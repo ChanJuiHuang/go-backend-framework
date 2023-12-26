@@ -23,6 +23,8 @@ type AdminCreateGroupingPolicyData struct {
 }
 
 // @tags admin
+// @Summary grant the roles to user
+// @Description grant the roles to user
 // @accept json
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"

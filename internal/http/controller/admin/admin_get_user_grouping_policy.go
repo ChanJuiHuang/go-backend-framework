@@ -12,21 +12,24 @@ import (
 	"go.uber.org/zap"
 )
 
-type AdminGetGroupingPolicyData struct {
+type AdminGetUserGroupingPolicyData struct {
 	UserId   uint     `json:"user_id" mapstructure:"user_id" validate:"required"`
 	Subjects []string `json:"subjects" mapstructure:"subjects" validate:"required"`
 }
 
 // @tags admin
+// @Summary get roles that belong to user
+// @Description get roles that belong to user
 // @accept json
 // @produce json
 // @param Authorization header string true "bearer token"
-// @success 200 {object} response.Response{data=admin.AdminGetGroupingPolicyData}
+// @param userId path string true "userId"
+// @success 200 {object} response.Response{data=admin.AdminGetUserGroupingPolicyData}
 // @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(casbin authorization failed)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
-// @router /api/admin/grouping-policy [get]
-func GetGroupingPolicy(c *gin.Context) {
+// @router /api/admin/user/{userId}/grouping-policy [get]
+func GetUserGroupingPolicy(c *gin.Context) {
 	userId := c.Param("userId")
 	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	groupingPolicies := enforcer.GetFilteredGroupingPolicy(0, userId)
@@ -39,7 +42,7 @@ func GetGroupingPolicy(c *gin.Context) {
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
-	data := AdminGetGroupingPolicyData{
+	data := AdminGetUserGroupingPolicyData{
 		UserId:   uint(id),
 		Subjects: make([]string, len(groupingPolicies)),
 	}

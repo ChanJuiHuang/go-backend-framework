@@ -32,7 +32,7 @@ func addPolicies() {
 		{"admin", "/api/admin/policy/subject", "DELETE"},
 		{"admin", "/api/admin/policy/reload", "POST"},
 		{"admin", "/api/admin/grouping-policy", "POST"},
-		{"admin", "/api/admin/grouping-policy/:userId", "GET"},
+		{"admin", "/api/admin/user/:userId/grouping-policy", "GET"},
 		{"admin", "/api/admin/grouping-policy", "DELETE"},
 	}
 	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
