@@ -6,13 +6,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AttachApiRoute(router *gin.Engine) {
-	userRouter := router.Group("/api/user")
-	{
-		userRouter.POST("/register", user.Register)
-		userRouter.POST("/login", user.Login)
-		userRouter.GET("/me", middleware.Authenticate(), user.Me)
-		userRouter.PUT("", middleware.Authenticate(), user.Update)
-		userRouter.PUT("/password", middleware.Authenticate(), user.UpdatePassword)
+type UserRouter struct {
+	router *gin.RouterGroup
+}
+
+func NewUserRouter(router *gin.Engine) *UserRouter {
+	return &UserRouter{
+		router: router.Group("api/user"),
 	}
+}
+
+func (ur *UserRouter) AttachRoutes() {
+	ur.router.POST("register", user.Register)
+	ur.router.POST("login", user.Login)
+	ur.router.GET("me", middleware.Authenticate(), user.Me)
+	ur.router.PUT("", middleware.Authenticate(), user.Update)
+	ur.router.PUT("password", middleware.Authenticate(), user.UpdatePassword)
 }

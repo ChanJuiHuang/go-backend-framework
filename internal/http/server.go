@@ -51,8 +51,15 @@ func NewServer(config ServerConfig) *Server {
 func (srv *Server) Run() {
 	engine := NewEngine()
 	middleware.AttachGlobalMiddleware(engine)
-	route.AttachApiRoutes(engine)
-	route.AttachSwaggerRoute(engine)
+
+	routers := []route.Router{
+		route.NewApiRouter(engine),
+		route.NewSwaggerRouter(engine),
+	}
+	for _, router := range routers {
+		router.AttachRoutes()
+	}
+
 	srv.server.Handler = engine.Handler()
 	logger := service.Registry.Get("logger").(*zap.Logger)
 

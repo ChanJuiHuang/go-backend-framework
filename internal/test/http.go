@@ -21,8 +21,13 @@ func NewHttpHandler() *httpHandler {
 		engine: pkgHttp.NewEngine(),
 	}
 	handler.AttachGlobalMiddleware()
-	route.AttachApiRoutes(handler.engine)
-	route.AttachSwaggerRoute(handler.engine)
+	routers := []route.Router{
+		route.NewApiRouter(handler.engine),
+		route.NewSwaggerRouter(handler.engine),
+	}
+	for _, router := range routers {
+		router.AttachRoutes()
+	}
 
 	return handler
 }

@@ -20,7 +20,13 @@ func init() {
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 	engine := gin.New()
-	route.AttachApiRoutes(engine)
+	routers := []route.Router{
+		route.NewApiRouter(engine),
+		route.NewSwaggerRouter(engine),
+	}
+	for _, router := range routers {
+		router.AttachRoutes()
+	}
 
 	for _, routeInfo := range engine.Routes() {
 		fmt.Printf("method: [%s], path: [%s], handler: [%s]\n", routeInfo.Method, routeInfo.Path, routeInfo.Handler)
