@@ -18,8 +18,8 @@ type AdminGetUserGroupingPolicyData struct {
 }
 
 // @tags admin
-// @Summary get roles that belong to user
-// @Description get roles that belong to user
+// @summary get roles that belong to user
+// @description get roles that belong to user
 // @accept json
 // @produce json
 // @param Authorization header string true "bearer token"

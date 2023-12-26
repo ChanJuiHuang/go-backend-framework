@@ -12,8 +12,8 @@ import (
 )
 
 // @tags admin
-// @Summary reload the policies
-// @Description reload the policies
+// @summary reload the policies
+// @description reload the policies
 // @accept json
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"

@@ -23,8 +23,8 @@ type AdminDeleteGroupingPolicyData struct {
 }
 
 // @tags admin
-// @Summary revoke the roles to user
-// @Description revoke the roles to user
+// @summary revoke the roles to user
+// @description revoke the roles to user
 // @accept json
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"
