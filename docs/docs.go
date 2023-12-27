@@ -73,7 +73,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(add grouping policy is failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(add grouping policy is failed), 400-002(request validation failed), 400-006(one of grouping policy is repeat)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
