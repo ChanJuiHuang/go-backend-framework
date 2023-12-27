@@ -79,6 +79,17 @@ func AdminAddPolicies() {
 	}
 }
 
+func AddRoleToUser(userId uint, role string) {
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	result, err := enforcer.AddRoleForUser(strconv.Itoa(int(userId)), role)
+	if err != nil {
+		panic(err)
+	}
+	if !result {
+		panic("add casbin testing policies failed")
+	}
+}
+
 func AdminAddRole() {
 	user := &model.User{}
 	database := service.Registry.Get("database").(*gorm.DB)
@@ -88,12 +99,5 @@ func AdminAddRole() {
 		panic(err)
 	}
 
-	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	result, err := enforcer.AddRoleForUser(strconv.Itoa(int(user.Id)), "admin")
-	if err != nil {
-		panic(err)
-	}
-	if !result {
-		panic("add casbin testing policies failed")
-	}
+	AddRoleToUser(user.Id, "admin")
 }

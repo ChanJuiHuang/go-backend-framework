@@ -205,6 +205,15 @@ definitions:
     required:
     - data
     type: object
+  user.UserGetPolicyData:
+    properties:
+      rules:
+        items:
+          type: string
+        type: array
+    required:
+    - rules
+    type: object
   user.UserLoginData:
     properties:
       access_token:
@@ -942,6 +951,42 @@ paths:
         "400":
           description: 'code: 400-001(update password failed), 400-002(request validation
             failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - user
+  /api/user/policy:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.UserGetPolicyData'
+              type: object
+        "400":
+          description: 'code: 400-001(get user policy failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "401":
