@@ -15,8 +15,8 @@ type ApiRouter struct {
 
 func NewApiRouter(router *gin.Engine) *ApiRouter {
 	routers := []Router{
-		user.NewUserRouter(router),
-		admin.NewAdminRouter(router),
+		user.NewRouter(router),
+		admin.NewRouter(router),
 	}
 
 	return &ApiRouter{
