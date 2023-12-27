@@ -74,7 +74,19 @@ func (suite *AdminCreatePolicyTestSuite) TestRequestValidationFailed() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
 	accessToken := test.AdminLogin()
-	reqBody, err := json.Marshal(new(admin.AdminCreatePolicyRequest))
+
+	subject := "role1"
+	rules := []admin.Rule{
+		{
+			Object: "api1",
+			Action: "POST",
+		},
+	}
+	adminCreatePolicyRequest := admin.AdminCreatePolicyRequest{
+		Subject: subject,
+		Rules:   rules,
+	}
+	reqBody, err := json.Marshal(adminCreatePolicyRequest)
 	if err != nil {
 		panic(err)
 	}
