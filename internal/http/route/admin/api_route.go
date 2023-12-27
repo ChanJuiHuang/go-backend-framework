@@ -6,30 +6,30 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AdminRouter struct {
+type Router struct {
 	router *gin.RouterGroup
 }
 
-func NewAdminRouter(router *gin.Engine) *AdminRouter {
-	return &AdminRouter{
+func NewRouter(router *gin.Engine) *Router {
+	return &Router{
 		router: router.Group("api/admin"),
 	}
 }
 
-func (ar *AdminRouter) AttachRoutes() {
-	ar.router.GET(
+func (r *Router) AttachRoutes() {
+	r.router.GET(
 		"user/:userId/grouping-policy",
 		middleware.Authenticate(),
 		middleware.Authorize(),
 		admin.GetUserGroupingPolicy,
 	)
-	ar.AttachPolicyRoutes()
-	ar.AttachPolicySubjectRoutes()
-	ar.AttachGroupingPolicyRoutes()
+	r.AttachPolicyRoutes()
+	r.AttachPolicySubjectRoutes()
+	r.AttachGroupingPolicyRoutes()
 }
 
-func (ar *AdminRouter) AttachPolicyRoutes() {
-	policyRouter := ar.router.Group("policy")
+func (r *Router) AttachPolicyRoutes() {
+	policyRouter := r.router.Group("policy")
 	policyRouter.POST(
 		"",
 		middleware.Authenticate(),
@@ -50,8 +50,8 @@ func (ar *AdminRouter) AttachPolicyRoutes() {
 	)
 }
 
-func (ar *AdminRouter) AttachPolicySubjectRoutes() {
-	policySubjectRouter := ar.router.Group("policy/subject")
+func (r *Router) AttachPolicySubjectRoutes() {
+	policySubjectRouter := r.router.Group("policy/subject")
 	policySubjectRouter.GET(
 		"",
 		middleware.Authenticate(),
@@ -78,8 +78,8 @@ func (ar *AdminRouter) AttachPolicySubjectRoutes() {
 	)
 }
 
-func (ar *AdminRouter) AttachGroupingPolicyRoutes() {
-	groupingPolicyRouter := ar.router.Group("grouping-policy")
+func (r *Router) AttachGroupingPolicyRoutes() {
+	groupingPolicyRouter := r.router.Group("grouping-policy")
 	groupingPolicyRouter.POST(
 		"",
 		middleware.Authenticate(),
