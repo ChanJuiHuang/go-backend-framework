@@ -31,7 +31,7 @@ type AdminCreateGroupingPolicyData struct {
 // @param Authorization header string true "bearer token"
 // @param request body admin.AdminCreateGroupingPolicyRequest true "create grouping policy"
 // @success 200 {object} response.Response{data=admin.AdminCreateGroupingPolicyData}
-// @failure 400 {object} response.ErrorResponse "code: 400-001(add grouping policy is failed), 400-002(request validation failed)"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(add grouping policy is failed), 400-002(request validation failed), 400-006(one of grouping policy is repeat)"
 // @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch, casbin authorization failed)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
