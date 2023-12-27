@@ -33,7 +33,7 @@ func GetPolicySubjectUser(c *gin.Context) {
 	userIds, err := enforcer.GetUsersForRole(c.Param("subject"))
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
-		logger.Error(errResp.Message, errResp.MakeLogFields(c.Request)...)
+		logger.Warn(errResp.Message, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 		return
 	}
@@ -46,7 +46,7 @@ func GetPolicySubjectUser(c *gin.Context) {
 		userId, err := strconv.ParseUint(userIds[i], 10, 64)
 		if err != nil {
 			errResp := response.NewErrorResponse(response.BadRequest, err, nil)
-			logger.Error(errResp.Message, errResp.MakeLogFields(c.Request)...)
+			logger.Warn(errResp.Message, errResp.MakeLogFields(c.Request)...)
 			c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 			return
 		}
