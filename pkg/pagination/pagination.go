@@ -17,8 +17,8 @@ type Paginator struct {
 }
 
 type PaginationRequest struct {
-	Page    int    `form:"page" validate:"min=1"`
-	PerPage int    `form:"per_page" validate:"min=10"`
+	Page    int    `form:"page" binding:"required" validate:"min=1"`
+	PerPage int    `form:"per_page" binding:"required" validate:"min=10"`
 	OrderBy string `form:"order_by" validate:"omitempty"`
 }
 
