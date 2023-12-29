@@ -3,6 +3,7 @@ package user
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
@@ -10,6 +11,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
@@ -57,8 +59,20 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	encoder := schema.NewEncoder()
+	values := url.Values{}
+	userQuery := user.Query{
+		UserId: u.Id,
+	}
+	if err := encoder.Encode(userQuery, values); err != nil {
+		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
+		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
+		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
+		return
+	}
+
 	authenticator := service.Registry.Get("authentication.authenticator").(*authentication.Authenticator)
-	accessToken, err := authenticator.IssueAccessToken(fmt.Sprintf("%v", u.Id))
+	accessToken, err := authenticator.IssueAccessToken(values.Encode())
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)

@@ -10,6 +10,7 @@ require (
 	github.com/go-playground/form/v4 v4.2.1
 	github.com/go-playground/mold/v4 v4.5.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
+	github.com/gorilla/schema v1.2.1
 	github.com/joho/godotenv v1.5.1
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/natefinch/lumberjack/v3 v3.0.0-alpha

@@ -1,14 +1,16 @@
 package middleware
 
 import (
-	"strconv"
+	"net/url"
 	"strings"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
@@ -26,7 +28,7 @@ func Authenticate() gin.HandlerFunc {
 		}
 
 		accessTokenString := strings.Replace(authorizationHeader, "Bearer ", "", 1)
-		userIdString, err := verifyAccessToken(authenticator, accessTokenString)
+		subject, err := verifyAccessToken(authenticator, accessTokenString)
 		if err != nil {
 			errResp := response.NewErrorResponse(response.Unauthorized, err, nil)
 			logger.Warn(response.Unauthorized, errResp.MakeLogFields(c.Request)...)
@@ -34,14 +36,23 @@ func Authenticate() gin.HandlerFunc {
 			return
 		}
 
-		userId, err := strconv.ParseUint(userIdString, 10, 64)
+		values, err := url.ParseQuery(subject)
 		if err != nil {
-			errResp := response.NewErrorResponse(response.Unauthorized, err, nil)
+			errResp := response.NewErrorResponse(response.Unauthorized, errors.WithStack(err), nil)
 			logger.Warn(response.Unauthorized, errResp.MakeLogFields(c.Request)...)
 			c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
 			return
 		}
-		c.Set("user_id", uint(userId))
+
+		decoder := schema.NewDecoder()
+		userQuery := &user.Query{}
+		if err := decoder.Decode(userQuery, values); err != nil {
+			errResp := response.NewErrorResponse(response.Unauthorized, errors.WithStack(err), nil)
+			logger.Warn(response.Unauthorized, errResp.MakeLogFields(c.Request)...)
+			c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
+			return
+		}
+		c.Set("user_id", userQuery.UserId)
 
 		c.Next()
 	}
