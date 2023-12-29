@@ -693,7 +693,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "admin-user"
                 ],
                 "summary": "get roles that belong to user",
                 "parameters": [

@@ -785,7 +785,7 @@ paths:
             $ref: '#/definitions/response.ErrorResponse'
       summary: get roles that belong to user
       tags:
-      - admin
+      - admin-user
   /api/ping:
     get:
       produces:

@@ -17,7 +17,7 @@ type AdminGetUserGroupingPolicyData struct {
 	Subjects []string `json:"subjects" mapstructure:"subjects" validate:"required"`
 }
 
-// @tags admin
+// @tags admin-user
 // @summary get roles that belong to user
 // @description get roles that belong to user
 // @accept json
