@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"

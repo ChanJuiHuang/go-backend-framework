@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
