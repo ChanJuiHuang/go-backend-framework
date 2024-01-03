@@ -7,7 +7,7 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/mitchellh/mapstructure"

@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user/model"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
