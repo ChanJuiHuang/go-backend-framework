@@ -815,7 +815,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/user.UserUpdateData"
+                                            "$ref": "#/definitions/user.UserData"
                                         }
                                     }
                                 }
@@ -884,7 +884,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/user.UserLoginData"
+                                            "$ref": "#/definitions/user.TokenData"
                                         }
                                     }
                                 }
@@ -944,7 +944,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/user.UserMeData"
+                                            "$ref": "#/definitions/user.UserData"
                                         }
                                     }
                                 }
@@ -1134,7 +1134,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/user.UserRegisterData"
+                                            "$ref": "#/definitions/user.TokenData"
                                         }
                                     }
                                 }
@@ -1472,6 +1472,46 @@ const docTemplate = `{
                 "data": {}
             }
         },
+        "user.TokenData": {
+            "type": "object",
+            "required": [
+                "access_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UserData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "email",
+                "id",
+                "name",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
         "user.UserGetPolicyData": {
             "type": "object",
             "required": [
@@ -1486,17 +1526,6 @@ const docTemplate = `{
                 }
             }
         },
-        "user.UserLoginData": {
-            "type": "object",
-            "required": [
-                "access_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                }
-            }
-        },
         "user.UserLoginRequest": {
             "type": "object",
             "required": [
@@ -1508,44 +1537,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UserMeData": {
-            "type": "object",
-            "required": [
-                "created_at",
-                "email",
-                "id",
-                "name",
-                "updated_at"
-            ],
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UserRegisterData": {
-            "type": "object",
-            "required": [
-                "access_token"
-            ],
-            "properties": {
-                "access_token": {
                     "type": "string"
                 }
             }
@@ -1567,33 +1558,6 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "minLength": 8
-                }
-            }
-        },
-        "user.UserUpdateData": {
-            "type": "object",
-            "required": [
-                "created_at",
-                "email",
-                "id",
-                "name",
-                "updated_at"
-            ],
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
                 }
             }
         },

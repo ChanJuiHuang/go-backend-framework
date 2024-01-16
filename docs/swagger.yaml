@@ -205,6 +205,34 @@ definitions:
     required:
     - data
     type: object
+  user.TokenData:
+    properties:
+      access_token:
+        type: string
+    required:
+    - access_token
+    type: object
+  user.UserData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - email
+    - id
+    - name
+    - updated_at
+    type: object
   user.UserGetPolicyData:
     properties:
       rules:
@@ -213,13 +241,6 @@ definitions:
         type: array
     required:
     - rules
-    type: object
-  user.UserLoginData:
-    properties:
-      access_token:
-        type: string
-    required:
-    - access_token
     type: object
   user.UserLoginRequest:
     properties:
@@ -230,32 +251,6 @@ definitions:
     required:
     - email
     - password
-    type: object
-  user.UserMeData:
-    properties:
-      created_at:
-        type: string
-      email:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      updated_at:
-        type: string
-    required:
-    - created_at
-    - email
-    - id
-    - name
-    - updated_at
-    type: object
-  user.UserRegisterData:
-    properties:
-      access_token:
-        type: string
-    required:
-    - access_token
     type: object
   user.UserRegisterRequest:
     properties:
@@ -270,25 +265,6 @@ definitions:
     - email
     - name
     - password
-    type: object
-  user.UserUpdateData:
-    properties:
-      created_at:
-        type: string
-      email:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      updated_at:
-        type: string
-    required:
-    - created_at
-    - email
-    - id
-    - name
-    - updated_at
     type: object
   user.UserUpdatePasswordRequest:
     properties:
@@ -826,7 +802,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/user.UserUpdateData'
+                  $ref: '#/definitions/user.UserData'
               type: object
         "400":
           description: 'code: 400-001(update user failed, get user failed), 400-002(request
@@ -869,7 +845,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/user.UserLoginData'
+                  $ref: '#/definitions/user.TokenData'
               type: object
         "400":
           description: 'code: 400-001(issue access token failed), 400-002(request
@@ -906,7 +882,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/user.UserMeData'
+                  $ref: '#/definitions/user.UserData'
               type: object
         "400":
           description: 'code: 400-001(get user failed)'
@@ -1025,7 +1001,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/user.UserRegisterData'
+                  $ref: '#/definitions/user.TokenData'
               type: object
         "400":
           description: 'code: 400-001(issue access token failed), 400-002(request
