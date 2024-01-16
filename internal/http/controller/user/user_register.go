@@ -21,16 +21,12 @@ type UserRegisterRequest struct {
 	Password string `json:"password" binding:"required,gte=8,containsany=abcdefghijklmnopqrstuvwxyz,containsany=ABCDEFGHIJKLMNOPQRSTUVWXYZ,containsany=1234567890"`
 }
 
-type UserRegisterData struct {
-	AccessToken string `json:"access_token" mapstructure:"access_token" validate:"required"`
-}
-
 // @tags user
 // @accept json
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param request body user.UserRegisterRequest true "register user"
-// @success 200 {object} response.Response{data=user.UserRegisterData}
+// @success 200 {object} response.Response{data=user.TokenData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(issue access token failed), 400-002(request validation failed)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
@@ -66,8 +62,8 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	respBody := response.NewResponse(UserRegisterData{
-		AccessToken: fmt.Sprintf("Bearer %s", accessToken),
-	})
+	data := TokenData{}
+	data.Fill(fmt.Sprintf("Bearer %s", accessToken))
+	respBody := response.NewResponse(data)
 	c.JSON(http.StatusOK, respBody)
 }

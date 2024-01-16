@@ -21,16 +21,12 @@ type UserLoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type UserLoginData struct {
-	AccessToken string `json:"access_token" mapstructure:"access_token" validate:"required"`
-}
-
 // @tags user
 // @accept json
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param request body user.UserLoginRequest true "login user"
-// @success 200 {object} response.Response{data=user.UserLoginData}
+// @success 200 {object} response.Response{data=user.TokenData}
 // @failure 400 {object} response.ErrorResponse "code: 400-001(issue access token failed), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
@@ -80,8 +76,8 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	respBody := response.NewResponse(UserLoginData{
-		AccessToken: fmt.Sprintf("Bearer %s", accessToken),
-	})
+	data := TokenData{}
+	data.Fill(fmt.Sprintf("Bearer %s", accessToken))
+	respBody := response.NewResponse(data)
 	c.JSON(http.StatusOK, respBody)
 }

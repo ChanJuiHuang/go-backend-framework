@@ -36,7 +36,7 @@ func (suite *UserMeTestSuite) TestMe() {
 		panic(err)
 	}
 
-	data := &user.UserMeData{}
+	data := &user.UserData{}
 	decoder := service.Registry.Get("mapstructureDecoder").(func(any, any) error)
 	if err := decoder(respBody.Data, data); err != nil {
 		panic(err)
