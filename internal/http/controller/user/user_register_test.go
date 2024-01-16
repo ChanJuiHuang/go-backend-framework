@@ -44,7 +44,7 @@ func (suite *UserRegisterTestSuite) TestRegister() {
 		panic(err)
 	}
 
-	data := &user.UserRegisterData{}
+	data := &user.TokenData{}
 	if err := mapstructure.Decode(respBody.Data, data); err != nil {
 		panic(err)
 	}

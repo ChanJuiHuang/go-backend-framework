@@ -44,7 +44,7 @@ func (suite *UserLoginTestSuite) TestLogin() {
 		panic(err)
 	}
 
-	data := &user.UserLoginData{}
+	data := &user.TokenData{}
 	if err := mapstructure.Decode(respBody.Data, data); err != nil {
 		panic(err)
 	}

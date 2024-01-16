@@ -47,7 +47,7 @@ func AdminLogin() string {
 	if err := json.Unmarshal(resp.Body.Bytes(), &respBody); err != nil {
 		panic(err)
 	}
-	data := &user.UserLoginData{}
+	data := &user.TokenData{}
 	if err := mapstructure.Decode(respBody.Data, data); err != nil {
 		panic(err)
 	}

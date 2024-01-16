@@ -46,7 +46,7 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 		panic(err)
 	}
 
-	data := &user.UserUpdateData{}
+	data := &user.UserData{}
 	decoder := service.Registry.Get("mapstructureDecoder").(func(any, any) error)
 	if err := decoder(respBody.Data, data); err != nil {
 		panic(err)
