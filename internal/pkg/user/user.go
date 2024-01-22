@@ -31,7 +31,7 @@ func Get(query any, args ...any) (*model.User, error) {
 
 func Update(id uint, values map[string]any) (int, error) {
 	database := service.Registry.Get("database").(*gorm.DB)
-	db := database.Table("users").
+	db := database.Model(&model.User{}).
 		Where("id = ?", id).
 		Updates(values)
 	if err := db.Error; err != nil {
