@@ -98,9 +98,14 @@ func (er *ErrorResponse) MakeLogFields(req *http.Request) []zap.Field {
 		debug = er.debug
 	}
 
+	errorString := ""
+	if err != nil {
+		errorString = debug.err.Error()
+	}
+
 	return []zap.Field{
 		zap.String("code", er.Code),
-		zap.String("error", debug.err.Error()),
+		zap.String("error", errorString),
 		zap.Strings("stacktrace", debug.Stacktrace),
 		zap.Int("status_code", er.StatusCode()),
 		zap.String("path", req.URL.Path),

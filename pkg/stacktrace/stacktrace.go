@@ -7,6 +7,10 @@ type stackTracer interface {
 }
 
 func GetStackStrace(err error) []string {
+	if err == nil {
+		return []string{}
+	}
+
 	frames := err.(stackTracer).StackTrace()
 	stacktrace := make([]string, 0, len(frames))
 	for _, frame := range frames {
