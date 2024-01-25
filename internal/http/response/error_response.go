@@ -99,7 +99,7 @@ func (er *ErrorResponse) MakeLogFields(req *http.Request) []zap.Field {
 	}
 
 	errorString := ""
-	if err != nil {
+	if debug.err != nil {
 		errorString = debug.err.Error()
 	}
 
