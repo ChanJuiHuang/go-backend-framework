@@ -43,6 +43,7 @@ func (suite *RegisterExecutorTestSuite) TestRegisterExecutor() {
 	assert.NotEmpty(suite.T(), config.Registry.Get("logger.file"))
 	assert.NotEmpty(suite.T(), config.Registry.Get("logger.access"))
 	assert.NotEmpty(suite.T(), config.Registry.Get("redis"))
+	assert.NotEmpty(suite.T(), config.Registry.Get("clickhouse"))
 
 	assert.NotEmpty(suite.T(), service.Registry.Get("authentication.authenticator"))
 	assert.NotEmpty(suite.T(), service.Registry.Get("database"))
@@ -55,6 +56,7 @@ func (suite *RegisterExecutorTestSuite) TestRegisterExecutor() {
 	assert.NotEmpty(suite.T(), service.Registry.Get("formDecoder"))
 	assert.NotEmpty(suite.T(), service.Registry.Get("modifier"))
 	assert.NotEmpty(suite.T(), service.Registry.Get("mapstructureDecoder"))
+	assert.NotEmpty(suite.T(), service.Registry.Get("clickhouse"))
 }
 
 func (suite *RegisterExecutorTestSuite) TestSimpleRegisterExecutor() {

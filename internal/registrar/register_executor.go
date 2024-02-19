@@ -18,6 +18,7 @@ var RegisterExecutor = registerExecutor{
 		&AuthenticationRegistrar{},
 		&CasbinRegistrar{},
 		&MapstructureDecoderRegistrar{},
+		&ClickhouseRegistrar{},
 	}),
 }
 
