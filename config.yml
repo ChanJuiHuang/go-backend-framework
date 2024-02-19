@@ -51,6 +51,15 @@ redis:
   minIdleConns: 10
   connMaxLifetime: 2h
 
+clickhouse:
+  addr:
+    - ${CLICKHOUSE_ADDR_01}
+  database: ${CLICKHOUSE_DATABASE}
+  username: ${CLICKHOUSE_USERNAME}
+  password: ${CLICKHOUSE_PASSWORD}
+  maxOpenConns: 5
+  maxIdleConns: 5
+
 httpServer:
   address: ${HTTP_ADDRESS}
   gracefulShutdownTtl: 30s
