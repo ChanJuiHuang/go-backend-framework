@@ -22,7 +22,7 @@ func NewMigration() *migration {
 	booterConfig := config.Registry.Get("booter").(booter.Config)
 
 	return &migration{
-		dir: path.Join(booterConfig.RootDir, "internal/migration/test"),
+		dir: path.Join(booterConfig.RootDir, "internal/migration/mysql/test"),
 	}
 }
 
