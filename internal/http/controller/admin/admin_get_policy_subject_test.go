@@ -19,7 +19,7 @@ type AdminGetPolicySubjectTestSuite struct {
 }
 
 func (suite *AdminGetPolicySubjectTestSuite) SetupTest() {
-	test.Migration.Run()
+	test.RdbmsMigration.Run()
 	test.AdminRegister()
 }
 
@@ -90,7 +90,7 @@ func (suite *AdminGetPolicySubjectTestSuite) TestAuthorizationFailed() {
 }
 
 func (suite *AdminGetPolicySubjectTestSuite) TearDownTest() {
-	test.Migration.Reset()
+	test.RdbmsMigration.Reset()
 }
 
 func TestAdminGetPolicySubjectTestSuite(t *testing.T) {

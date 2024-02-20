@@ -18,7 +18,7 @@ func init() {
 	)
 
 	HttpHandler = NewHttpHandler()
-	Migration = NewMigration()
+	RdbmsMigration = NewRdbmsMigration()
 }
 
 func loadEnv() {

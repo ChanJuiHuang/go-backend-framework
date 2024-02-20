@@ -20,7 +20,7 @@ type UserLoginTestSuite struct {
 }
 
 func (suite *UserLoginTestSuite) SetupSuite() {
-	test.Migration.Run()
+	test.RdbmsMigration.Run()
 	test.UserRegister()
 }
 
@@ -135,7 +135,7 @@ func (suite *UserLoginTestSuite) TestRequestValidationFailed() {
 }
 
 func (suite *UserLoginTestSuite) TearDownSuite() {
-	test.Migration.Reset()
+	test.RdbmsMigration.Reset()
 }
 
 func TestUserLoginTestSuite(t *testing.T) {
