@@ -14,7 +14,7 @@ APP_BIN:=app
 GOFILES:=$(shell find . -type f -name "*.go")
 TAGS:="jsoniter"
 
-OBJECTS:=jwt mysql_seeder http_route policy_seeder
+OBJECTS:=jwt rdbms_seeder http_route policy_seeder
 
 all:${OBJECTS}
 	go build -o ${BIN_DIR}/${APP_BIN} -v -tags ${TAGS} -ldflags "-s -w" ${APP_DIR}
@@ -28,7 +28,7 @@ debug-app:
 jwt:
 	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
-mysql_seeder:
+rdbms_seeder:
 	go build -o ${BIN_DIR}/$@ -v -race -ldflags "-s -w" ${KIT_DIR}/$@
 
 http_route:
@@ -41,13 +41,13 @@ clean:
 	rm -rf ${BIN_DIR}
 
 mysql-migration:
-	goose -dir internal/migration/mysql -allow-missing mysql "${DB_USERNAME}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_DATABASE}?parseTime=true&loc=UTC" ${args}
+	goose -dir internal/migration/rdbms -allow-missing mysql "${DB_USERNAME}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_DATABASE}?parseTime=true&loc=UTC" ${args}
 
 pgsql-migration:
-	goose -dir internal/migration/pgsql -allow-missing postgres "user=${DB_USERNAME} password=${DB_PASSWORD} host=${DB_HOST} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable" ${args}
+	goose -dir internal/migration/rdbms -allow-missing postgres "user=${DB_USERNAME} password=${DB_PASSWORD} host=${DB_HOST} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable" ${args}
 
 sqlite-migration:
-	goose -dir internal/migration/sqlite -allow-missing sqlite3 ${DB_DATABASE} ${args}
+	goose -dir internal/migration/rdbms -allow-missing sqlite3 ${DB_DATABASE} ${args}
 
 swagger:
 	swag init -g cmd/app/main.go
