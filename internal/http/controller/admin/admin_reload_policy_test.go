@@ -17,7 +17,7 @@ type AdminReloadPolicyTestSuite struct {
 }
 
 func (suite *AdminReloadPolicyTestSuite) SetupTest() {
-	test.Migration.Run()
+	test.RdbmsMigration.Run()
 	test.AdminRegister()
 }
 
@@ -89,7 +89,7 @@ func (suite *AdminReloadPolicyTestSuite) TestAuthorizationFailed() {
 }
 
 func (suite *AdminReloadPolicyTestSuite) TearDownTest() {
-	test.Migration.Reset()
+	test.RdbmsMigration.Reset()
 }
 
 func TestAdminReloadPolicyTestSuite(t *testing.T) {

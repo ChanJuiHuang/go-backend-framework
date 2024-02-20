@@ -23,7 +23,7 @@ type AdminGetUserGroupingPolicyTestSuite struct {
 }
 
 func (suite *AdminGetUserGroupingPolicyTestSuite) SetupTest() {
-	test.Migration.Run()
+	test.RdbmsMigration.Run()
 	test.AdminRegister()
 }
 
@@ -101,7 +101,7 @@ func (suite *AdminGetUserGroupingPolicyTestSuite) TestAuthorizationFailed() {
 }
 
 func (suite *AdminGetUserGroupingPolicyTestSuite) TearDownTest() {
-	test.Migration.Reset()
+	test.RdbmsMigration.Reset()
 }
 
 func TestAdminGetUserGroupingPolicyTestSuite(t *testing.T) {

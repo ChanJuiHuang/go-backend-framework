@@ -21,7 +21,7 @@ type AdminSearchPolicySubjectTestSuite struct {
 }
 
 func (suite *AdminSearchPolicySubjectTestSuite) SetupTest() {
-	test.Migration.Run()
+	test.RdbmsMigration.Run()
 	test.AdminRegister()
 }
 
@@ -90,7 +90,7 @@ func (suite *AdminSearchPolicySubjectTestSuite) TestAuthorizationFailed() {
 }
 
 func (suite *AdminSearchPolicySubjectTestSuite) TearDownTest() {
-	test.Migration.Reset()
+	test.RdbmsMigration.Reset()
 }
 
 func TestAdminSearchPolicySubjectTestSuite(t *testing.T) {

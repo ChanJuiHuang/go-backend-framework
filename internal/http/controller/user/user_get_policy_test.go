@@ -22,7 +22,7 @@ type UserGetPolicyTestSuite struct {
 }
 
 func (suite *UserGetPolicyTestSuite) SetupTest() {
-	test.Migration.Run()
+	test.RdbmsMigration.Run()
 	test.UserRegister()
 }
 
@@ -74,7 +74,7 @@ func (suite *UserGetPolicyTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *UserGetPolicyTestSuite) TearDownTest() {
-	test.Migration.Reset()
+	test.RdbmsMigration.Reset()
 }
 
 func TestUserGetPolicyTestSuite(t *testing.T) {

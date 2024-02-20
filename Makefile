@@ -49,6 +49,9 @@ pgsql-migration:
 sqlite-migration:
 	goose -dir internal/migration/rdbms -allow-missing sqlite3 ${DB_DATABASE} ${args}
 
+clickhouse-migration:
+	goose -dir internal/migration/clickhouse -allow-missing clickhouse "tcp://${CLICKHOUSE_ADDR_01}/${CLICKHOUSE_DATABASE}?username=${CLICKHOUSE_USERNAME}&password=${CLICKHOUSE_PASSWORD}" ${args}
+
 swagger:
 	swag init -g cmd/app/main.go
 

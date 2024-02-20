@@ -22,7 +22,7 @@ type AdminDeletePolicyTestSuite struct {
 }
 
 func (suite *AdminDeletePolicyTestSuite) SetupTest() {
-	test.Migration.Run()
+	test.RdbmsMigration.Run()
 	test.AdminRegister()
 }
 
@@ -160,7 +160,7 @@ func (suite *AdminDeletePolicyTestSuite) TestAuthorizationFailed() {
 }
 
 func (suite *AdminDeletePolicyTestSuite) TearDownTest() {
-	test.Migration.Reset()
+	test.RdbmsMigration.Reset()
 }
 
 func TestAdminDeletePolicyTestSuite(t *testing.T) {

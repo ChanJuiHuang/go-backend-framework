@@ -12,21 +12,21 @@ import (
 	"gorm.io/gorm"
 )
 
-type migration struct {
+type rdbmsMigration struct {
 	dir string
 }
 
-var Migration *migration
+var RdbmsMigration *rdbmsMigration
 
-func NewMigration() *migration {
+func NewRdbmsMigration() *rdbmsMigration {
 	booterConfig := config.Registry.Get("booter").(booter.Config)
 
-	return &migration{
+	return &rdbmsMigration{
 		dir: path.Join(booterConfig.RootDir, "internal/migration/rdbms/test"),
 	}
 }
 
-func (dt *migration) Run(callbacks ...func()) {
+func (rm *rdbmsMigration) Run(callbacks ...func()) {
 	databaseConfig := config.Registry.Get("database").(database.Config)
 	database := service.Registry.Get("database").(*gorm.DB)
 	db, err := database.DB()
@@ -37,7 +37,7 @@ func (dt *migration) Run(callbacks ...func()) {
 	if err := goose.SetDialect(string(databaseConfig.Driver)); err != nil {
 		panic(err)
 	}
-	if err := goose.Up(db, dt.dir); err != nil {
+	if err := goose.Up(db, rm.dir); err != nil {
 		panic(err)
 	}
 
@@ -46,13 +46,19 @@ func (dt *migration) Run(callbacks ...func()) {
 	}
 }
 
-func (dt *migration) Reset() {
+func (rm *rdbmsMigration) Reset() {
+	databaseConfig := config.Registry.Get("database").(database.Config)
 	database := service.Registry.Get("database").(*gorm.DB)
 	db, err := database.DB()
 	if err != nil {
 		panic(err)
 	}
-	if err := goose.Reset(db, dt.dir); err != nil {
+
+	if err := goose.SetDialect(string(databaseConfig.Driver)); err != nil {
+		panic(err)
+	}
+
+	if err := goose.Reset(db, rm.dir); err != nil {
 		panic(err)
 	}
 
