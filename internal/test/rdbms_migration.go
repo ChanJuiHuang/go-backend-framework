@@ -47,11 +47,17 @@ func (rm *rdbmsMigration) Run(callbacks ...func()) {
 }
 
 func (rm *rdbmsMigration) Reset() {
+	databaseConfig := config.Registry.Get("database").(database.Config)
 	database := service.Registry.Get("database").(*gorm.DB)
 	db, err := database.DB()
 	if err != nil {
 		panic(err)
 	}
+
+	if err := goose.SetDialect(string(databaseConfig.Driver)); err != nil {
+		panic(err)
+	}
+
 	if err := goose.Reset(db, rm.dir); err != nil {
 		panic(err)
 	}
