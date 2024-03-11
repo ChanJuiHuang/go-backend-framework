@@ -119,7 +119,9 @@ func bootConfigRegistry(booterConfig *Config) {
 
 	v := viper.New()
 	v.SetConfigType("yaml")
-	v.ReadConfig(strings.NewReader(stringYaml))
+	if err := v.ReadConfig(strings.NewReader(stringYaml)); err != nil {
+		panic(err)
+	}
 
 	config.Registry.SetViper(v)
 }
