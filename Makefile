@@ -52,6 +52,9 @@ sqlite-migration:
 clickhouse-migration:
 	goose -dir internal/migration/clickhouse -allow-missing clickhouse "tcp://${CLICKHOUSE_ADDR_01}/${CLICKHOUSE_DATABASE}?username=${CLICKHOUSE_USERNAME}&password=${CLICKHOUSE_PASSWORD}" ${args}
 
+linter:
+	golangci-lint run ./...
+
 swagger:
 	swag init -g cmd/app/main.go
 

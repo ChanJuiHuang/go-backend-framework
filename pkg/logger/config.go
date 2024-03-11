@@ -10,19 +10,19 @@ type Level string
 
 const (
 	Debug  Level = "debug"
-	Info         = "info"
-	Warn         = "warn"
-	Error        = "error"
-	Dpanic       = "dpanic"
-	Panic        = "panic"
-	Fatal        = "fatal"
+	Info   Level = "info"
+	Warn   Level = "warn"
+	Error  Level = "error"
+	Dpanic Level = "dpanic"
+	Panic  Level = "panic"
+	Fatal  Level = "fatal"
 )
 
 type Type string
 
 const (
 	Console Type = "console"
-	File         = "file"
+	File    Type = "file"
 )
 
 type Config struct {
