@@ -33,9 +33,13 @@ func (suite *AdminDeletePolicySubjectTestSuite) TestDeletePolicySubject() {
 
 	role1 := "role1"
 	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	enforcer.AddPolicies([][]string{
+	_, err := enforcer.AddPolicies([][]string{
 		{role1, "/api1", "GET"},
 	})
+	if err != nil {
+		panic(err)
+	}
+
 	adminDeletePolicySubjectRequest := admin.AdminDeletePolicySubjectRequest{
 		Subjects: []string{role1},
 	}

@@ -23,24 +23,25 @@ type ServerConfig struct {
 	GracefulShutdownTtl time.Duration
 }
 
-func NewEngine() *gin.Engine {
+func NewEngine() (*gin.Engine, error) {
 	engine := gin.New()
 	engine.RemoteIPHeaders = []string{
 		"X-Forwarded-For",
 		"X-Real-IP",
 	}
-	engine.SetTrustedProxies([]string{
+	err := engine.SetTrustedProxies([]string{
 		"0.0.0.0/0",
 		"::/0",
 	})
 
-	return engine
+	return engine, err
 }
 
 func NewServer(config ServerConfig) *Server {
 	srv := &Server{
 		server: &http.Server{
-			Addr: config.Address,
+			Addr:              config.Address,
+			ReadHeaderTimeout: 30 * time.Minute,
 		},
 		config: config,
 	}
@@ -49,7 +50,10 @@ func NewServer(config ServerConfig) *Server {
 }
 
 func (srv *Server) Run() {
-	engine := NewEngine()
+	engine, err := NewEngine()
+	if err != nil {
+		panic(err)
+	}
 	middleware.AttachGlobalMiddleware(engine)
 
 	routers := []route.Router{

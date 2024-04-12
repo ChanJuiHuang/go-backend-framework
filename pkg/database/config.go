@@ -11,8 +11,8 @@ type Driver string
 
 const (
 	MySql  Driver = "mysql"
-	PgSql         = "pgsql"
-	Sqlite        = "sqlite"
+	PgSql  Driver = "pgsql"
+	Sqlite Driver = "sqlite"
 )
 
 func GetDriver(driver Driver) Driver {
@@ -32,9 +32,9 @@ type LogLevel string
 
 const (
 	Info   LogLevel = "info"
-	Warn            = "warn"
-	Error           = "error"
-	Silent          = "silent"
+	Warn   LogLevel = "warn"
+	Error  LogLevel = "error"
+	Silent LogLevel = "silent"
 )
 
 func GetGormLogLevel(level LogLevel) logger.LogLevel {

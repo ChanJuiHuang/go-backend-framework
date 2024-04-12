@@ -17,8 +17,13 @@ type httpHandler struct {
 var HttpHandler *httpHandler
 
 func NewHttpHandler() *httpHandler {
+	engine, err := pkgHttp.NewEngine()
+	if err != nil {
+		panic(err)
+	}
+
 	handler := &httpHandler{
-		engine: pkgHttp.NewEngine(),
+		engine: engine,
 	}
 	handler.AttachGlobalMiddleware()
 	routers := []route.Router{
