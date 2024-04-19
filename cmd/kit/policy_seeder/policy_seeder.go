@@ -1,17 +1,18 @@
 package main
 
 import (
-	"strconv"
+	"fmt"
+	"log"
+	"os"
 
 	_ "github.com/joho/godotenv/autoload"
-	"go.uber.org/zap"
+	"github.com/urfave/cli/v2"
 	"gorm.io/gorm"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
-	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 )
 
@@ -23,39 +24,31 @@ func init() {
 	)
 }
 
-func addPolicies() {
-	policies := [][]string{
-		{"admin", "/api/admin/policy", "POST"},
-		{"admin", "/api/admin/policy", "DELETE"},
-		{"admin", "/api/admin/policy/subject", "GET"},
-		{"admin", "/api/admin/policy/subject/:subject", "GET"},
-		{"admin", "/api/admin/policy/subject/:subject/user", "GET"},
-		{"admin", "/api/admin/policy/subject", "DELETE"},
-		{"admin", "/api/admin/policy/reload", "POST"},
-		{"admin", "/api/admin/grouping-policy", "POST"},
-		{"admin", "/api/admin/user/:userId/grouping-policy", "GET"},
-		{"admin", "/api/admin/grouping-policy", "DELETE"},
+func resetPolicies() {
+	policies := []gormadapter.CasbinRule{
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "POST"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "DELETE"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "GET"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject/:subject", V2: "GET"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject/:subject/user", V2: "GET"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "DELETE"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/reload", V2: "POST"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/grouping-policy", V2: "POST"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/user/:userId/grouping-policy", V2: "GET"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/grouping-policy", V2: "DELETE"},
 	}
-	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	logger := service.Registry.Get("logger").(*zap.Logger)
-
-	err := enforcer.GetAdapter().(*gormadapter.Adapter).Transaction(enforcer, func(e casbin.IEnforcer) error {
-		result, err := e.RemovePolicies(policies)
+	database := service.Registry.Get("database").(*gorm.DB)
+	err := database.Transaction(func(tx *gorm.DB) error {
+		err := tx.Table("casbin_rules").
+			Where("ptype = ?", "p").
+			Delete(&struct{}{}).
+			Error
 		if err != nil {
-			logger.Error(err.Error())
 			return err
 		}
-		if !result {
-			logger.Warn("policies are not in [casbin_rules] table PROBABLY")
-		}
 
-		result, err = enforcer.AddPolicies(policies)
-		if err != nil {
-			logger.Error(err.Error())
+		if err := tx.Table("casbin_rules").Create(policies).Error; err != nil {
 			return err
-		}
-		if !result {
-			panic("add policies failed")
 		}
 
 		return nil
@@ -66,7 +59,7 @@ func addPolicies() {
 	}
 }
 
-func addGroupingPolicies() {
+func resetGroupingPolicies() {
 	user := &model.User{}
 	database := service.Registry.Get("database").(*gorm.DB)
 	db := database.Where("email = ?", "admin@admin.com").
@@ -75,30 +68,20 @@ func addGroupingPolicies() {
 		panic(err)
 	}
 
-	groupingPolicies := [][]string{
-		{strconv.Itoa(int(user.Id)), "admin"},
+	groupingPolicies := []gormadapter.CasbinRule{
+		{Ptype: "g", V0: fmt.Sprintf("%d", user.Id), V1: "admin"},
 	}
-
-	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	logger := service.Registry.Get("logger").(*zap.Logger)
-
-	err := enforcer.GetAdapter().(*gormadapter.Adapter).Transaction(enforcer, func(e casbin.IEnforcer) error {
-		result, err := e.RemoveGroupingPolicies(groupingPolicies)
+	err := database.Transaction(func(tx *gorm.DB) error {
+		err := tx.Table("casbin_rules").
+			Where("ptype = ?", "g").
+			Delete(&struct{}{}).
+			Error
 		if err != nil {
-			logger.Error(err.Error())
 			return err
 		}
-		if !result {
-			logger.Warn("grouping policies are not in [casbin_rules] table PROBABLY")
-		}
 
-		result, err = e.AddGroupingPolicies(groupingPolicies)
-		if err != nil {
-			logger.Error(err.Error())
+		if err := tx.Table("casbin_rules").Create(groupingPolicies).Error; err != nil {
 			return err
-		}
-		if !result {
-			panic("add grouping policies failed")
 		}
 
 		return nil
@@ -110,6 +93,28 @@ func addGroupingPolicies() {
 }
 
 func main() {
-	addPolicies()
-	addGroupingPolicies()
+	app := &cli.App{
+		Commands: []*cli.Command{
+			{
+				Name:  "reset-policies",
+				Usage: "reset policies",
+				Action: func(cCtx *cli.Context) error {
+					resetPolicies()
+					return nil
+				},
+			},
+			{
+				Name:  "reset-group-policies",
+				Usage: "reset group policies",
+				Action: func(cCtx *cli.Context) error {
+					resetGroupingPolicies()
+					return nil
+				},
+			},
+		},
+	}
+
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
 }
