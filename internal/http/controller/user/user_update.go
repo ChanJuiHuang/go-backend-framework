@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/fatih/structs"
@@ -39,7 +40,7 @@ func Update(c *gin.Context) {
 	}
 
 	values := structs.Map(reqBody)
-	_, err := user.Update(c.GetUint("user_id"), values)
+	_, err := user.Update(database.NewTx("users"), c.GetUint("user_id"), values)
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
@@ -47,7 +48,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	u, err := user.Get("id = ?", c.GetUint("user_id"))
+	u, err := user.Get(database.NewTx("users"), "id = ?", c.GetUint("user_id"))
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)

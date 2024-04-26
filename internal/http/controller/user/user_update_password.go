@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
@@ -40,7 +41,7 @@ func UpdatePassword(c *gin.Context) {
 		return
 	}
 
-	u, err := user.Get("id = ?", c.GetUint("user_id"))
+	u, err := user.Get(database.NewTx("users"), "id = ?", c.GetUint("user_id"))
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
@@ -57,7 +58,7 @@ func UpdatePassword(c *gin.Context) {
 
 	reqBody.Password = argon2.MakeArgon2IdHash(reqBody.Password)
 	values := structs.Map(reqBody)
-	if _, err := user.Update(c.GetUint("user_id"), values); err != nil {
+	if _, err := user.Update(database.NewTx("users"), c.GetUint("user_id"), values); err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)

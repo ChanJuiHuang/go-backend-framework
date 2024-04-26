@@ -2,24 +2,21 @@ package user
 
 import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
-func Create(user any) error {
-	database := service.Registry.Get("database").(*gorm.DB)
-	if err := database.Create(user).Error; err != nil {
+func Create(tx *gorm.DB, user any) error {
+	if err := tx.Table("users").Create(user).Error; err != nil {
 		return errors.WithStack(err)
 	}
 
 	return nil
 }
 
-func Get(query any, args ...any) (*model.User, error) {
+func Get(tx *gorm.DB, query any, args ...any) (*model.User, error) {
 	user := &model.User{}
-	database := service.Registry.Get("database").(*gorm.DB)
-	err := database.Where(query, args...).
+	err := tx.Table("users").Where(query, args...).
 		First(user).
 		Error
 	if err != nil {
@@ -29,14 +26,13 @@ func Get(query any, args ...any) (*model.User, error) {
 	return user, nil
 }
 
-func Update(id uint, values map[string]any) (int, error) {
-	database := service.Registry.Get("database").(*gorm.DB)
-	db := database.Model(&model.User{}).
+func Update(tx *gorm.DB, id uint, values map[string]any) (int64, error) {
+	db := tx.Model(&model.User{}).
 		Where("id = ?", id).
 		Updates(values)
 	if err := db.Error; err != nil {
 		return 0, errors.WithStack(err)
 	}
 
-	return int(db.RowsAffected), nil
+	return db.RowsAffected, nil
 }

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
@@ -46,7 +47,7 @@ func Register(c *gin.Context) {
 		Email:    reqBody.Email,
 		Password: argon2.MakeArgon2IdHash(reqBody.Password),
 	}
-	if err := user.Create(u); err != nil {
+	if err := user.Create(database.NewTx("users"), u); err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
