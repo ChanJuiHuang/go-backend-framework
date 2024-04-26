@@ -6,6 +6,7 @@ import (
 	"net/url"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/authentication"
@@ -41,7 +42,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	u, err := user.Get("email = ?", reqBody.Email)
+	u, err := user.Get(database.NewTx("users"), "email = ?", reqBody.Email)
 	if err != nil {
 		errResp := response.NewErrorResponse(response.EmailIsWrong, err, nil)
 		logger.Warn(response.EmailIsWrong, errResp.MakeLogFields(c.Request)...)
