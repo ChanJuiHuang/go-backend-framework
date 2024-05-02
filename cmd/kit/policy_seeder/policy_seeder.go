@@ -9,6 +9,7 @@ import (
 	"github.com/urfave/cli/v2"
 	"gorm.io/gorm"
 
+	casbinrule "github.com/ChanJuiHuang/go-backend-framework/internal/pkg/casbin_rule"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
@@ -39,15 +40,11 @@ func resetPolicies() {
 	}
 	database := service.Registry.Get("database").(*gorm.DB)
 	err := database.Transaction(func(tx *gorm.DB) error {
-		err := tx.Table("casbin_rules").
-			Where("ptype = ?", "p").
-			Delete(&struct{}{}).
-			Error
-		if err != nil {
+		if err := casbinrule.Delete(tx, "ptype = ?", "p"); err != nil {
 			return err
 		}
 
-		if err := tx.Table("casbin_rules").Create(policies).Error; err != nil {
+		if err := casbinrule.Create(tx, policies); err != nil {
 			return err
 		}
 
@@ -72,15 +69,11 @@ func resetGroupingPolicies() {
 		{Ptype: "g", V0: fmt.Sprintf("%d", user.Id), V1: "admin"},
 	}
 	err := database.Transaction(func(tx *gorm.DB) error {
-		err := tx.Table("casbin_rules").
-			Where("ptype = ?", "g").
-			Delete(&struct{}{}).
-			Error
-		if err != nil {
+		if err := casbinrule.Delete(tx, "ptype = ?", "g"); err != nil {
 			return err
 		}
 
-		if err := tx.Table("casbin_rules").Create(groupingPolicies).Error; err != nil {
+		if err := casbinrule.Create(tx, groupingPolicies); err != nil {
 			return err
 		}
 
