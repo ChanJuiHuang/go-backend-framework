@@ -23,8 +23,8 @@ type PaginationRequest struct {
 }
 
 type PaginationResponse struct {
-	LastPage int   `json:"last_page" validate:"required"`
-	Total    int64 `json:"total" validate:"required"`
+	LastPage int   `json:"last_page" mapstructure:"last_page" validate:"required"`
+	Total    int64 `json:"total" mapstructure:"total" validate:"required"`
 }
 
 func NewPaginator(
