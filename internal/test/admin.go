@@ -8,10 +8,13 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
+	casbinrule "github.com/ChanJuiHuang/go-backend-framework/internal/pkg/casbin_rule"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
+	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/mitchellh/mapstructure"
 	"gorm.io/gorm"
 )
@@ -57,25 +60,25 @@ func AdminLogin() string {
 }
 
 func AdminAddPolicies() {
-	policies := [][]string{
-		{"admin", "/api/admin/policy", "POST"},
-		{"admin", "/api/admin/policy", "DELETE"},
-		{"admin", "/api/admin/policy/subject", "GET"},
-		{"admin", "/api/admin/policy/subject/:subject", "GET"},
-		{"admin", "/api/admin/policy/subject/:subject/user", "GET"},
-		{"admin", "/api/admin/policy/subject", "DELETE"},
-		{"admin", "/api/admin/policy/reload", "POST"},
-		{"admin", "/api/admin/grouping-policy", "POST"},
-		{"admin", "/api/admin/user/:userId/grouping-policy", "GET"},
-		{"admin", "/api/admin/grouping-policy", "DELETE"},
+	policies := []gormadapter.CasbinRule{
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "POST"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "DELETE"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "GET"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject/:subject", V2: "GET"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject/:subject/user", V2: "GET"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "DELETE"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/reload", V2: "POST"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/grouping-policy", V2: "POST"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/user/:userId/grouping-policy", V2: "GET"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/grouping-policy", V2: "DELETE"},
 	}
-	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	result, err := enforcer.AddPolicies(policies)
-	if err != nil {
+	if err := casbinrule.Create(database.NewTx("casbin_rules"), policies); err != nil {
 		panic(err)
 	}
-	if !result {
-		panic("add casbin testing policies failed")
+
+	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
+	if err := enforcer.LoadPolicy(); err != nil {
+		panic(err)
 	}
 }
 
