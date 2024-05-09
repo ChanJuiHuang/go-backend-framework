@@ -32,6 +32,10 @@ func (cm *clickhouseMigration) Run(callbacks ...func()) {
 		panic(err)
 	}
 
+	if _, err := conn.Exec(fmt.Sprintf("DROP DATABASE IF EXISTS %s", clickhouseConfig.Database)); err != nil {
+		panic(err)
+	}
+
 	if _, err := conn.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s", clickhouseConfig.Database)); err != nil {
 		panic(err)
 	}
