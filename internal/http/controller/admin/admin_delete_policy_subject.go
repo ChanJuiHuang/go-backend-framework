@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	casbinrule "github.com/ChanJuiHuang/go-backend-framework/internal/pkg/casbin_rule"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/permission"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
@@ -46,12 +46,12 @@ func DeletePolicySubject(c *gin.Context) {
 
 	database := service.Registry.Get("database").(*gorm.DB)
 	err := database.Transaction(func(tx *gorm.DB) error {
-		if err := casbinrule.Delete(tx, "ptype = ? AND v0 IN ?", "p", reqBody.Subjects); err != nil {
+		if err := permission.DeleteCasbinRule(tx, "ptype = ? AND v0 IN ?", "p", reqBody.Subjects); err != nil {
 			logger.Warn(err.Error())
 			return err
 		}
 
-		if err := casbinrule.Delete(tx, "ptype = ? AND v1 IN ?", "g", reqBody.Subjects); err != nil {
+		if err := permission.DeleteCasbinRule(tx, "ptype = ? AND v1 IN ?", "g", reqBody.Subjects); err != nil {
 			logger.Warn(err.Error())
 			return err
 		}

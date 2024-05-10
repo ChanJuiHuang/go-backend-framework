@@ -8,9 +8,9 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	casbinrule "github.com/ChanJuiHuang/go-backend-framework/internal/pkg/casbin_rule"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/permission"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
@@ -72,7 +72,7 @@ func AdminAddPolicies() {
 		{Ptype: "p", V0: "admin", V1: "/api/admin/user/:userId/grouping-policy", V2: "GET"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/grouping-policy", V2: "DELETE"},
 	}
-	if err := casbinrule.Create(database.NewTx(), policies); err != nil {
+	if err := permission.CreateCasbinRule(database.NewTx(), policies); err != nil {
 		panic(err)
 	}
 

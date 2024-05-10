@@ -1,11 +1,11 @@
-package casbinrule
+package permission
 
 import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
-func Create(tx *gorm.DB, value any) error {
+func CreateCasbinRule(tx *gorm.DB, value any) error {
 	if err := tx.Table("casbin_rules").Create(value).Error; err != nil {
 		return errors.WithStack(err)
 	}
@@ -13,7 +13,7 @@ func Create(tx *gorm.DB, value any) error {
 	return nil
 }
 
-func Delete(tx *gorm.DB, query any, args ...any) error {
+func DeleteCasbinRule(tx *gorm.DB, query any, args ...any) error {
 	err := tx.Table("casbin_rules").
 		Where(query, args...).
 		Delete(&struct{}{}).
