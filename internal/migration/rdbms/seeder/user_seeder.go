@@ -2,8 +2,8 @@ package seeder
 
 import (
 	"fmt"
-	"time"
 
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/random"
 	"gorm.io/gorm"
@@ -11,18 +11,13 @@ import (
 
 func runUserSeeder(tx *gorm.DB) error {
 	password := random.RandomString(16)
-	err := tx.Table("users").Create(&struct {
-		Name      string
-		Password  string
-		Email     string
-		CreatedAt time.Time
-		UpdatedAt time.Time
-	}{
+	user := &model.User{
 		Name:     "admin",
 		Password: argon2.MakeArgon2IdHash(password),
 		Email:    "admin@admin.com",
-	}).Error
-	if err != nil {
+	}
+	
+	if err := tx.Table("users").Create(user).Error err != nil {
 		return err
 	}
 
