@@ -11,7 +11,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
 	"github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -49,8 +48,8 @@ func (suite *UserRegisterTestSuite) TestRegister() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), data.AccessToken)
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.NotEmpty(data.AccessToken)
 }
 
 func (suite *UserRegisterTestSuite) TestCsrfMismatch() {
@@ -63,9 +62,9 @@ func (suite *UserRegisterTestSuite) TestCsrfMismatch() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *UserRegisterTestSuite) TestRequestValidationFailed() {
@@ -79,9 +78,9 @@ func (suite *UserRegisterTestSuite) TestRequestValidationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusBadRequest, resp.Code)
-	assert.Equal(suite.T(), response.RequestValidationFailed, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.RequestValidationFailed], respBody.Code)
+	suite.Equal(http.StatusBadRequest, resp.Code)
+	suite.Equal(response.RequestValidationFailed, respBody.Message)
+	suite.Equal(response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
 func (suite *UserRegisterTestSuite) TearDownSuite() {

@@ -14,7 +14,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -73,9 +72,9 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestDeleteGroupingPolicy() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.Equal(suite.T(), uint(id), data.UserId)
-	assert.Equal(suite.T(), []string{subject2}, data.Subjects)
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.Equal(uint(id), data.UserId)
+	suite.Equal([]string{subject2}, data.Subjects)
 }
 
 func (suite *AdminDeleteGroupingPolicyTestSuite) TestRequestValidationFailed() {
@@ -98,9 +97,9 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestRequestValidationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusBadRequest, resp.Code)
-	assert.Equal(suite.T(), response.RequestValidationFailed, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.RequestValidationFailed], respBody.Code)
+	suite.Equal(http.StatusBadRequest, resp.Code)
+	suite.Equal(response.RequestValidationFailed, respBody.Message)
+	suite.Equal(response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
 func (suite *AdminDeleteGroupingPolicyTestSuite) TestWrongAccessToken() {
@@ -116,9 +115,9 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *AdminDeleteGroupingPolicyTestSuite) TestCsrfMismatch() {
@@ -133,9 +132,9 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestCsrfMismatch() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminDeleteGroupingPolicyTestSuite) TestAuthorizationFailed() {
@@ -151,9 +150,9 @@ func (suite *AdminDeleteGroupingPolicyTestSuite) TestAuthorizationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminDeleteGroupingPolicyTestSuite) TearDownTest() {

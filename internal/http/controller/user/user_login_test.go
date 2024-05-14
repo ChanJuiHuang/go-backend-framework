@@ -11,7 +11,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
 	"github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -49,8 +48,8 @@ func (suite *UserLoginTestSuite) TestLogin() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), data.AccessToken)
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.NotEmpty(data.AccessToken)
 }
 
 func (suite *UserLoginTestSuite) TestEmailIsWrong() {
@@ -73,9 +72,9 @@ func (suite *UserLoginTestSuite) TestEmailIsWrong() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusBadRequest, resp.Code)
-	assert.Equal(suite.T(), response.EmailIsWrong, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.EmailIsWrong], respBody.Code)
+	suite.Equal(http.StatusBadRequest, resp.Code)
+	suite.Equal(response.EmailIsWrong, respBody.Message)
+	suite.Equal(response.MessageToCode[response.EmailIsWrong], respBody.Code)
 }
 
 func (suite *UserLoginTestSuite) TestPasswordIsWrong() {
@@ -98,9 +97,9 @@ func (suite *UserLoginTestSuite) TestPasswordIsWrong() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusBadRequest, resp.Code)
-	assert.Equal(suite.T(), response.PasswordIsWrong, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.PasswordIsWrong], respBody.Code)
+	suite.Equal(http.StatusBadRequest, resp.Code)
+	suite.Equal(response.PasswordIsWrong, respBody.Message)
+	suite.Equal(response.MessageToCode[response.PasswordIsWrong], respBody.Code)
 }
 
 func (suite *UserLoginTestSuite) TestCsrfMismatch() {
@@ -113,9 +112,9 @@ func (suite *UserLoginTestSuite) TestCsrfMismatch() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *UserLoginTestSuite) TestRequestValidationFailed() {
@@ -129,9 +128,9 @@ func (suite *UserLoginTestSuite) TestRequestValidationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusBadRequest, resp.Code)
-	assert.Equal(suite.T(), response.RequestValidationFailed, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.RequestValidationFailed], respBody.Code)
+	suite.Equal(http.StatusBadRequest, resp.Code)
+	suite.Equal(response.RequestValidationFailed, respBody.Message)
+	suite.Equal(response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
 func (suite *UserLoginTestSuite) TearDownSuite() {

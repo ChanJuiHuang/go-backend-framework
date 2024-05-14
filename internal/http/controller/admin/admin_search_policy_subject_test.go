@@ -12,7 +12,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -49,8 +48,8 @@ func (suite *AdminSearchPolicySubjectTestSuite) TestSearchPolicySubject() {
 	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	subjects := enforcer.GetAllSubjects()
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.Equal(suite.T(), len(subjects), len(data.Subjects))
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.Equal(len(subjects), len(data.Subjects))
 }
 
 func (suite *AdminSearchPolicySubjectTestSuite) TestWrongAccessToken() {
@@ -67,9 +66,9 @@ func (suite *AdminSearchPolicySubjectTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *AdminSearchPolicySubjectTestSuite) TestAuthorizationFailed() {
@@ -84,9 +83,9 @@ func (suite *AdminSearchPolicySubjectTestSuite) TestAuthorizationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminSearchPolicySubjectTestSuite) TearDownTest() {

@@ -14,7 +14,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -56,9 +55,9 @@ func (suite *AdminGetUserGroupingPolicyTestSuite) TestGetUserGroupingPolicy() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.Equal(suite.T(), uint(id), data.UserId)
-	assert.Equal(suite.T(), len(subjects), len(data.Subjects))
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.Equal(uint(id), data.UserId)
+	suite.Equal(len(subjects), len(data.Subjects))
 }
 
 func (suite *AdminGetUserGroupingPolicyTestSuite) TestWrongAccessToken() {
@@ -76,9 +75,9 @@ func (suite *AdminGetUserGroupingPolicyTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *AdminGetUserGroupingPolicyTestSuite) TestAuthorizationFailed() {
@@ -95,9 +94,9 @@ func (suite *AdminGetUserGroupingPolicyTestSuite) TestAuthorizationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminGetUserGroupingPolicyTestSuite) TearDownTest() {

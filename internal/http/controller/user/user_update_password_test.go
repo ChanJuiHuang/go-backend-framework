@@ -10,7 +10,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -41,7 +40,7 @@ func (suite *UserUpdatePasswordTestSuite) TestUpdatePassword() {
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
-	assert.Equal(suite.T(), http.StatusNoContent, resp.Code)
+	suite.Equal(http.StatusNoContent, resp.Code)
 }
 
 func (suite *UserUpdatePasswordTestSuite) TestWrongAccessToken() {
@@ -55,9 +54,9 @@ func (suite *UserUpdatePasswordTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *UserUpdatePasswordTestSuite) TestCsrfMismatch() {
@@ -70,9 +69,9 @@ func (suite *UserUpdatePasswordTestSuite) TestCsrfMismatch() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *UserUpdatePasswordTestSuite) TestRequestValidationFailed() {
@@ -97,9 +96,9 @@ func (suite *UserUpdatePasswordTestSuite) TestRequestValidationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusBadRequest, resp.Code)
-	assert.Equal(suite.T(), response.RequestValidationFailed, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.RequestValidationFailed], respBody.Code)
+	suite.Equal(http.StatusBadRequest, resp.Code)
+	suite.Equal(response.RequestValidationFailed, respBody.Message)
+	suite.Equal(response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
 func (suite *UserUpdatePasswordTestSuite) TearDownSuite() {

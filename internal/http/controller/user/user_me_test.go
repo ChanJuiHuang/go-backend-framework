@@ -10,7 +10,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -42,12 +41,12 @@ func (suite *UserMeTestSuite) TestMe() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), data.Id)
-	assert.NotEmpty(suite.T(), data.Name)
-	assert.NotEmpty(suite.T(), data.Email)
-	assert.NotEmpty(suite.T(), data.CreatedAt)
-	assert.NotEmpty(suite.T(), data.UpdatedAt)
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.NotEmpty(data.Id)
+	suite.NotEmpty(data.Name)
+	suite.NotEmpty(data.Email)
+	suite.NotEmpty(data.CreatedAt)
+	suite.NotEmpty(data.UpdatedAt)
 }
 
 func (suite *UserMeTestSuite) TestWrongAccessToken() {
@@ -61,9 +60,9 @@ func (suite *UserMeTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *UserMeTestSuite) TearDownSuite() {

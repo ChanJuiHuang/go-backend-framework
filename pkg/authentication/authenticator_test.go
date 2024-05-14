@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -17,7 +16,7 @@ type AuthenticatorTestSuite struct {
 
 func (suite *AuthenticatorTestSuite) SetupSuite() {
 	publicKey, privateKey, err := ed25519.GenerateKey(nil)
-	assert.ErrorIs(suite.T(), err, nil, err)
+	suite.ErrorIs(err, nil, err)
 	suite.publicKey = publicKey
 	suite.privateKey = privateKey
 	suite.accessTokenLifeTime = time.Hour
@@ -27,15 +26,15 @@ func (suite *AuthenticatorTestSuite) SetupSuite() {
 func (suite *AuthenticatorTestSuite) TestVerifyAccessToken() {
 	subject := "john"
 	accessToken, err := suite.IssueAccessToken(subject)
-	assert.ErrorIs(suite.T(), err, nil, err)
+	suite.ErrorIs(err, nil, err)
 
 	token, err := suite.VerifyJwt(accessToken)
-	assert.ErrorIs(suite.T(), err, nil, err)
-	assert.True(suite.T(), token.Valid)
+	suite.ErrorIs(err, nil, err)
+	suite.True(token.Valid)
 
 	claims := token.Claims.(jwt.MapClaims)
-	assert.Equal(suite.T(), subject, claims["sub"].(string))
-	assert.Equal(suite.T(), "access", claims["aud"].([]any)[0].(string))
+	suite.Equal(subject, claims["sub"].(string))
+	suite.Equal("access", claims["aud"].([]any)[0].(string))
 }
 
 func (suite *AuthenticatorTestSuite) TestInvalidJwtToken() {
@@ -48,12 +47,12 @@ func (suite *AuthenticatorTestSuite) TestInvalidJwtToken() {
 		IssuedAt:  jwt.NewNumericDate(now),
 	}
 	invalidJwt, err := suite.IssueJwt(claims)
-	assert.ErrorIs(suite.T(), err, nil, err)
+	suite.ErrorIs(err, nil, err)
 	time.Sleep(time.Second)
 
 	token, err := suite.VerifyJwt(invalidJwt)
-	assert.NotEmpty(suite.T(), err)
-	assert.Empty(suite.T(), token)
+	suite.NotEmpty(err)
+	suite.Empty(token)
 }
 
 func TestAuthenticatorTestSuite(t *testing.T) {
