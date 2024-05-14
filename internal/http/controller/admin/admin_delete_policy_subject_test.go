@@ -13,7 +13,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	"github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -64,8 +63,8 @@ func (suite *AdminDeletePolicySubjectTestSuite) TestDeletePolicySubject() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), data.Subjects)
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.NotEmpty(data.Subjects)
 }
 
 func (suite *AdminDeletePolicySubjectTestSuite) TestCsrfMismatch() {
@@ -81,9 +80,9 @@ func (suite *AdminDeletePolicySubjectTestSuite) TestCsrfMismatch() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminDeletePolicySubjectTestSuite) TestWrongAccessToken() {
@@ -100,9 +99,9 @@ func (suite *AdminDeletePolicySubjectTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *AdminDeletePolicySubjectTestSuite) TestAuthorizationFailed() {
@@ -119,9 +118,9 @@ func (suite *AdminDeletePolicySubjectTestSuite) TestAuthorizationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminDeletePolicySubjectTestSuite) TearDownTest() {

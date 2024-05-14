@@ -12,7 +12,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/gorm"
 )
@@ -54,8 +53,8 @@ func (suite *UserGetPolicyTestSuite) TestGetPolicy() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.NotEmpty(suite.T(), data.Rules)
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.NotEmpty(data.Rules)
 }
 
 func (suite *UserGetPolicyTestSuite) TestWrongAccessToken() {
@@ -68,9 +67,9 @@ func (suite *UserGetPolicyTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *UserGetPolicyTestSuite) TearDownTest() {

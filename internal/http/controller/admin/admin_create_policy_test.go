@@ -11,7 +11,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
 	"github.com/mitchellh/mapstructure"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -65,9 +64,9 @@ func (suite *AdminCreatePolicyTestSuite) TestCreatePolicy() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusOK, resp.Code)
-	assert.Equal(suite.T(), subject, data.Subject)
-	assert.Equal(suite.T(), rules, data.Rules)
+	suite.Equal(http.StatusOK, resp.Code)
+	suite.Equal(subject, data.Subject)
+	suite.Equal(rules, data.Rules)
 }
 
 func (suite *AdminCreatePolicyTestSuite) TestRequestValidationFailed() {
@@ -102,9 +101,9 @@ func (suite *AdminCreatePolicyTestSuite) TestRequestValidationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusBadRequest, resp.Code)
-	assert.Equal(suite.T(), response.RequestValidationFailed, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.RequestValidationFailed], respBody.Code)
+	suite.Equal(http.StatusBadRequest, resp.Code)
+	suite.Equal(response.RequestValidationFailed, respBody.Message)
+	suite.Equal(response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
 func (suite *AdminCreatePolicyTestSuite) TestOneOfPolicyIsRepeat() {
@@ -142,9 +141,9 @@ func (suite *AdminCreatePolicyTestSuite) TestOneOfPolicyIsRepeat() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusBadRequest, resp.Code)
-	assert.Equal(suite.T(), response.OneOfPolicyIsRepeat, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.OneOfPolicyIsRepeat], respBody.Code)
+	suite.Equal(http.StatusBadRequest, resp.Code)
+	suite.Equal(response.OneOfPolicyIsRepeat, respBody.Message)
+	suite.Equal(response.MessageToCode[response.OneOfPolicyIsRepeat], respBody.Code)
 }
 
 func (suite *AdminCreatePolicyTestSuite) TestWrongAccessToken() {
@@ -160,9 +159,9 @@ func (suite *AdminCreatePolicyTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *AdminCreatePolicyTestSuite) TestCsrfMismatch() {
@@ -177,9 +176,9 @@ func (suite *AdminCreatePolicyTestSuite) TestCsrfMismatch() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminCreatePolicyTestSuite) TestAuthorizationFailed() {
@@ -195,9 +194,9 @@ func (suite *AdminCreatePolicyTestSuite) TestAuthorizationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminCreatePolicyTestSuite) TearDownTest() {

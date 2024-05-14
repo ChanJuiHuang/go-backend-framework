@@ -8,7 +8,6 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -32,7 +31,7 @@ func (suite *AdminReloadPolicyTestSuite) TestReloadPolicy() {
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
-	assert.Equal(suite.T(), http.StatusNoContent, resp.Code)
+	suite.Equal(http.StatusNoContent, resp.Code)
 }
 
 func (suite *AdminReloadPolicyTestSuite) TestWrongAccessToken() {
@@ -48,9 +47,9 @@ func (suite *AdminReloadPolicyTestSuite) TestWrongAccessToken() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusUnauthorized, resp.Code)
-	assert.Equal(suite.T(), response.Unauthorized, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Unauthorized], respBody.Code)
+	suite.Equal(http.StatusUnauthorized, resp.Code)
+	suite.Equal(response.Unauthorized, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
 func (suite *AdminReloadPolicyTestSuite) TestCsrfMismatch() {
@@ -65,9 +64,9 @@ func (suite *AdminReloadPolicyTestSuite) TestCsrfMismatch() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminReloadPolicyTestSuite) TestAuthorizationFailed() {
@@ -83,9 +82,9 @@ func (suite *AdminReloadPolicyTestSuite) TestAuthorizationFailed() {
 		panic(err)
 	}
 
-	assert.Equal(suite.T(), http.StatusForbidden, resp.Code)
-	assert.Equal(suite.T(), response.Forbidden, respBody.Message)
-	assert.Equal(suite.T(), response.MessageToCode[response.Forbidden], respBody.Code)
+	suite.Equal(http.StatusForbidden, resp.Code)
+	suite.Equal(response.Forbidden, respBody.Message)
+	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
 func (suite *AdminReloadPolicyTestSuite) TearDownTest() {

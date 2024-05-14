@@ -10,7 +10,6 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -34,29 +33,29 @@ func (suite *RegisterExecutorTestSuite) TestRegisterExecutor() {
 	registrar.RegisterExecutor.Execute()
 	registrar.RegisterExecutor.BeforeExecute()
 
-	assert.NotEmpty(suite.T(), config.Registry.Get("httpServer"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("middleware.csrf"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("middleware.rateLimit"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("authentication.authenticator"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("database"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("logger.console"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("logger.file"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("logger.access"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("redis"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("clickhouse"))
+	suite.NotEmpty(config.Registry.Get("httpServer"))
+	suite.NotEmpty(config.Registry.Get("middleware.csrf"))
+	suite.NotEmpty(config.Registry.Get("middleware.rateLimit"))
+	suite.NotEmpty(config.Registry.Get("authentication.authenticator"))
+	suite.NotEmpty(config.Registry.Get("database"))
+	suite.NotEmpty(config.Registry.Get("logger.console"))
+	suite.NotEmpty(config.Registry.Get("logger.file"))
+	suite.NotEmpty(config.Registry.Get("logger.access"))
+	suite.NotEmpty(config.Registry.Get("redis"))
+	suite.NotEmpty(config.Registry.Get("clickhouse"))
 
-	assert.NotEmpty(suite.T(), service.Registry.Get("authentication.authenticator"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("database"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("casbinEnforcer"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("logger"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("logger.console"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("logger.file"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("logger.access"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("redis"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("formDecoder"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("modifier"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("mapstructureDecoder"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("clickhouse"))
+	suite.NotEmpty(service.Registry.Get("authentication.authenticator"))
+	suite.NotEmpty(service.Registry.Get("database"))
+	suite.NotEmpty(service.Registry.Get("casbinEnforcer"))
+	suite.NotEmpty(service.Registry.Get("logger"))
+	suite.NotEmpty(service.Registry.Get("logger.console"))
+	suite.NotEmpty(service.Registry.Get("logger.file"))
+	suite.NotEmpty(service.Registry.Get("logger.access"))
+	suite.NotEmpty(service.Registry.Get("redis"))
+	suite.NotEmpty(service.Registry.Get("formDecoder"))
+	suite.NotEmpty(service.Registry.Get("modifier"))
+	suite.NotEmpty(service.Registry.Get("mapstructureDecoder"))
+	suite.NotEmpty(service.Registry.Get("clickhouse"))
 }
 
 func (suite *RegisterExecutorTestSuite) TestSimpleRegisterExecutor() {
@@ -68,21 +67,21 @@ func (suite *RegisterExecutorTestSuite) TestSimpleRegisterExecutor() {
 	registrar.SimpleRegisterExecutor.Execute()
 	registrar.SimpleRegisterExecutor.BeforeExecute()
 
-	assert.NotEmpty(suite.T(), config.Registry.Get("httpServer"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("middleware.csrf"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("middleware.rateLimit"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("authentication.authenticator"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("logger.console"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("logger.file"))
-	assert.NotEmpty(suite.T(), config.Registry.Get("logger.access"))
+	suite.NotEmpty(config.Registry.Get("httpServer"))
+	suite.NotEmpty(config.Registry.Get("middleware.csrf"))
+	suite.NotEmpty(config.Registry.Get("middleware.rateLimit"))
+	suite.NotEmpty(config.Registry.Get("authentication.authenticator"))
+	suite.NotEmpty(config.Registry.Get("logger.console"))
+	suite.NotEmpty(config.Registry.Get("logger.file"))
+	suite.NotEmpty(config.Registry.Get("logger.access"))
 
-	assert.NotEmpty(suite.T(), service.Registry.Get("authentication.authenticator"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("logger.console"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("logger.file"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("logger.access"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("formDecoder"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("modifier"))
-	assert.NotEmpty(suite.T(), service.Registry.Get("mapstructureDecoder"))
+	suite.NotEmpty(service.Registry.Get("authentication.authenticator"))
+	suite.NotEmpty(service.Registry.Get("logger.console"))
+	suite.NotEmpty(service.Registry.Get("logger.file"))
+	suite.NotEmpty(service.Registry.Get("logger.access"))
+	suite.NotEmpty(service.Registry.Get("formDecoder"))
+	suite.NotEmpty(service.Registry.Get("modifier"))
+	suite.NotEmpty(service.Registry.Get("mapstructureDecoder"))
 }
 
 func (suite *RegisterExecutorTestSuite) TearDownSuite() {
