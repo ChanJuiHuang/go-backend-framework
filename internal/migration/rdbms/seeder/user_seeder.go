@@ -16,8 +16,8 @@ func runUserSeeder(tx *gorm.DB) error {
 		Password: argon2.MakeArgon2IdHash(password),
 		Email:    "admin@admin.com",
 	}
-	
-	if err := tx.Table("users").Create(user).Error err != nil {
+
+	if err := tx.Table("users").Create(user).Error; err != nil {
 		return err
 	}
 
