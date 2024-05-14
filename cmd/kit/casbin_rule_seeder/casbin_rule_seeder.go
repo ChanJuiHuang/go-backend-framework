@@ -25,8 +25,8 @@ func init() {
 	)
 }
 
-func resetPolicies() {
-	policies := []gormadapter.CasbinRule{
+func resetPermissions() {
+	casbinRules := []gormadapter.CasbinRule{
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "POST"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "DELETE"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "GET"},
@@ -44,7 +44,7 @@ func resetPolicies() {
 			return err
 		}
 
-		if err := permission.CreateCasbinRule(tx, policies); err != nil {
+		if err := permission.CreateCasbinRule(tx, casbinRules); err != nil {
 			return err
 		}
 
@@ -56,7 +56,7 @@ func resetPolicies() {
 	}
 }
 
-func resetGroupingPolicies() {
+func resetRoles() {
 	user := &model.User{}
 	database := service.Registry.Get("database").(*gorm.DB)
 	db := database.Where("email = ?", "admin@admin.com").
@@ -65,7 +65,7 @@ func resetGroupingPolicies() {
 		panic(err)
 	}
 
-	groupingPolicies := []gormadapter.CasbinRule{
+	casbinRoles := []gormadapter.CasbinRule{
 		{Ptype: "g", V0: fmt.Sprintf("%d", user.Id), V1: "admin"},
 	}
 	err := database.Transaction(func(tx *gorm.DB) error {
@@ -73,7 +73,7 @@ func resetGroupingPolicies() {
 			return err
 		}
 
-		if err := permission.CreateCasbinRule(tx, groupingPolicies); err != nil {
+		if err := permission.CreateCasbinRule(tx, casbinRoles); err != nil {
 			return err
 		}
 
@@ -89,18 +89,18 @@ func main() {
 	app := &cli.App{
 		Commands: []*cli.Command{
 			{
-				Name:  "reset-policies",
-				Usage: "reset policies",
+				Name:  "reset-permission",
+				Usage: "reset permission",
 				Action: func(cCtx *cli.Context) error {
-					resetPolicies()
+					resetPermissions()
 					return nil
 				},
 			},
 			{
-				Name:  "reset-group-policies",
-				Usage: "reset group policies",
+				Name:  "reset-role",
+				Usage: "reset role",
 				Action: func(cCtx *cli.Context) error {
-					resetGroupingPolicies()
+					resetRoles()
 					return nil
 				},
 			},
