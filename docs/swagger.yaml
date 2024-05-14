@@ -261,6 +261,55 @@ definitions:
     - http_apis
     - name
     type: object
+  permission.PermissionData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - id
+    - name
+    - updated_at
+    type: object
+  permission.PermissionSearchData:
+    properties:
+      last_page:
+        type: integer
+      permissions:
+        items:
+          $ref: '#/definitions/permission.PermissionData'
+        type: array
+      total:
+        type: integer
+    required:
+    - last_page
+    - permissions
+    - total
+    type: object
+  permission.PermissionSearchRequest:
+    properties:
+      name:
+        type: string
+      order_by:
+        type: string
+      page:
+        minimum: 1
+        type: integer
+      per_page:
+        minimum: 10
+        type: integer
+    required:
+    - page
+    - per_page
+    type: object
   response.Debug:
     properties:
       error:
@@ -551,6 +600,52 @@ paths:
       tags:
       - admin-http-api
   /api/admin/permission:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: search permissions
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/permission.PermissionSearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/permission.PermissionSearchData'
+              type: object
+        "400":
+          description: 'code: 400-001(search permissions failed), 400-002(request
+            validation failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin-permission
     post:
       consumes:
       - application/json
