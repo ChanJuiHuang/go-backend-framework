@@ -39,6 +39,7 @@ func (r *Router) AttachPermissionRoutes() {
 	permissionRouter := r.router.Group("permission")
 	permissionRouter.POST("", permission.Create)
 	permissionRouter.GET("", permission.Search)
+	permissionRouter.GET(":id", permission.Get)
 }
 
 func (r *Router) AttachPolicyRoutes() {

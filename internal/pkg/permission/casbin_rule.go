@@ -1,6 +1,7 @@
 package permission
 
 import (
+	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -11,6 +12,19 @@ func CreateCasbinRule(tx *gorm.DB, value any) error {
 	}
 
 	return nil
+}
+
+func GetCasbinRules(tx *gorm.DB, query any, args ...any) ([]gormadapter.CasbinRule, error) {
+	casbinRules := []gormadapter.CasbinRule{}
+	err := tx.Table("casbin_rules").
+		Where(query, args...).
+		Find(&casbinRules).
+		Error
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return casbinRules, nil
 }
 
 func DeleteCasbinRule(tx *gorm.DB, query any, args ...any) error {
