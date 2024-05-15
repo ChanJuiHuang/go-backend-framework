@@ -26,3 +26,14 @@ func Get(tx *gorm.DB, query any, args ...any) (*model.Permission, error) {
 
 	return permission, nil
 }
+
+func Update(tx *gorm.DB, id any, values map[string]any) (int64, error) {
+	db := tx.Model(&model.Permission{}).
+		Where("id = ?", id).
+		Updates(values)
+	if err := db.Error; err != nil {
+		return 0, errors.WithStack(err)
+	}
+
+	return db.RowsAffected, nil
+}

@@ -27,6 +27,17 @@ func GetCasbinRules(tx *gorm.DB, query any, args ...any) ([]gormadapter.CasbinRu
 	return casbinRules, nil
 }
 
+func UpdateCasbinRule(tx *gorm.DB, values map[string]any, query any, args ...any) (int64, error) {
+	db := tx.Table("casbin_rules").
+		Where(query, args...).
+		Updates(values)
+	if err := db.Error; err != nil {
+		return 0, errors.WithStack(err)
+	}
+
+	return db.RowsAffected, nil
+}
+
 func DeleteCasbinRule(tx *gorm.DB, query any, args ...any) error {
 	err := tx.Table("casbin_rules").
 		Where(query, args...).
