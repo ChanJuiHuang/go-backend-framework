@@ -27,6 +27,19 @@ func Get(tx *gorm.DB, query any, args ...any) (*model.Permission, error) {
 	return permission, nil
 }
 
+func GetMany(tx *gorm.DB, query any, args ...any) ([]model.Permission, error) {
+	permissions := []model.Permission{}
+	err := tx.Table("permissions").
+		Where(query, args...).
+		Find(&permissions).
+		Error
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return permissions, nil
+}
+
 func Update(tx *gorm.DB, id any, values map[string]any) (int64, error) {
 	db := tx.Model(&model.Permission{}).
 		Where("id = ?", id).
@@ -36,4 +49,16 @@ func Update(tx *gorm.DB, id any, values map[string]any) (int64, error) {
 	}
 
 	return db.RowsAffected, nil
+}
+
+func Delete(tx *gorm.DB, query any, args ...any) error {
+	err := tx.Table("permissions").
+		Where(query, args...).
+		Delete(&struct{}{}).
+		Error
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
 }

@@ -429,6 +429,78 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin-permission"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "delete permissions",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/permission.PermissionDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "no content"
+                    },
+                    "400": {
+                        "description": "code: 400-001(delete permissions failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/api/admin/permission/{id}": {
@@ -1983,6 +2055,20 @@ const docTemplate = `{
                 "updated_at": {
                     "type": "string",
                     "format": "date-time"
+                }
+            }
+        },
+        "permission.PermissionDeleteRequest": {
+            "type": "object",
+            "required": [
+                "ids"
+            ],
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
