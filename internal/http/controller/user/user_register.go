@@ -47,7 +47,7 @@ func Register(c *gin.Context) {
 		Email:    reqBody.Email,
 		Password: argon2.MakeArgon2IdHash(reqBody.Password),
 	}
-	if err := user.Create(database.NewTx("users"), u); err != nil {
+	if err := user.Create(database.NewTx(), u); err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)

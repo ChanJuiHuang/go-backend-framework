@@ -40,7 +40,7 @@ func Update(c *gin.Context) {
 	}
 
 	values := structs.Map(reqBody)
-	_, err := user.Update(database.NewTx("users"), c.GetUint("user_id"), values)
+	_, err := user.Update(database.NewTx(), c.GetUint("user_id"), values)
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
@@ -48,7 +48,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	u, err := user.Get(database.NewTx("users"), "id = ?", c.GetUint("user_id"))
+	u, err := user.Get(database.NewTx(), "id = ?", c.GetUint("user_id"))
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger.Warn(response.BadRequest, errResp.MakeLogFields(c.Request)...)
