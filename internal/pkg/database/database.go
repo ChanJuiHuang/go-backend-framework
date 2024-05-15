@@ -5,21 +5,21 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewTx(preloads ...string) *gorm.DB {
+func NewTx(associations ...string) *gorm.DB {
 	tx := service.Registry.Get("database").(*gorm.DB)
-	for _, preload := range preloads {
-		tx.Preload(preload)
+	for _, association := range associations {
+		tx.Preload(association)
 	}
 
 	return tx
 }
 
-func NewTxByTable(table string, preloads ...string) *gorm.DB {
+func NewTxByTable(table string, associations ...string) *gorm.DB {
 	database := service.Registry.Get("database").(*gorm.DB)
 	tx := database.Table(table)
 
-	for _, preload := range preloads {
-		tx.Preload(preload)
+	for _, association := range associations {
+		tx.Preload(association)
 	}
 
 	return tx
