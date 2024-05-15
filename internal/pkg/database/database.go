@@ -5,7 +5,16 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewTx(table string, preloads ...string) *gorm.DB {
+func NewTx(preloads ...string) *gorm.DB {
+	tx := service.Registry.Get("database").(*gorm.DB)
+	for _, preload := range preloads {
+		tx.Preload(preload)
+	}
+
+	return tx
+}
+
+func NewTxByTable(table string, preloads ...string) *gorm.DB {
 	database := service.Registry.Get("database").(*gorm.DB)
 	tx := database.Table(table)
 
