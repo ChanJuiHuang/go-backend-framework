@@ -72,7 +72,7 @@ func AdminAddPolicies() {
 		{Ptype: "p", V0: "admin", V1: "/api/admin/user/:userId/grouping-policy", V2: "GET"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/grouping-policy", V2: "DELETE"},
 	}
-	if err := casbinrule.Create(database.NewTx("casbin_rules"), policies); err != nil {
+	if err := casbinrule.Create(database.NewTx(), policies); err != nil {
 		panic(err)
 	}
 

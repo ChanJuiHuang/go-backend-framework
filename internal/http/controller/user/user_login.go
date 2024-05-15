@@ -42,7 +42,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	u, err := user.Get(database.NewTx("users"), "email = ?", reqBody.Email)
+	u, err := user.Get(database.NewTx(), "email = ?", reqBody.Email)
 	if err != nil {
 		errResp := response.NewErrorResponse(response.EmailIsWrong, err, nil)
 		logger.Warn(response.EmailIsWrong, errResp.MakeLogFields(c.Request)...)
