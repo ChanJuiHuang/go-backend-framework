@@ -386,6 +386,47 @@ definitions:
     - http_apis
     - name
     type: object
+  permission.RoleCreateRequest:
+    properties:
+      is_public:
+        type: boolean
+      name:
+        type: string
+      permission_ids:
+        items:
+          type: integer
+        minItems: 1
+        type: array
+    required:
+    - name
+    - permission_ids
+    type: object
+  permission.RoleData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      is_public:
+        type: boolean
+      name:
+        type: string
+      permissions:
+        items:
+          $ref: '#/definitions/permission.PermissionData'
+        type: array
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - id
+    - is_public
+    - name
+    - permissions
+    - updated_at
+    type: object
   response.Debug:
     properties:
       error:
@@ -1243,6 +1284,58 @@ paths:
       summary: get user ids in the role
       tags:
       - admin
+  /api/admin/role:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create role
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/permission.RoleCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/permission.RoleData'
+              type: object
+        "400":
+          description: 'code: 400-001(create role failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin-permission
   /api/admin/user/{userId}/grouping-policy:
     get:
       consumes:
