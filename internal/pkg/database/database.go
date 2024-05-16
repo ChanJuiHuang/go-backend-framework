@@ -5,13 +5,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewTx(associations ...string) *gorm.DB {
-	tx := service.Registry.Get("database").(*gorm.DB)
-	for _, association := range associations {
-		tx.Preload(association)
-	}
-
-	return tx
+func NewTx() *gorm.DB {
+	return service.Registry.Get("database").(*gorm.DB)
 }
 
 func NewTxByTable(table string, associations ...string) *gorm.DB {
