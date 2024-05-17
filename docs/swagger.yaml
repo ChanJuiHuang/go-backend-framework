@@ -427,6 +427,39 @@ definitions:
     - permissions
     - updated_at
     type: object
+  permission.RoleSearchData:
+    properties:
+      last_page:
+        type: integer
+      roles:
+        items:
+          $ref: '#/definitions/permission.RoleData'
+        type: array
+      total:
+        type: integer
+    required:
+    - last_page
+    - roles
+    - total
+    type: object
+  permission.RoleSearchRequest:
+    properties:
+      is_public:
+        type: boolean
+      name:
+        type: string
+      order_by:
+        type: string
+      page:
+        minimum: 1
+        type: integer
+      per_page:
+        minimum: 10
+        type: integer
+    required:
+    - page
+    - per_page
+    type: object
   response.Debug:
     properties:
       error:
@@ -1285,6 +1318,52 @@ paths:
       tags:
       - admin
   /api/admin/role:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: search roles
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/permission.RoleSearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/permission.RoleSearchData'
+              type: object
+        "400":
+          description: 'code: 400-001(search roles failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin-permission
     post:
       consumes:
       - application/json

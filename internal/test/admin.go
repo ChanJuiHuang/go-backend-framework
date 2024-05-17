@@ -68,6 +68,7 @@ func AdminAddPolicies() {
 		{Ptype: "p", V0: "admin", V1: "/api/admin/permission/:id", V2: "PUT"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/permission", V2: "DELETE"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "POST"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "GET"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "POST"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "DELETE"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "GET"},
