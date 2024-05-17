@@ -24,17 +24,17 @@ func (suite *UserUpdatePasswordTestSuite) SetupSuite() {
 
 func (suite *UserUpdatePasswordTestSuite) TestUpdatePassword() {
 	accessToken := test.UserLogin()
-	userUpdateRequest := user.UserUpdatePasswordRequest{
+	reqBody := user.UserUpdatePasswordRequest{
 		CurrentPassword: "abcABC123",
 		Password:        "abcABC000",
 		ConfirmPassword: "abcABC000",
 	}
-	reqBody, err := json.Marshal(userUpdateRequest)
+	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
 		panic(err)
 	}
 
-	req := httptest.NewRequest("PUT", "/api/user/password", bytes.NewReader(reqBody))
+	req := httptest.NewRequest("PUT", "/api/user/password", bytes.NewReader(reqBodyBytes))
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()

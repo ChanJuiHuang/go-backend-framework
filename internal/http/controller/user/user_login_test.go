@@ -24,16 +24,16 @@ func (suite *UserLoginTestSuite) SetupSuite() {
 }
 
 func (suite *UserLoginTestSuite) TestLogin() {
-	userLoginRequest := user.UserLoginRequest{
+	reqBody := user.UserLoginRequest{
 		Email:    "john@test.com",
 		Password: "abcABC123",
 	}
-	reqBody, err := json.Marshal(userLoginRequest)
+	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
 		panic(err)
 	}
 
-	req := httptest.NewRequest("POST", "/api/user/login", bytes.NewReader(reqBody))
+	req := httptest.NewRequest("POST", "/api/user/login", bytes.NewReader(reqBodyBytes))
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
@@ -53,16 +53,16 @@ func (suite *UserLoginTestSuite) TestLogin() {
 }
 
 func (suite *UserLoginTestSuite) TestEmailIsWrong() {
-	userLoginRequest := user.UserLoginRequest{
+	reqBody := user.UserLoginRequest{
 		Email:    "john123@test.com",
 		Password: "123456",
 	}
-	reqBody, err := json.Marshal(userLoginRequest)
+	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
 		panic(err)
 	}
 
-	req := httptest.NewRequest("POST", "/api/user/login", bytes.NewReader(reqBody))
+	req := httptest.NewRequest("POST", "/api/user/login", bytes.NewReader(reqBodyBytes))
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
@@ -78,16 +78,16 @@ func (suite *UserLoginTestSuite) TestEmailIsWrong() {
 }
 
 func (suite *UserLoginTestSuite) TestPasswordIsWrong() {
-	userLoginRequest := user.UserLoginRequest{
+	reqBody := user.UserLoginRequest{
 		Email:    "john@test.com",
 		Password: "abc123",
 	}
-	reqBody, err := json.Marshal(userLoginRequest)
+	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
 		panic(err)
 	}
 
-	req := httptest.NewRequest("POST", "/api/user/login", bytes.NewReader(reqBody))
+	req := httptest.NewRequest("POST", "/api/user/login", bytes.NewReader(reqBodyBytes))
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)

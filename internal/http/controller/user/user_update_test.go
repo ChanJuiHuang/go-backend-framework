@@ -25,16 +25,16 @@ func (suite *UserUpdateTestSuite) SetupSuite() {
 
 func (suite *UserUpdateTestSuite) TestUpdate() {
 	accessToken := test.UserLogin()
-	userUpdateRequest := user.UserUpdateRequest{
+	reqBody := user.UserUpdateRequest{
 		Name:  "bob",
 		Email: "bob@test.com",
 	}
-	reqBody, err := json.Marshal(userUpdateRequest)
+	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
 		panic(err)
 	}
 
-	req := httptest.NewRequest("PUT", "/api/user", bytes.NewReader(reqBody))
+	req := httptest.NewRequest("PUT", "/api/user", bytes.NewReader(reqBodyBytes))
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()
@@ -53,8 +53,8 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 
 	suite.Equal(http.StatusOK, resp.Code)
 	suite.NotEmpty(data.Id)
-	suite.Equal(userUpdateRequest.Name, data.Name)
-	suite.Equal(userUpdateRequest.Email, data.Email)
+	suite.Equal(reqBody.Name, data.Name)
+	suite.Equal(reqBody.Email, data.Email)
 	suite.NotEmpty(data.CreatedAt)
 	suite.NotEmpty(data.UpdatedAt)
 }
