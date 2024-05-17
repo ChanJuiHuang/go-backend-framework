@@ -11,4 +11,5 @@ type Role struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	Permissions []Permission `gorm:"many2many:role_permissions"`
+	Users       []User       `gorm:"many2many:user_roles"`
 }
