@@ -23,17 +23,17 @@ func (suite *UserRegisterTestSuite) SetupSuite() {
 }
 
 func (suite *UserRegisterTestSuite) TestRegister() {
-	userRegisterRequest := user.UserRegisterRequest{
+	reqBody := user.UserRegisterRequest{
 		Name:     "bob",
 		Email:    "bob@test.com",
 		Password: "abcABC123",
 	}
-	reqBody, err := json.Marshal(userRegisterRequest)
+	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
 		panic(err)
 	}
 
-	req := httptest.NewRequest("POST", "/api/user/register", bytes.NewReader(reqBody))
+	req := httptest.NewRequest("POST", "/api/user/register", bytes.NewReader(reqBodyBytes))
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
