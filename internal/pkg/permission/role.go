@@ -43,6 +43,19 @@ func GetRole(tx *gorm.DB, query any, args ...any) (*model.Role, error) {
 	return role, nil
 }
 
+func GetRoles(tx *gorm.DB, query any, args ...any) ([]model.Role, error) {
+	roles := []model.Role{}
+	err := tx.Table("roles").
+		Where(query, args...).
+		Find(&roles).
+		Error
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return roles, nil
+}
+
 func UpdateRole(tx *gorm.DB, id any, values map[string]any) (int64, error) {
 	db := tx.Model(&model.Role{}).
 		Where("id = ?", id).
@@ -56,6 +69,30 @@ func UpdateRole(tx *gorm.DB, id any, values map[string]any) (int64, error) {
 
 func DeleteRolePermission(tx *gorm.DB, query any, args ...any) error {
 	err := tx.Table("role_permissions").
+		Where(query, args...).
+		Delete(&struct{}{}).
+		Error
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func DeleteUserRole(tx *gorm.DB, query any, args ...any) error {
+	err := tx.Table("user_roles").
+		Where(query, args...).
+		Delete(&struct{}{}).
+		Error
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func DeleteRole(tx *gorm.DB, query any, args ...any) error {
+	err := tx.Table("roles").
 		Where(query, args...).
 		Delete(&struct{}{}).
 		Error
