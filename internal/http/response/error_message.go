@@ -2,12 +2,11 @@ package response
 
 const (
 	// 400
-	BadRequest                  = "Bad Request"
-	RequestValidationFailed     = "request validation failed"
-	EmailIsWrong                = "email is wrong"
-	PasswordIsWrong             = "password is wrong"
-	OneOfPolicyIsRepeat         = "one of policy is repeat"
-	OneOfGroupingPolicyIsRepeat = "one of grouping policy is repeat"
+	BadRequest              = "Bad Request"
+	RequestValidationFailed = "request validation failed"
+	EmailIsWrong            = "email is wrong"
+	PasswordIsWrong         = "password is wrong"
+	PermissionIsRepeat      = "permission is repeat"
 
 	// 401
 	Unauthorized = "Unauthorized"
@@ -23,14 +22,13 @@ const (
 )
 
 var MessageToCode = map[string]string{
-	BadRequest:                  "400-001",
-	RequestValidationFailed:     "400-002",
-	EmailIsWrong:                "400-003",
-	PasswordIsWrong:             "400-004",
-	OneOfPolicyIsRepeat:         "400-005",
-	OneOfGroupingPolicyIsRepeat: "400-006",
-	Unauthorized:                "401-001",
-	Forbidden:                   "403-001",
-	InternalServerError:         "500-001",
-	ServiceUnavailable:          "503-001",
+	BadRequest:              "400-001",
+	RequestValidationFailed: "400-002",
+	EmailIsWrong:            "400-003",
+	PasswordIsWrong:         "400-004",
+	PermissionIsRepeat:      "400-005",
+	Unauthorized:            "401-001",
+	Forbidden:               "403-001",
+	InternalServerError:     "500-001",
+	ServiceUnavailable:      "503-001",
 }

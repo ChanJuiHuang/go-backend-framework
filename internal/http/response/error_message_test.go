@@ -14,8 +14,6 @@ func TestMessageToCode(t *testing.T) {
 	assert.Equal(t, "400-002", response.MessageToCode[response.RequestValidationFailed])
 	assert.Equal(t, "400-003", response.MessageToCode[response.EmailIsWrong])
 	assert.Equal(t, "400-004", response.MessageToCode[response.PasswordIsWrong])
-	assert.Equal(t, "400-005", response.MessageToCode[response.OneOfPolicyIsRepeat])
-	assert.Equal(t, "400-006", response.MessageToCode[response.OneOfGroupingPolicyIsRepeat])
 	assert.Equal(t, "401-001", response.MessageToCode[response.Unauthorized])
 	assert.Equal(t, "403-001", response.MessageToCode[response.Forbidden])
 	assert.Equal(t, "500-001", response.MessageToCode[response.InternalServerError])

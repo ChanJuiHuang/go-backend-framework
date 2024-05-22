@@ -4,6 +4,7 @@ import (
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
 	httpapi "github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/http_api"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/permission"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +26,7 @@ func NewRouter(router *gin.Engine) *Router {
 func (r *Router) AttachRoutes() {
 	r.AttachHttpApiRoutes()
 	r.AttachPermissionRoutes()
+	r.AttachUserRoutes()
 	r.AttachPolicyRoutes()
 }
 
@@ -46,6 +48,11 @@ func (r *Router) AttachPermissionRoutes() {
 	roleRouter.GET("", permission.SearchRoles)
 	roleRouter.PUT(":id", permission.UpdateRole)
 	roleRouter.DELETE("", permission.DeleteRoles)
+}
+
+func (r *Router) AttachUserRoutes() {
+	userRoleRouter := r.router.Group("user-role")
+	userRoleRouter.PUT("", user.UpdateUserRole)
 }
 
 func (r *Router) AttachPolicyRoutes() {

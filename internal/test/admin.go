@@ -71,6 +71,7 @@ func AdminAddPolicies() {
 		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "GET"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/role/:id", V2: "PUT"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "DELETE"},
+		{Ptype: "p", V0: "admin", V1: "/api/admin/user-role", V2: "PUT"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/reload", V2: "POST"},
 	}
 	if err := permission.CreateCasbinRule(database.NewTx(), policies); err != nil {
