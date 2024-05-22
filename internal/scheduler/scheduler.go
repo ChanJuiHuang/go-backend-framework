@@ -17,12 +17,12 @@ func Start() {
 	scheduler.Scheduler.Start()
 
 	logger := service.Registry.Get("logger").(*zap.Logger)
-	logger.Info("the scheduler is started")
+	logger.Info("scheduler is started")
 }
 
 func Stop() {
 	<-scheduler.Scheduler.Stop().Done()
 
 	logger := service.Registry.Get("logger").(*zap.Logger)
-	logger.Info("the scheduler is stopped")
+	logger.Info("scheduler is stopped")
 }

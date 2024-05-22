@@ -54,6 +54,9 @@ func main() {
 	}
 	asyncCallbacks := []func(){}
 	terminatedCallbacks := []func(){
+		func() {
+			logger.Info("app is terminating")
+		},
 		scheduler.Stop,
 		func() {
 			logger.Info("app is terminated")
