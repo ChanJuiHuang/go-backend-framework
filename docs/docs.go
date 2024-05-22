@@ -15,172 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/admin/grouping-policy": {
-            "post": {
-                "description": "grant the roles to user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "grant the roles to user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "create grouping policy",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/admin.AdminCreateGroupingPolicyRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminCreateGroupingPolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "code: 400-001(add grouping policy is failed), 400-002(request validation failed), 400-006(one of grouping policy is repeat)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "revoke the roles to user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "revoke the roles to user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "delete grouping policy",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/admin.AdminDeleteGroupingPolicyRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminDeleteGroupingPolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "code: 400-001(delete grouping policy failed), 400-002(request validation failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/api/admin/http-api": {
             "get": {
                 "consumes": [
@@ -663,172 +497,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/admin/policy": {
-            "post": {
-                "description": "bind the permissions on the role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "bind the permissions on the role",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "create policy",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/admin.AdminCreatePolicyRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminCreatePolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "code: 400-001(add policy is failed), 400-002(request validation failed), 400-005(one of policy is repeat)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "remove the permissions on the role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "remove the permissions on the role",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "delete policy",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/admin.AdminDeletePolicyRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminDeletePolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "code: 400-001(delete policy failed), 400-002(request validation failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/api/admin/policy/reload": {
             "post": {
                 "description": "reload the policies",
@@ -876,282 +544,6 @@ const docTemplate = `{
                     },
                     "403": {
                         "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/admin/policy/subject": {
-            "get": {
-                "description": "search roles",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "search roles",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminSearchPolicySubjectData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "delete roles",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "delete roles",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "delete policy subject",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/admin.AdminDeletePolicySubjectRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminDeletePolicySubjectData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/admin/policy/subject/{subject}": {
-            "get": {
-                "description": "get permissions in the role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "get permissions in the role",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "subject",
-                        "name": "subject",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminGetPolicySubjectData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/admin/policy/subject/{subject}/user": {
-            "get": {
-                "description": "get user ids in the role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "get user ids in the role",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "subject",
-                        "name": "subject",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminGetPolicySubjectUserData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1481,9 +873,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/admin/user/{userId}/grouping-policy": {
-            "get": {
-                "description": "get roles that belong to user",
+        "/api/admin/user-role": {
+            "put": {
                 "consumes": [
                     "application/json"
                 ],
@@ -1493,8 +884,14 @@ const docTemplate = `{
                 "tags": [
                     "admin-user"
                 ],
-                "summary": "get roles that belong to user",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "bearer token",
@@ -1503,11 +900,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "userId",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
+                        "description": "update user role",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserRoleUpdateRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -1522,11 +921,17 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admin.AdminGetUserGroupingPolicyData"
+                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData"
                                         }
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(update user role failed), 400-002(request validation failed), 400-005(permission is repeat)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
@@ -1536,7 +941,7 @@ const docTemplate = `{
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1613,7 +1018,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/user.UserData"
+                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData"
                                         }
                                     }
                                 }
@@ -1742,7 +1147,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/user.UserData"
+                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData"
                                         }
                                     }
                                 }
@@ -1962,261 +1367,68 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "admin.AdminCreateGroupingPolicyData": {
+        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData": {
             "type": "object",
             "required": [
-                "subjects",
-                "user_id"
+                "created_at",
+                "email",
+                "id",
+                "name",
+                "roles",
+                "updated_at"
             ],
             "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "admin.AdminCreateGroupingPolicyRequest": {
-            "type": "object",
-            "required": [
-                "subjects",
-                "user_id"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "admin.AdminCreatePolicyData": {
-            "type": "object",
-            "required": [
-                "rules",
-                "subject"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
-                },
-                "subject": {
-                    "type": "string"
-                }
-            }
-        },
-        "admin.AdminCreatePolicyRequest": {
-            "type": "object",
-            "required": [
-                "rules",
-                "subject"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
-                },
-                "subject": {
-                    "type": "string"
-                }
-            }
-        },
-        "admin.AdminDeleteGroupingPolicyData": {
-            "type": "object",
-            "required": [
-                "subjects",
-                "user_id"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "admin.AdminDeleteGroupingPolicyRequest": {
-            "type": "object",
-            "required": [
-                "subjects",
-                "user_id"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "admin.AdminDeletePolicyData": {
-            "type": "object",
-            "required": [
-                "rules",
-                "subject"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
-                },
-                "subject": {
-                    "type": "string"
-                }
-            }
-        },
-        "admin.AdminDeletePolicyRequest": {
-            "type": "object",
-            "required": [
-                "rules",
-                "subject"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
-                },
-                "subject": {
-                    "type": "string"
-                }
-            }
-        },
-        "admin.AdminDeletePolicySubjectData": {
-            "type": "object",
-            "required": [
-                "subjects"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "admin.AdminDeletePolicySubjectRequest": {
-            "type": "object",
-            "required": [
-                "subjects"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "admin.AdminGetPolicySubjectData": {
-            "type": "object",
-            "required": [
-                "rules",
-                "subject"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
-                },
-                "subject": {
-                    "type": "string"
-                }
-            }
-        },
-        "admin.AdminGetPolicySubjectUserData": {
-            "type": "object",
-            "required": [
-                "user_ids"
-            ],
-            "properties": {
-                "user_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "admin.AdminGetUserGroupingPolicyData": {
-            "type": "object",
-            "required": [
-                "subjects",
-                "user_id"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "admin.AdminSearchPolicySubjectData": {
-            "type": "object",
-            "required": [
-                "subjects"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "admin.Rule": {
-            "type": "object",
-            "required": [
-                "action",
-                "object"
-            ],
-            "properties": {
-                "action": {
+                "created_at": {
                     "type": "string",
-                    "enum": [
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "PATCH",
-                        "DELETE"
-                    ]
+                    "format": "date-time"
                 },
-                "object": {
+                "email": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.RoleData"
+                    }
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "email",
+                "id",
+                "name",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
                 }
             }
         },
@@ -2720,23 +1932,12 @@ const docTemplate = `{
                 "data": {}
             }
         },
-        "user.TokenData": {
-            "type": "object",
-            "required": [
-                "access_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UserData": {
+        "user.RoleData": {
             "type": "object",
             "required": [
                 "created_at",
-                "email",
                 "id",
+                "is_public",
                 "name",
                 "updated_at"
             ],
@@ -2745,11 +1946,11 @@ const docTemplate = `{
                     "type": "string",
                     "format": "date-time"
                 },
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "is_public": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
@@ -2757,6 +1958,17 @@ const docTemplate = `{
                 "updated_at": {
                     "type": "string",
                     "format": "date-time"
+                }
+            }
+        },
+        "user.TokenData": {
+            "type": "object",
+            "required": [
+                "access_token"
+            ],
+            "properties": {
+                "access_token": {
+                    "type": "string"
                 }
             }
         },
@@ -2806,6 +2018,24 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "minLength": 8
+                }
+            }
+        },
+        "user.UserRoleUpdateRequest": {
+            "type": "object",
+            "required": [
+                "role_ids",
+                "user_id"
+            ],
+            "properties": {
+                "role_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },
