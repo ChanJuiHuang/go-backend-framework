@@ -802,11 +802,10 @@ paths:
             $ref: '#/definitions/response.ErrorResponse'
       tags:
       - admin-permission
-  /api/admin/policy/reload:
+  /api/admin/permission/reload:
     post:
       consumes:
       - application/json
-      description: reload the policies
       parameters:
       - description: csrf token
         in: header
@@ -824,7 +823,7 @@ paths:
         "204":
           description: no content
         "400":
-          description: 'code: 400-001(load policy is failed)'
+          description: 'code: 400-001(reload permission failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "401":
@@ -839,9 +838,8 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: reload the policies
       tags:
-      - admin
+      - admin-permission
   /api/admin/role:
     delete:
       consumes:

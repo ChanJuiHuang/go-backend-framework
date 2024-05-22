@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
 	httpapi "github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/http_api"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/permission"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/user"
@@ -27,7 +26,6 @@ func (r *Router) AttachRoutes() {
 	r.AttachHttpApiRoutes()
 	r.AttachPermissionRoutes()
 	r.AttachUserRoutes()
-	r.AttachPolicyRoutes()
 }
 
 func (r *Router) AttachHttpApiRoutes() {
@@ -42,6 +40,7 @@ func (r *Router) AttachPermissionRoutes() {
 	permissionRouter.GET(":id", permission.Get)
 	permissionRouter.PUT(":id", permission.Update)
 	permissionRouter.DELETE("", permission.Delete)
+	permissionRouter.POST("reload", permission.Reload)
 
 	roleRouter := r.router.Group("role")
 	roleRouter.POST("", permission.CreateRole)
@@ -53,9 +52,4 @@ func (r *Router) AttachPermissionRoutes() {
 func (r *Router) AttachUserRoutes() {
 	userRoleRouter := r.router.Group("user-role")
 	userRoleRouter.PUT("", user.UpdateUserRole)
-}
-
-func (r *Router) AttachPolicyRoutes() {
-	policyRouter := r.router.Group("policy")
-	policyRouter.POST("reload", admin.ReloadPolicy)
 }

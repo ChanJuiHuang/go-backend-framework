@@ -1,4 +1,4 @@
-package admin_test
+package permission_test
 
 import (
 	"encoding/json"
@@ -11,21 +11,21 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type AdminReloadPolicyTestSuite struct {
+type PermissionReloadTestSuite struct {
 	suite.Suite
 }
 
-func (suite *AdminReloadPolicyTestSuite) SetupTest() {
+func (suite *PermissionReloadTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
 	test.AdminRegister()
 }
 
-func (suite *AdminReloadPolicyTestSuite) TestReloadPolicy() {
+func (suite *PermissionReloadTestSuite) Test() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
 	accessToken := test.AdminLogin()
 
-	req := httptest.NewRequest("POST", "/api/admin/policy/reload", nil)
+	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()
@@ -34,10 +34,10 @@ func (suite *AdminReloadPolicyTestSuite) TestReloadPolicy() {
 	suite.Equal(http.StatusNoContent, resp.Code)
 }
 
-func (suite *AdminReloadPolicyTestSuite) TestWrongAccessToken() {
+func (suite *PermissionReloadTestSuite) TestWrongAccessToken() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	req := httptest.NewRequest("POST", "/api/admin/policy/reload", nil)
+	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
@@ -52,10 +52,10 @@ func (suite *AdminReloadPolicyTestSuite) TestWrongAccessToken() {
 	suite.Equal(response.MessageToCode[response.Unauthorized], respBody.Code)
 }
 
-func (suite *AdminReloadPolicyTestSuite) TestCsrfMismatch() {
+func (suite *PermissionReloadTestSuite) TestCsrfMismatch() {
 	test.AdminAddPolicies()
 	test.AdminAddRole()
-	req := httptest.NewRequest("POST", "/api/admin/policy/reload", nil)
+	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
 
@@ -69,9 +69,9 @@ func (suite *AdminReloadPolicyTestSuite) TestCsrfMismatch() {
 	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
-func (suite *AdminReloadPolicyTestSuite) TestAuthorizationFailed() {
+func (suite *PermissionReloadTestSuite) TestAuthorizationFailed() {
 	accessToken := test.AdminLogin()
-	req := httptest.NewRequest("POST", "/api/admin/policy/reload", nil)
+	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()
@@ -87,10 +87,10 @@ func (suite *AdminReloadPolicyTestSuite) TestAuthorizationFailed() {
 	suite.Equal(response.MessageToCode[response.Forbidden], respBody.Code)
 }
 
-func (suite *AdminReloadPolicyTestSuite) TearDownTest() {
+func (suite *PermissionReloadTestSuite) TearDownTest() {
 	test.RdbmsMigration.Reset()
 }
 
-func TestAdminReloadPolicyTestSuite(t *testing.T) {
-	suite.Run(t, new(AdminReloadPolicyTestSuite))
+func TestPermissionReloadTestSuite(t *testing.T) {
+	suite.Run(t, new(PermissionReloadTestSuite))
 }

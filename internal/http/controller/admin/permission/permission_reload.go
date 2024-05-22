@@ -1,4 +1,4 @@
-package admin
+package permission
 
 import (
 	"net/http"
@@ -11,20 +11,18 @@ import (
 	"go.uber.org/zap"
 )
 
-// @tags admin
-// @summary reload the policies
-// @description reload the policies
+// @tags admin-permission
 // @accept json
 // @produce json
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param Authorization header string true "bearer token"
 // @success 204 "no content"
-// @failure 400 {object} response.ErrorResponse "code: 400-001(load policy is failed)"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(reload permission failed)"
 // @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
 // @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch, casbin authorization failed)"
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
-// @router /api/admin/policy/reload [post]
-func ReloadPolicy(c *gin.Context) {
+// @router /api/admin/permission/reload [post]
+func Reload(c *gin.Context) {
 	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
 	if err := enforcer.LoadPolicy(); err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
