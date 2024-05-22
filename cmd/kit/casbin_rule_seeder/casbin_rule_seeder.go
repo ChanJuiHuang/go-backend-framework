@@ -37,16 +37,7 @@ func resetPermissions() {
 		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "GET"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/role/:id", V2: "PUT"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "DELETE"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "POST"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "DELETE"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "GET"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject/:subject", V2: "GET"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject/:subject/user", V2: "GET"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "DELETE"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/reload", V2: "POST"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/grouping-policy", V2: "POST"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/user/:userId/grouping-policy", V2: "GET"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/grouping-policy", V2: "DELETE"},
 	}
 	database := service.Registry.Get("database").(*gorm.DB)
 	err := database.Transaction(func(tx *gorm.DB) error {
