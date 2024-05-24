@@ -22,5 +22,4 @@ func (r *Router) AttachRoutes() {
 	r.router.GET("me", middleware.Authenticate(), user.Me)
 	r.router.PUT("", middleware.Authenticate(), user.Update)
 	r.router.PUT("password", middleware.Authenticate(), user.UpdatePassword)
-	r.router.GET("policy", middleware.Authenticate(), user.GetPolicy)
 }
