@@ -7,29 +7,42 @@ import (
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
+	pkgUser "github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
 	"github.com/mitchellh/mapstructure"
-	"gorm.io/gorm"
 )
 
-func UserRegister() {
-	database := service.Registry.Get("database").(*gorm.DB)
-	db := database.Create(&model.User{
-		Name:     "john",
-		Email:    "john@test.com",
-		Password: argon2.MakeArgon2IdHash("abcABC123"),
-	})
-	if err := db.Error; err != nil {
+type userService struct {
+	User         *model.User
+	UserPassword string
+}
+
+var UserService *userService
+
+func NewUserService() *userService {
+	return &userService{
+		User: &model.User{
+			Name:  "john",
+			Email: "john@test.com",
+		},
+		UserPassword: "abcABC123",
+	}
+}
+
+func (us *userService) Register() {
+	us.User.Password = argon2.MakeArgon2IdHash(us.UserPassword)
+	err := pkgUser.Create(database.NewTx(), us.User)
+	if err != nil {
 		panic(err)
 	}
 }
 
-func UserLogin() string {
+func (us *userService) Login() string {
 	userLoginRequest := user.UserLoginRequest{
-		Email:    "john@test.com",
-		Password: "abcABC123",
+		Email:    us.User.Email,
+		Password: us.UserPassword,
 	}
 	reqBody, err := json.Marshal(userLoginRequest)
 	if err != nil {

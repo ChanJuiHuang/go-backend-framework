@@ -21,6 +21,7 @@ func init() {
 	RdbmsMigration = NewRdbmsMigration()
 	ClickhouseMigration = NewClickhouseMigration()
 	PermissionService = NewPermissionService()
+	UserService = NewUserService()
 }
 
 func loadEnv() {
