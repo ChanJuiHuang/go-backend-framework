@@ -1,4 +1,25 @@
 definitions:
+  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      is_public:
+        type: boolean
+      name:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - id
+    - is_public
+    - name
+    - updated_at
+    type: object
   github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData:
     properties:
       created_at:
@@ -12,7 +33,7 @@ definitions:
         type: string
       roles:
         items:
-          $ref: '#/definitions/user.RoleData'
+          $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData'
         type: array
       updated_at:
         format: date-time
@@ -23,6 +44,29 @@ definitions:
     - id
     - name
     - roles
+    - updated_at
+    type: object
+  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      permissions:
+        items:
+          $ref: '#/definitions/user.PermissionData'
+        type: array
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - id
+    - name
+    - permissions
     - updated_at
     type: object
   github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData:
@@ -36,6 +80,10 @@ definitions:
         type: integer
       name:
         type: string
+      roles:
+        items:
+          $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData'
+        type: array
       updated_at:
         format: date-time
         type: string
@@ -44,6 +92,7 @@ definitions:
     - email
     - id
     - name
+    - roles
     - updated_at
     type: object
   httpapi.HttpApiData:
@@ -393,15 +442,13 @@ definitions:
     required:
     - data
     type: object
-  user.RoleData:
+  user.PermissionData:
     properties:
       created_at:
         format: date-time
         type: string
       id:
         type: integer
-      is_public:
-        type: boolean
       name:
         type: string
       updated_at:
@@ -410,7 +457,6 @@ definitions:
     required:
     - created_at
     - id
-    - is_public
     - name
     - updated_at
     type: object
@@ -420,15 +466,6 @@ definitions:
         type: string
     required:
     - access_token
-    type: object
-  user.UserGetPolicyData:
-    properties:
-      rules:
-        items:
-          type: string
-        type: array
-    required:
-    - rules
     type: object
   user.UserLoginRequest:
     properties:
@@ -1261,42 +1298,6 @@ paths:
         "400":
           description: 'code: 400-001(update password failed), 400-002(request validation
             failed)'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "401":
-          description: 'code: 401-001(access token is wrong)'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "500":
-          description: 'code: 500-001'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      tags:
-      - user
-  /api/user/policy:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/user.UserGetPolicyData'
-              type: object
-        "400":
-          description: 'code: 400-001(get user policy failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "401":

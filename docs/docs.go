@@ -1234,66 +1234,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/user/policy": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/user.UserGetPolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "code: 400-001(get user policy failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/api/user/register": {
             "post": {
                 "consumes": [
@@ -1365,6 +1305,35 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "is_public",
+                "name",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
         "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData": {
             "type": "object",
             "required": [
@@ -1392,7 +1361,39 @@ const docTemplate = `{
                 "roles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/user.RoleData"
+                        "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData"
+                    }
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "permissions",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.PermissionData"
                     }
                 },
                 "updated_at": {
@@ -1408,6 +1409,7 @@ const docTemplate = `{
                 "email",
                 "id",
                 "name",
+                "roles",
                 "updated_at"
             ],
             "properties": {
@@ -1423,6 +1425,12 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData"
+                    }
                 },
                 "updated_at": {
                     "type": "string",
@@ -1930,12 +1938,11 @@ const docTemplate = `{
                 "data": {}
             }
         },
-        "user.RoleData": {
+        "user.PermissionData": {
             "type": "object",
             "required": [
                 "created_at",
                 "id",
-                "is_public",
                 "name",
                 "updated_at"
             ],
@@ -1946,9 +1953,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
-                },
-                "is_public": {
-                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
@@ -1967,20 +1971,6 @@ const docTemplate = `{
             "properties": {
                 "access_token": {
                     "type": "string"
-                }
-            }
-        },
-        "user.UserGetPolicyData": {
-            "type": "object",
-            "required": [
-                "rules"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 }
             }
         },
