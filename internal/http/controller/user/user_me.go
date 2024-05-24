@@ -21,7 +21,7 @@ import (
 // @failure 500 {object} response.ErrorResponse "code: 500-001"
 // @router /api/user/me [get]
 func Me(c *gin.Context) {
-	u, err := user.Get(database.NewTx(), "id = ?", c.GetUint("user_id"))
+	u, err := user.Get(database.NewTx("Roles.Permissions"), "id = ?", c.GetUint("user_id"))
 	if err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, err, nil)
 		logger := service.Registry.Get("logger").(*zap.Logger)
