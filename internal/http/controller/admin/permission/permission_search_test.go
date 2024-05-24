@@ -56,8 +56,8 @@ func (suite *PermissionSearchTestSuite) Test() {
 		panic(err)
 	}
 
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	searchRequest := permission.PermissionSearchRequest{
@@ -99,8 +99,8 @@ func (suite *PermissionSearchTestSuite) Test() {
 }
 
 func (suite *PermissionSearchTestSuite) TestRequestValidationFailed() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	req := httptest.NewRequest("GET", "/api/admin/permission", nil)
@@ -119,8 +119,8 @@ func (suite *PermissionSearchTestSuite) TestRequestValidationFailed() {
 }
 
 func (suite *PermissionSearchTestSuite) TestWrongAccessToken() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("GET", "/api/admin/permission", nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)

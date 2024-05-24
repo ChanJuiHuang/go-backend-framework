@@ -99,8 +99,8 @@ func (suite *UserRoleUpdateTestSuite) SetupTest() {
 }
 
 func (suite *UserRoleUpdateTestSuite) Test() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	reqBody := user.UserRoleUpdateRequest{
@@ -140,8 +140,8 @@ func (suite *UserRoleUpdateTestSuite) Test() {
 }
 
 func (suite *UserRoleUpdateTestSuite) TestDeleteAllRoles() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	reqBody := user.UserRoleUpdateRequest{
@@ -180,8 +180,8 @@ func (suite *UserRoleUpdateTestSuite) TestDeleteAllRoles() {
 }
 
 func (suite *UserRoleUpdateTestSuite) TestPermissionIsRepeat() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	reqBody := user.UserRoleUpdateRequest{
@@ -210,8 +210,8 @@ func (suite *UserRoleUpdateTestSuite) TestPermissionIsRepeat() {
 }
 
 func (suite *UserRoleUpdateTestSuite) TestRequestValidationFailed() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	req := httptest.NewRequest("PUT", "/api/admin/user-role", nil)
@@ -231,8 +231,8 @@ func (suite *UserRoleUpdateTestSuite) TestRequestValidationFailed() {
 }
 
 func (suite *UserRoleUpdateTestSuite) TestWrongAccessToken() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("PUT", "/api/admin/user-role", nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
@@ -249,8 +249,8 @@ func (suite *UserRoleUpdateTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *UserRoleUpdateTestSuite) TestCsrfMismatch() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("PUT", "/api/admin/user-role", nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)

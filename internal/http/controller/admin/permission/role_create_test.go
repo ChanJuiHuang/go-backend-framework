@@ -29,8 +29,8 @@ func (suite *RoleCreateTestSuite) SetupTest() {
 }
 
 func (suite *RoleCreateTestSuite) Test() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	permissionModel := &model.Permission{Name: "permission1"}
@@ -98,8 +98,8 @@ func (suite *RoleCreateTestSuite) Test() {
 }
 
 func (suite *RoleCreateTestSuite) TestRequestValidationFailed() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	req := httptest.NewRequest("POST", "/api/admin/role", nil)
@@ -119,8 +119,8 @@ func (suite *RoleCreateTestSuite) TestRequestValidationFailed() {
 }
 
 func (suite *RoleCreateTestSuite) TestWrongAccessToken() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("POST", "/api/admin/role", nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
@@ -137,8 +137,8 @@ func (suite *RoleCreateTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *RoleCreateTestSuite) TestCsrfMismatch() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("POST", "/api/admin/role", nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)

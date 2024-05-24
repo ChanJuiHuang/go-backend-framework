@@ -34,8 +34,8 @@ func (suite *UserGetPolicyTestSuite) TestGetPolicy() {
 		panic(err)
 	}
 
-	test.AdminAddPolicies()
-	test.AddRoleToUser(u.Id, "admin")
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantRoleToUser(u.Id, "admin")
 
 	accessToken := test.UserLogin()
 	req := httptest.NewRequest("GET", "/api/user/policy", nil)

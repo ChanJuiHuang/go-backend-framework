@@ -29,8 +29,8 @@ func (suite *HttpApiSearchTestSuite) SetupTest() {
 }
 
 func (suite *HttpApiSearchTestSuite) Test() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	httpApi := &model.HttpApi{
@@ -81,8 +81,8 @@ func (suite *HttpApiSearchTestSuite) Test() {
 }
 
 func (suite *HttpApiSearchTestSuite) TestRequestValidationFailed() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	req := httptest.NewRequest("GET", "/api/admin/http-api", nil)

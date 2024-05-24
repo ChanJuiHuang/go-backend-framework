@@ -21,8 +21,8 @@ func (suite *PermissionReloadTestSuite) SetupTest() {
 }
 
 func (suite *PermissionReloadTestSuite) Test() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
@@ -35,8 +35,8 @@ func (suite *PermissionReloadTestSuite) Test() {
 }
 
 func (suite *PermissionReloadTestSuite) TestWrongAccessToken() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
@@ -53,8 +53,8 @@ func (suite *PermissionReloadTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *PermissionReloadTestSuite) TestCsrfMismatch() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)

@@ -61,8 +61,8 @@ func (suite *PermissionDeleteTestSuite) SetupTest() {
 }
 
 func (suite *PermissionDeleteTestSuite) Test() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	reqBody := permission.PermissionDeleteRequest{
@@ -95,8 +95,8 @@ func (suite *PermissionDeleteTestSuite) Test() {
 }
 
 func (suite *PermissionDeleteTestSuite) TestWrongAccessToken() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("DELETE", "/api/admin/permission", nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
@@ -113,8 +113,8 @@ func (suite *PermissionDeleteTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *PermissionDeleteTestSuite) TestCsrfMismatch() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("DELETE", "/api/admin/permission", nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)

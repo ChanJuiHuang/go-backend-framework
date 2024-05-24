@@ -58,8 +58,8 @@ func (suite *PermissionUpdateTestSuite) SetupTest() {
 }
 
 func (suite *PermissionUpdateTestSuite) Test() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	reqBody := permission.PermissionUpdateRequest{
@@ -111,8 +111,8 @@ func (suite *PermissionUpdateTestSuite) Test() {
 }
 
 func (suite *PermissionUpdateTestSuite) TestWrongAccessToken() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("PUT", fmt.Sprintf("/api/admin/permission/%d", suite.permission.Id), nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
@@ -129,8 +129,8 @@ func (suite *PermissionUpdateTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *PermissionUpdateTestSuite) TestCsrfMismatch() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("PUT", fmt.Sprintf("/api/admin/permission/%d", suite.permission.Id), nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)

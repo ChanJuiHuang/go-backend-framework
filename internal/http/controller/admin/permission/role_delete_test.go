@@ -28,8 +28,8 @@ func (suite *RoleDeleteTestSuite) SetupTest() {
 }
 
 func (suite *RoleDeleteTestSuite) Test() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	role := &model.Role{Name: "role1"}
@@ -99,8 +99,8 @@ func (suite *RoleDeleteTestSuite) Test() {
 }
 
 func (suite *RoleDeleteTestSuite) TestRequestValidationFailed() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	accessToken := test.AdminLogin()
 
 	req := httptest.NewRequest("DELETE", "/api/admin/role", nil)
@@ -120,8 +120,8 @@ func (suite *RoleDeleteTestSuite) TestRequestValidationFailed() {
 }
 
 func (suite *RoleDeleteTestSuite) TestWrongAccessToken() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("DELETE", "/api/admin/role", nil)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
@@ -138,8 +138,8 @@ func (suite *RoleDeleteTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *RoleDeleteTestSuite) TestCsrfMismatch() {
-	test.AdminAddPolicies()
-	test.AdminAddRole()
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantAdminToAdminUser()
 	req := httptest.NewRequest("DELETE", "/api/admin/role", nil)
 	resp := httptest.NewRecorder()
 	test.HttpHandler.ServeHTTP(resp, req)
