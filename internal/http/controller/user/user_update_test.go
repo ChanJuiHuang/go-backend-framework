@@ -18,7 +18,7 @@ type UserUpdateTestSuite struct {
 	suite.Suite
 }
 
-func (suite *UserUpdateTestSuite) SetupSuite() {
+func (suite *UserUpdateTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
 	test.UserService.Register()
 }
@@ -92,7 +92,7 @@ func (suite *UserUpdateTestSuite) TestCsrfMismatch() {
 
 func (suite *UserUpdateTestSuite) TestRequestValidationFailed() {
 	accessToken := test.UserService.Login()
-	req := httptest.NewRequest("PUT", "/api/user", bytes.NewReader([]byte{}))
+	req := httptest.NewRequest("PUT", "/api/user", nil)
 	test.AddBearerToken(req, accessToken)
 	test.AddCsrfToken(req)
 	resp := httptest.NewRecorder()
@@ -108,7 +108,7 @@ func (suite *UserUpdateTestSuite) TestRequestValidationFailed() {
 	suite.Equal(response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
-func (suite *UserUpdateTestSuite) TearDownSuite() {
+func (suite *UserUpdateTestSuite) TearDownTest() {
 	test.RdbmsMigration.Reset()
 }
 

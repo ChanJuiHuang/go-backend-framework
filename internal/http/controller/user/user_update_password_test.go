@@ -17,7 +17,7 @@ type UserUpdatePasswordTestSuite struct {
 	suite.Suite
 }
 
-func (suite *UserUpdatePasswordTestSuite) SetupSuite() {
+func (suite *UserUpdatePasswordTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
 	test.UserService.Register()
 }
@@ -101,7 +101,7 @@ func (suite *UserUpdatePasswordTestSuite) TestRequestValidationFailed() {
 	suite.Equal(response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
-func (suite *UserUpdatePasswordTestSuite) TearDownSuite() {
+func (suite *UserUpdatePasswordTestSuite) TearDownTest() {
 	test.RdbmsMigration.Reset()
 }
 
