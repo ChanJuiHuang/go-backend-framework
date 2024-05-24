@@ -16,10 +16,12 @@ type SeederExecutor struct {
 
 func NewSeederExecutor() *SeederExecutor {
 	order := []string{
+		"httpApi",
 		"user",
 	}
 	runSeederFuncs := map[string]runSeederFunc{
-		"user": runUserSeeder,
+		"httpApi": runHttpApiSeeder,
+		"user":    runUserSeeder,
 	}
 
 	return &SeederExecutor{
