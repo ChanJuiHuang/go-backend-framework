@@ -23,7 +23,7 @@ func (suite *UserUpdateTestSuite) SetupSuite() {
 	test.UserService.Register()
 }
 
-func (suite *UserUpdateTestSuite) TestUpdate() {
+func (suite *UserUpdateTestSuite) Test() {
 	accessToken := test.UserService.Login()
 	reqBody := user.UserUpdateRequest{
 		Name:  "bob",

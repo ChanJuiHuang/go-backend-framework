@@ -22,7 +22,7 @@ func (suite *UserUpdatePasswordTestSuite) SetupSuite() {
 	test.UserService.Register()
 }
 
-func (suite *UserUpdatePasswordTestSuite) TestUpdatePassword() {
+func (suite *UserUpdatePasswordTestSuite) Test() {
 	accessToken := test.UserService.Login()
 	reqBody := user.UserUpdatePasswordRequest{
 		CurrentPassword: "abcABC123",

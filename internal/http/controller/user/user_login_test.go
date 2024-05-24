@@ -23,7 +23,7 @@ func (suite *UserLoginTestSuite) SetupSuite() {
 	test.UserService.Register()
 }
 
-func (suite *UserLoginTestSuite) TestLogin() {
+func (suite *UserLoginTestSuite) Test() {
 	reqBody := user.UserLoginRequest{
 		Email:    test.UserService.User.Email,
 		Password: test.UserService.UserPassword,
