@@ -20,13 +20,13 @@ type UserLoginTestSuite struct {
 
 func (suite *UserLoginTestSuite) SetupSuite() {
 	test.RdbmsMigration.Run()
-	test.UserRegister()
+	test.UserService.Register()
 }
 
 func (suite *UserLoginTestSuite) TestLogin() {
 	reqBody := user.UserLoginRequest{
-		Email:    "john@test.com",
-		Password: "abcABC123",
+		Email:    test.UserService.User.Email,
+		Password: test.UserService.UserPassword,
 	}
 	reqBodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
@@ -79,7 +79,7 @@ func (suite *UserLoginTestSuite) TestEmailIsWrong() {
 
 func (suite *UserLoginTestSuite) TestPasswordIsWrong() {
 	reqBody := user.UserLoginRequest{
-		Email:    "john@test.com",
+		Email:    test.UserService.User.Email,
 		Password: "abc123",
 	}
 	reqBodyBytes, err := json.Marshal(reqBody)

@@ -20,11 +20,11 @@ type UserUpdateTestSuite struct {
 
 func (suite *UserUpdateTestSuite) SetupSuite() {
 	test.RdbmsMigration.Run()
-	test.UserRegister()
+	test.UserService.Register()
 }
 
 func (suite *UserUpdateTestSuite) TestUpdate() {
-	accessToken := test.UserLogin()
+	accessToken := test.UserService.Login()
 	reqBody := user.UserUpdateRequest{
 		Name:  "bob",
 		Email: "bob@test.com",
@@ -91,7 +91,7 @@ func (suite *UserUpdateTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *UserUpdateTestSuite) TestRequestValidationFailed() {
-	accessToken := test.UserLogin()
+	accessToken := test.UserService.Login()
 	req := httptest.NewRequest("PUT", "/api/user", bytes.NewReader([]byte{}))
 	test.AddBearerToken(req, accessToken)
 	test.AddCsrfToken(req)

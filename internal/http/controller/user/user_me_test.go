@@ -19,11 +19,11 @@ type UserMeTestSuite struct {
 
 func (suite *UserMeTestSuite) SetupSuite() {
 	test.RdbmsMigration.Run()
-	test.UserRegister()
+	test.UserService.Register()
 }
 
 func (suite *UserMeTestSuite) TestMe() {
-	accessToken := test.UserLogin()
+	accessToken := test.UserService.Login()
 	req := httptest.NewRequest("GET", "/api/user/me", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

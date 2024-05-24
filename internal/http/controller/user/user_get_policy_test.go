@@ -22,7 +22,7 @@ type UserGetPolicyTestSuite struct {
 
 func (suite *UserGetPolicyTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.UserRegister()
+	test.UserService.Register()
 }
 
 func (suite *UserGetPolicyTestSuite) TestGetPolicy() {
@@ -37,7 +37,7 @@ func (suite *UserGetPolicyTestSuite) TestGetPolicy() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantRoleToUser(u.Id, "admin")
 
-	accessToken := test.UserLogin()
+	accessToken := test.UserService.Login()
 	req := httptest.NewRequest("GET", "/api/user/policy", nil)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()
