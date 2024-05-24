@@ -25,7 +25,7 @@ type PermissionDeleteTestSuite struct {
 
 func (suite *PermissionDeleteTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 
 	permissionModel := &model.Permission{Name: "permission1"}
 	casbinRules := []gormadapter.CasbinRule{
@@ -63,7 +63,7 @@ func (suite *PermissionDeleteTestSuite) SetupTest() {
 func (suite *PermissionDeleteTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	reqBody := permission.PermissionDeleteRequest{
 		Ids: []uint{suite.permission.Id},
@@ -130,7 +130,7 @@ func (suite *PermissionDeleteTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *PermissionDeleteTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("DELETE", "/api/admin/permission", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

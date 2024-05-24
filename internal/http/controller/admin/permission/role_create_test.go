@@ -25,13 +25,13 @@ type RoleCreateTestSuite struct {
 
 func (suite *RoleCreateTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 }
 
 func (suite *RoleCreateTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	permissionModel := &model.Permission{Name: "permission1"}
 	casbinRules := []gormadapter.CasbinRule{
@@ -100,7 +100,7 @@ func (suite *RoleCreateTestSuite) Test() {
 func (suite *RoleCreateTestSuite) TestRequestValidationFailed() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("POST", "/api/admin/role", nil)
 	test.AddCsrfToken(req)
@@ -154,7 +154,7 @@ func (suite *RoleCreateTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *RoleCreateTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("POST", "/api/admin/role", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

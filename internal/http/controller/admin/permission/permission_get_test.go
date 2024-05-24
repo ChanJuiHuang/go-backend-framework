@@ -26,7 +26,7 @@ type PermissionGetTestSuite struct {
 
 func (suite *PermissionGetTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 
 	permissionModel := &model.Permission{Name: "permission1"}
 	casbinRules := []gormadapter.CasbinRule{
@@ -59,7 +59,7 @@ func (suite *PermissionGetTestSuite) SetupTest() {
 func (suite *PermissionGetTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("GET", fmt.Sprintf("/api/admin/permission/%d", suite.permission.Id), nil)
 	test.AddBearerToken(req, accessToken)
@@ -105,7 +105,7 @@ func (suite *PermissionGetTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *PermissionGetTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("GET", fmt.Sprintf("/api/admin/permission/%d", suite.permission.Id), nil)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()

@@ -20,13 +20,13 @@ type PermissionCreateTestSuite struct {
 
 func (suite *PermissionCreateTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 }
 
 func (suite *PermissionCreateTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	reqBody := permission.PermissionCreateRequest{
 		Name: "permission1",
@@ -79,7 +79,7 @@ func (suite *PermissionCreateTestSuite) Test() {
 func (suite *PermissionCreateTestSuite) TestRequestValidationFailed() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("POST", "/api/admin/permission", nil)
 	test.AddCsrfToken(req)
@@ -133,7 +133,7 @@ func (suite *PermissionCreateTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *PermissionCreateTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("POST", "/api/admin/permission", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

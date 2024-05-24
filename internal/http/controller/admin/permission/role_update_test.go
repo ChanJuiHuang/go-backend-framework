@@ -28,7 +28,7 @@ type RoleUpdateTestSuite struct {
 
 func (suite *RoleUpdateTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 
 	role := &model.Role{Name: "role1"}
 	permissionModel := &model.Permission{Name: "permission1"}
@@ -86,7 +86,7 @@ func (suite *RoleUpdateTestSuite) SetupTest() {
 func (suite *RoleUpdateTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	reqBody := permission.RoleUpdateRequest{
 		Name:          "role2",
@@ -130,7 +130,7 @@ func (suite *RoleUpdateTestSuite) Test() {
 func (suite *RoleUpdateTestSuite) TestRequestValidationFailed() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("PUT", fmt.Sprintf("/api/admin/role/%d", suite.role.Id), nil)
 	test.AddCsrfToken(req)
@@ -184,7 +184,7 @@ func (suite *RoleUpdateTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *RoleUpdateTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("PUT", fmt.Sprintf("/api/admin/role/%d", suite.role.Id), nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

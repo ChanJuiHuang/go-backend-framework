@@ -25,13 +25,13 @@ type HttpApiSearchTestSuite struct {
 
 func (suite *HttpApiSearchTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 }
 
 func (suite *HttpApiSearchTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	httpApi := &model.HttpApi{
 		Method: "GET",
@@ -83,7 +83,7 @@ func (suite *HttpApiSearchTestSuite) Test() {
 func (suite *HttpApiSearchTestSuite) TestRequestValidationFailed() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("GET", "/api/admin/http-api", nil)
 	test.AddBearerToken(req, accessToken)
@@ -116,7 +116,7 @@ func (suite *HttpApiSearchTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *HttpApiSearchTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("GET", "/api/admin/http-api", nil)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()

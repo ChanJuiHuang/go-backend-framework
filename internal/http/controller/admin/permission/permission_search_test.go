@@ -27,7 +27,7 @@ type PermissionSearchTestSuite struct {
 
 func (suite *PermissionSearchTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 }
 
 func (suite *PermissionSearchTestSuite) Test() {
@@ -58,7 +58,7 @@ func (suite *PermissionSearchTestSuite) Test() {
 
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	searchRequest := permission.PermissionSearchRequest{
 		Name: permissionModel.Name,
@@ -101,7 +101,7 @@ func (suite *PermissionSearchTestSuite) Test() {
 func (suite *PermissionSearchTestSuite) TestRequestValidationFailed() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("GET", "/api/admin/permission", nil)
 	test.AddBearerToken(req, accessToken)
@@ -136,7 +136,7 @@ func (suite *PermissionSearchTestSuite) TestWrongAccessToken() {
 }
 
 func (suite *PermissionSearchTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("GET", "/api/admin/permission", nil)
 	test.AddBearerToken(req, accessToken)
 	resp := httptest.NewRecorder()

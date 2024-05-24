@@ -17,13 +17,13 @@ type PermissionReloadTestSuite struct {
 
 func (suite *PermissionReloadTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 }
 
 func (suite *PermissionReloadTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
 	test.AddCsrfToken(req)
@@ -70,7 +70,7 @@ func (suite *PermissionReloadTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *PermissionReloadTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("POST", "/api/admin/permission/reload", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

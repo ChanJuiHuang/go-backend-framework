@@ -27,7 +27,7 @@ type PermissionUpdateTestSuite struct {
 
 func (suite *PermissionUpdateTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 
 	permissionModel := &model.Permission{Name: "permission1"}
 	casbinRules := []gormadapter.CasbinRule{
@@ -60,7 +60,7 @@ func (suite *PermissionUpdateTestSuite) SetupTest() {
 func (suite *PermissionUpdateTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	reqBody := permission.PermissionUpdateRequest{
 		Name: "permission2",
@@ -146,7 +146,7 @@ func (suite *PermissionUpdateTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *PermissionUpdateTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("PUT", fmt.Sprintf("/api/admin/permission/%d", suite.permission.Id), nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

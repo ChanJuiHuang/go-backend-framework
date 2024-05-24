@@ -27,7 +27,7 @@ type UserRoleUpdateTestSuite struct {
 
 func (suite *UserRoleUpdateTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 
 	roles := []model.Role{{Name: "role1"}, {Name: "role2"}}
 	permissions := []model.Permission{{Name: "permission1"}, {Name: "permission2"}}
@@ -101,7 +101,7 @@ func (suite *UserRoleUpdateTestSuite) SetupTest() {
 func (suite *UserRoleUpdateTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	reqBody := user.UserRoleUpdateRequest{
 		UserId:  1,
@@ -142,7 +142,7 @@ func (suite *UserRoleUpdateTestSuite) Test() {
 func (suite *UserRoleUpdateTestSuite) TestDeleteAllRoles() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	reqBody := user.UserRoleUpdateRequest{
 		UserId:  1,
@@ -182,7 +182,7 @@ func (suite *UserRoleUpdateTestSuite) TestDeleteAllRoles() {
 func (suite *UserRoleUpdateTestSuite) TestPermissionIsRepeat() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	reqBody := user.UserRoleUpdateRequest{
 		UserId:  1,
@@ -212,7 +212,7 @@ func (suite *UserRoleUpdateTestSuite) TestPermissionIsRepeat() {
 func (suite *UserRoleUpdateTestSuite) TestRequestValidationFailed() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("PUT", "/api/admin/user-role", nil)
 	test.AddCsrfToken(req)
@@ -266,7 +266,7 @@ func (suite *UserRoleUpdateTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *UserRoleUpdateTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("PUT", "/api/admin/user-role", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)

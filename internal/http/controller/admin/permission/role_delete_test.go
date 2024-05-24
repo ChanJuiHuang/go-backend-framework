@@ -24,13 +24,13 @@ type RoleDeleteTestSuite struct {
 
 func (suite *RoleDeleteTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.AdminRegister()
+	test.AdminService.Register()
 }
 
 func (suite *RoleDeleteTestSuite) Test() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	role := &model.Role{Name: "role1"}
 	permissionModel := &model.Permission{Name: "permission1"}
@@ -101,7 +101,7 @@ func (suite *RoleDeleteTestSuite) Test() {
 func (suite *RoleDeleteTestSuite) TestRequestValidationFailed() {
 	test.PermissionService.AddPermissions()
 	test.PermissionService.GrantAdminToAdminUser()
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 
 	req := httptest.NewRequest("DELETE", "/api/admin/role", nil)
 	test.AddCsrfToken(req)
@@ -155,7 +155,7 @@ func (suite *RoleDeleteTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *RoleDeleteTestSuite) TestAuthorizationFailed() {
-	accessToken := test.AdminLogin()
+	accessToken := test.AdminService.Login()
 	req := httptest.NewRequest("DELETE", "/api/admin/role", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
