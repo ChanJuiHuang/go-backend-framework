@@ -22,6 +22,7 @@ func init() {
 	ClickhouseMigration = NewClickhouseMigration()
 	PermissionService = NewPermissionService()
 	UserService = NewUserService()
+	AdminService = NewAdminService()
 }
 
 func loadEnv() {
