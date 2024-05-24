@@ -181,6 +181,101 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/admin/http-api": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin-http-api"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "path",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 10,
+                        "type": "integer",
+                        "name": "per_page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/httpapi.HttpApiSearchData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(search http apis failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/admin/policy": {
             "post": {
                 "description": "bind the permissions on the role",
@@ -1419,6 +1514,57 @@ const docTemplate = `{
                 },
                 "object": {
                     "type": "string"
+                }
+            }
+        },
+        "httpapi.HttpApiData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "method",
+                "path",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "httpapi.HttpApiSearchData": {
+            "type": "object",
+            "required": [
+                "http_apis",
+                "last_page",
+                "total"
+            ],
+            "properties": {
+                "http_apis": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/httpapi.HttpApiData"
+                    }
+                },
+                "last_page": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },

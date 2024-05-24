@@ -1,7 +1,7 @@
 package admin
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
+	httpapi "github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/http_api"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -22,9 +22,15 @@ func NewRouter(router *gin.Engine) *Router {
 
 func (r *Router) AttachRoutes() {
 	r.router.GET("user/:userId/grouping-policy", admin.GetUserGroupingPolicy)
+	r.AttachHttpApiRoutes()
 	r.AttachPolicyRoutes()
 	r.AttachPolicySubjectRoutes()
 	r.AttachGroupingPolicyRoutes()
+}
+
+func (r *Router) AttachHttpApiRoutes() {
+	httpApiRouter := r.router.Group("http-api")
+	httpApiRouter.GET("", httpapi.Search)
 }
 
 func (r *Router) AttachPolicyRoutes() {

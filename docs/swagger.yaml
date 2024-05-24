@@ -171,6 +171,42 @@ definitions:
     - action
     - object
     type: object
+  httpapi.HttpApiData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      method:
+        type: string
+      path:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - id
+    - method
+    - path
+    - updated_at
+    type: object
+  httpapi.HttpApiSearchData:
+    properties:
+      http_apis:
+        items:
+          $ref: '#/definitions/httpapi.HttpApiData'
+        type: array
+      last_page:
+        type: integer
+      total:
+        type: integer
+    required:
+    - http_apis
+    - last_page
+    - total
+    type: object
   response.Debug:
     properties:
       error:
@@ -400,6 +436,66 @@ paths:
       summary: grant the roles to user
       tags:
       - admin
+  /api/admin/http-api:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - in: query
+        name: method
+        type: string
+      - in: query
+        name: order_by
+        type: string
+      - in: query
+        minimum: 1
+        name: page
+        required: true
+        type: integer
+      - in: query
+        name: path
+        type: string
+      - in: query
+        minimum: 10
+        name: per_page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/httpapi.HttpApiSearchData'
+              type: object
+        "400":
+          description: 'code: 400-001(search http apis failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin-http-api
   /api/admin/policy:
     delete:
       consumes:

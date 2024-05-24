@@ -61,6 +61,7 @@ func AdminLogin() string {
 
 func AdminAddPolicies() {
 	policies := []gormadapter.CasbinRule{
+		{Ptype: "p", V0: "admin", V1: "/api/admin/http-api", V2: "GET"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "POST"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy", V2: "DELETE"},
 		{Ptype: "p", V0: "admin", V1: "/api/admin/policy/subject", V2: "GET"},
