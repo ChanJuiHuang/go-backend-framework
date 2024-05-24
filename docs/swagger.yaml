@@ -1,175 +1,412 @@
 definitions:
-  admin.AdminCreateGroupingPolicyData:
+  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData:
     properties:
-      subjects:
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      is_public:
+        type: boolean
+      name:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - id
+    - is_public
+    - name
+    - updated_at
+    type: object
+  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      roles:
         items:
-          type: string
+          $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData'
         type: array
-      user_id:
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - email
+    - id
+    - name
+    - roles
+    - updated_at
+    type: object
+  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      permissions:
+        items:
+          $ref: '#/definitions/user.PermissionData'
+        type: array
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - id
+    - name
+    - permissions
+    - updated_at
+    type: object
+  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData'
+        type: array
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - email
+    - id
+    - name
+    - roles
+    - updated_at
+    type: object
+  httpapi.HttpApiData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      method:
+        type: string
+      path:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - id
+    - method
+    - path
+    - updated_at
+    type: object
+  httpapi.HttpApiSearchData:
+    properties:
+      http_apis:
+        items:
+          $ref: '#/definitions/httpapi.HttpApiData'
+        type: array
+      last_page:
+        type: integer
+      total:
         type: integer
     required:
-    - subjects
-    - user_id
+    - http_apis
+    - last_page
+    - total
     type: object
-  admin.AdminCreateGroupingPolicyRequest:
+  permission.HttpApiData:
     properties:
-      subjects:
+      method:
+        type: string
+      path:
+        type: string
+    required:
+    - method
+    - path
+    type: object
+  permission.PermissionCreateData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      http_apis:
         items:
-          type: string
+          $ref: '#/definitions/permission.HttpApiData'
         type: array
-      user_id:
+      id:
         type: integer
-    required:
-    - subjects
-    - user_id
-    type: object
-  admin.AdminCreatePolicyData:
-    properties:
-      rules:
-        items:
-          $ref: '#/definitions/admin.Rule'
-        type: array
-      subject:
+      name:
+        type: string
+      updated_at:
+        format: date-time
         type: string
     required:
-    - rules
-    - subject
+    - created_at
+    - http_apis
+    - id
+    - name
+    - updated_at
     type: object
-  admin.AdminCreatePolicyRequest:
+  permission.PermissionCreateRequest:
     properties:
-      rules:
+      http_apis:
         items:
-          $ref: '#/definitions/admin.Rule'
+          properties:
+            method:
+              type: string
+            path:
+              type: string
+          required:
+          - method
+          - path
+          type: object
+        minItems: 1
         type: array
-      subject:
+      name:
         type: string
     required:
-    - rules
-    - subject
+    - http_apis
+    - name
     type: object
-  admin.AdminDeleteGroupingPolicyData:
+  permission.PermissionData:
     properties:
-      subjects:
-        items:
-          type: string
-        type: array
-      user_id:
+      created_at:
+        format: date-time
+        type: string
+      id:
         type: integer
-    required:
-    - subjects
-    - user_id
-    type: object
-  admin.AdminDeleteGroupingPolicyRequest:
-    properties:
-      subjects:
-        items:
-          type: string
-        type: array
-      user_id:
-        type: integer
-    required:
-    - subjects
-    - user_id
-    type: object
-  admin.AdminDeletePolicyData:
-    properties:
-      rules:
-        items:
-          $ref: '#/definitions/admin.Rule'
-        type: array
-      subject:
+      name:
+        type: string
+      updated_at:
+        format: date-time
         type: string
     required:
-    - rules
-    - subject
+    - created_at
+    - id
+    - name
+    - updated_at
     type: object
-  admin.AdminDeletePolicyRequest:
+  permission.PermissionDeleteRequest:
     properties:
-      rules:
-        items:
-          $ref: '#/definitions/admin.Rule'
-        type: array
-      subject:
-        type: string
-    required:
-    - rules
-    - subject
-    type: object
-  admin.AdminDeletePolicySubjectData:
-    properties:
-      subjects:
-        items:
-          type: string
-        type: array
-    required:
-    - subjects
-    type: object
-  admin.AdminDeletePolicySubjectRequest:
-    properties:
-      subjects:
-        items:
-          type: string
-        type: array
-    required:
-    - subjects
-    type: object
-  admin.AdminGetPolicySubjectData:
-    properties:
-      rules:
-        items:
-          $ref: '#/definitions/admin.Rule'
-        type: array
-      subject:
-        type: string
-    required:
-    - rules
-    - subject
-    type: object
-  admin.AdminGetPolicySubjectUserData:
-    properties:
-      user_ids:
+      ids:
         items:
           type: integer
         type: array
     required:
-    - user_ids
+    - ids
     type: object
-  admin.AdminGetUserGroupingPolicyData:
+  permission.PermissionGetData:
     properties:
-      subjects:
+      created_at:
+        format: date-time
+        type: string
+      http_apis:
         items:
-          type: string
+          $ref: '#/definitions/permission.HttpApiData'
         type: array
-      user_id:
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - http_apis
+    - id
+    - name
+    - updated_at
+    type: object
+  permission.PermissionSearchData:
+    properties:
+      last_page:
+        type: integer
+      permissions:
+        items:
+          $ref: '#/definitions/permission.PermissionData'
+        type: array
+      total:
         type: integer
     required:
-    - subjects
-    - user_id
+    - last_page
+    - permissions
+    - total
     type: object
-  admin.AdminSearchPolicySubjectData:
+  permission.PermissionSearchRequest:
     properties:
-      subjects:
+      name:
+        type: string
+      order_by:
+        type: string
+      page:
+        minimum: 1
+        type: integer
+      per_page:
+        minimum: 10
+        type: integer
+    required:
+    - page
+    - per_page
+    type: object
+  permission.PermissionUpdateData:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      http_apis:
         items:
-          type: string
+          $ref: '#/definitions/permission.HttpApiData'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - created_at
+    - http_apis
+    - id
+    - name
+    - updated_at
+    type: object
+  permission.PermissionUpdateRequest:
+    properties:
+      http_apis:
+        items:
+          properties:
+            method:
+              type: string
+            path:
+              type: string
+          required:
+          - method
+          - path
+          type: object
+        minItems: 1
+        type: array
+      name:
+        type: string
+    required:
+    - http_apis
+    - name
+    type: object
+  permission.RoleCreateRequest:
+    properties:
+      is_public:
+        type: boolean
+      name:
+        type: string
+      permission_ids:
+        items:
+          type: integer
+        minItems: 1
         type: array
     required:
-    - subjects
+    - name
+    - permission_ids
     type: object
-  admin.Rule:
+  permission.RoleData:
     properties:
-      action:
-        enum:
-        - GET
-        - POST
-        - PUT
-        - PATCH
-        - DELETE
+      created_at:
+        format: date-time
         type: string
-      object:
+      id:
+        type: integer
+      is_public:
+        type: boolean
+      name:
+        type: string
+      permissions:
+        items:
+          $ref: '#/definitions/permission.PermissionData'
+        type: array
+      updated_at:
+        format: date-time
         type: string
     required:
-    - action
-    - object
+    - created_at
+    - id
+    - is_public
+    - name
+    - permissions
+    - updated_at
+    type: object
+  permission.RoleDeleteRequest:
+    properties:
+      ids:
+        items:
+          type: integer
+        type: array
+    required:
+    - ids
+    type: object
+  permission.RoleSearchData:
+    properties:
+      last_page:
+        type: integer
+      roles:
+        items:
+          $ref: '#/definitions/permission.RoleData'
+        type: array
+      total:
+        type: integer
+    required:
+    - last_page
+    - roles
+    - total
+    type: object
+  permission.RoleSearchRequest:
+    properties:
+      is_public:
+        type: boolean
+      name:
+        type: string
+      order_by:
+        type: string
+      page:
+        minimum: 1
+        type: integer
+      per_page:
+        minimum: 10
+        type: integer
+    required:
+    - page
+    - per_page
+    type: object
+  permission.RoleUpdateRequest:
+    properties:
+      is_public:
+        type: boolean
+      name:
+        type: string
+      permission_ids:
+        items:
+          type: integer
+        minItems: 1
+        type: array
+    required:
+    - name
+    - permission_ids
     type: object
   response.Debug:
     properties:
@@ -205,19 +442,10 @@ definitions:
     required:
     - data
     type: object
-  user.TokenData:
-    properties:
-      access_token:
-        type: string
-    required:
-    - access_token
-    type: object
-  user.UserData:
+  user.PermissionData:
     properties:
       created_at:
         format: date-time
-        type: string
-      email:
         type: string
       id:
         type: integer
@@ -228,19 +456,16 @@ definitions:
         type: string
     required:
     - created_at
-    - email
     - id
     - name
     - updated_at
     type: object
-  user.UserGetPolicyData:
+  user.TokenData:
     properties:
-      rules:
-        items:
-          type: string
-        type: array
+      access_token:
+        type: string
     required:
-    - rules
+    - access_token
     type: object
   user.UserLoginRequest:
     properties:
@@ -265,6 +490,18 @@ definitions:
     - email
     - name
     - password
+    type: object
+  user.UserRoleUpdateRequest:
+    properties:
+      role_ids:
+        items:
+          type: integer
+        type: array
+      user_id:
+        type: integer
+    required:
+    - role_ids
+    - user_id
     type: object
   user.UserUpdatePasswordRequest:
     properties:
@@ -293,11 +530,70 @@ info:
   title: Example API
   version: "1.0"
 paths:
-  /api/admin/grouping-policy:
+  /api/admin/http-api:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - in: query
+        name: method
+        type: string
+      - in: query
+        name: order_by
+        type: string
+      - in: query
+        minimum: 1
+        name: page
+        required: true
+        type: integer
+      - in: query
+        name: path
+        type: string
+      - in: query
+        minimum: 10
+        name: per_page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/httpapi.HttpApiSearchData'
+              type: object
+        "400":
+          description: 'code: 400-001(search http apis failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin-http-api
+  /api/admin/permission:
     delete:
       consumes:
       - application/json
-      description: revoke the roles to user
       parameters:
       - description: csrf token
         in: header
@@ -309,26 +605,24 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: delete grouping policy
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: delete permissions
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/admin.AdminDeleteGroupingPolicyRequest'
+          $ref: '#/definitions/permission.PermissionDeleteRequest'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/admin.AdminDeleteGroupingPolicyData'
-              type: object
+        "204":
+          description: no content
         "400":
-          description: 'code: 400-001(delete grouping policy failed), 400-002(request
+          description: 'code: 400-001(delete permissions failed), 400-002(request
             validation failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
@@ -344,30 +638,23 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: revoke the roles to user
       tags:
-      - admin
-    post:
+      - admin-permission
+    get:
       consumes:
       - application/json
-      description: grant the roles to user
       parameters:
-      - description: csrf token
-        in: header
-        name: X-XSRF-TOKEN
-        required: true
-        type: string
       - description: bearer token
         in: header
         name: Authorization
         required: true
         type: string
-      - description: create grouping policy
+      - description: search permissions
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/admin.AdminCreateGroupingPolicyRequest'
+          $ref: '#/definitions/permission.PermissionSearchRequest'
       produces:
       - application/json
       responses:
@@ -378,11 +665,11 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/admin.AdminCreateGroupingPolicyData'
+                  $ref: '#/definitions/permission.PermissionSearchData'
               type: object
         "400":
-          description: 'code: 400-001(add grouping policy is failed), 400-002(request
-            validation failed), 400-006(one of grouping policy is repeat)'
+          description: 'code: 400-001(search permissions failed), 400-002(request
+            validation failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "401":
@@ -390,21 +677,18 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "403":
-          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
+          description: 'code: 403-001(casbin authorization failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "500":
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: grant the roles to user
       tags:
-      - admin
-  /api/admin/policy:
-    delete:
+      - admin-permission
+    post:
       consumes:
       - application/json
-      description: remove the permissions on the role
       parameters:
       - description: csrf token
         in: header
@@ -416,12 +700,12 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: delete policy
+      - description: create permission
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/admin.AdminDeletePolicyRequest'
+          $ref: '#/definitions/permission.PermissionCreateRequest'
       produces:
       - application/json
       responses:
@@ -432,10 +716,10 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/admin.AdminDeletePolicyData'
+                  $ref: '#/definitions/permission.PermissionCreateData'
               type: object
         "400":
-          description: 'code: 400-001(delete policy failed), 400-002(request validation
+          description: 'code: 400-001(create permission failed), 400-002(request validation
             failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
@@ -451,13 +735,57 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: remove the permissions on the role
       tags:
-      - admin
-    post:
+      - admin-permission
+  /api/admin/permission/{id}:
+    get:
       consumes:
       - application/json
-      description: bind the permissions on the role
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/permission.PermissionGetData'
+              type: object
+        "400":
+          description: 'code: 400-001(get permission failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin-permission
+    put:
+      consumes:
+      - application/json
       parameters:
       - description: csrf token
         in: header
@@ -469,12 +797,17 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: create policy
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: update permission
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/admin.AdminCreatePolicyRequest'
+          $ref: '#/definitions/permission.PermissionUpdateRequest'
       produces:
       - application/json
       responses:
@@ -485,11 +818,11 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/admin.AdminCreatePolicyData'
+                  $ref: '#/definitions/permission.PermissionUpdateData'
               type: object
         "400":
-          description: 'code: 400-001(add policy is failed), 400-002(request validation
-            failed), 400-005(one of policy is repeat)'
+          description: 'code: 400-001(update permission failed), 400-002(request validation
+            failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "401":
@@ -504,14 +837,12 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: bind the permissions on the role
       tags:
-      - admin
-  /api/admin/policy/reload:
+      - admin-permission
+  /api/admin/permission/reload:
     post:
       consumes:
       - application/json
-      description: reload the policies
       parameters:
       - description: csrf token
         in: header
@@ -529,7 +860,7 @@ paths:
         "204":
           description: no content
         "400":
-          description: 'code: 400-001(load policy is failed)'
+          description: 'code: 400-001(reload permission failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "401":
@@ -544,14 +875,12 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: reload the policies
       tags:
-      - admin
-  /api/admin/policy/subject:
+      - admin-permission
+  /api/admin/role:
     delete:
       consumes:
       - application/json
-      description: delete roles
       parameters:
       - description: csrf token
         in: header
@@ -563,12 +892,56 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: delete policy subject
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: delete roles
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/admin.AdminDeletePolicySubjectRequest'
+          $ref: '#/definitions/permission.RoleDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: no content
+        "400":
+          description: 'code: 400-001(delete roles failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "401":
+          description: 'code: 401-001(access token is wrong)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "403":
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: 'code: 500-001'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      tags:
+      - admin-permission
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: search roles
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/permission.RoleSearchRequest'
       produces:
       - application/json
       responses:
@@ -579,8 +952,13 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/admin.AdminDeletePolicySubjectData'
+                  $ref: '#/definitions/permission.RoleSearchData'
               type: object
+        "400":
+          description: 'code: 400-001(search roles failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
         "401":
           description: 'code: 401-001(access token is wrong)'
           schema:
@@ -593,19 +971,28 @@ paths:
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: delete roles
       tags:
-      - admin
-    get:
+      - admin-permission
+    post:
       consumes:
       - application/json
-      description: search roles
       parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
       - description: bearer token
         in: header
         name: Authorization
         required: true
         type: string
+      - description: create role
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/permission.RoleCreateRequest'
       produces:
       - application/json
       responses:
@@ -616,39 +1003,53 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/admin.AdminSearchPolicySubjectData'
+                  $ref: '#/definitions/permission.RoleData'
               type: object
+        "400":
+          description: 'code: 400-001(create role failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
         "401":
           description: 'code: 401-001(access token is wrong)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "403":
-          description: 'code: 403-001(casbin authorization failed)'
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "500":
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: search roles
       tags:
-      - admin
-  /api/admin/policy/subject/{subject}:
-    get:
+      - admin-permission
+  /api/admin/role/{id}:
+    put:
       consumes:
       - application/json
-      description: get permissions in the role
       parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
       - description: bearer token
         in: header
         name: Authorization
         required: true
         type: string
-      - description: subject
+      - description: id
         in: path
-        name: subject
+        name: id
         required: true
         type: string
+      - description: update role
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/permission.RoleUpdateRequest'
       produces:
       - application/json
       responses:
@@ -659,39 +1060,48 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/admin.AdminGetPolicySubjectData'
+                  $ref: '#/definitions/permission.RoleData'
               type: object
+        "400":
+          description: 'code: 400-001(update role failed), 400-002(request validation
+            failed)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
         "401":
           description: 'code: 401-001(access token is wrong)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "403":
-          description: 'code: 403-001(casbin authorization failed)'
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "500":
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: get permissions in the role
       tags:
-      - admin
-  /api/admin/policy/subject/{subject}/user:
-    get:
+      - admin-permission
+  /api/admin/user-role:
+    put:
       consumes:
       - application/json
-      description: get user ids in the role
       parameters:
+      - description: csrf token
+        in: header
+        name: X-XSRF-TOKEN
+        required: true
+        type: string
       - description: bearer token
         in: header
         name: Authorization
         required: true
         type: string
-      - description: subject
-        in: path
-        name: subject
+      - description: update user role
+        in: body
+        name: request
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/user.UserRoleUpdateRequest'
       produces:
       - application/json
       responses:
@@ -702,64 +1112,25 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/admin.AdminGetPolicySubjectUserData'
+                  $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData'
               type: object
+        "400":
+          description: 'code: 400-001(update user role failed), 400-002(request validation
+            failed), 400-005(permission is repeat)'
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
         "401":
           description: 'code: 401-001(access token is wrong)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "403":
-          description: 'code: 403-001(casbin authorization failed)'
+          description: 'code: 403-001(csrf token mismatch, casbin authorization failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "500":
           description: 'code: 500-001'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: get user ids in the role
-      tags:
-      - admin
-  /api/admin/user/{userId}/grouping-policy:
-    get:
-      consumes:
-      - application/json
-      description: get roles that belong to user
-      parameters:
-      - description: bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: userId
-        in: path
-        name: userId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/admin.AdminGetUserGroupingPolicyData'
-              type: object
-        "401":
-          description: 'code: 401-001(access token is wrong)'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "403":
-          description: 'code: 403-001(casbin authorization failed)'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "500":
-          description: 'code: 500-001'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      summary: get roles that belong to user
       tags:
       - admin-user
   /api/ping:
@@ -802,7 +1173,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/user.UserData'
+                  $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData'
               type: object
         "400":
           description: 'code: 400-001(update user failed, get user failed), 400-002(request
@@ -882,7 +1253,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/user.UserData'
+                  $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData'
               type: object
         "400":
           description: 'code: 400-001(get user failed)'
@@ -927,42 +1298,6 @@ paths:
         "400":
           description: 'code: 400-001(update password failed), 400-002(request validation
             failed)'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "401":
-          description: 'code: 401-001(access token is wrong)'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-        "500":
-          description: 'code: 500-001'
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      tags:
-      - user
-  /api/user/policy:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/user.UserGetPolicyData'
-              type: object
-        "400":
-          description: 'code: 400-001(get user policy failed)'
           schema:
             $ref: '#/definitions/response.ErrorResponse'
         "401":

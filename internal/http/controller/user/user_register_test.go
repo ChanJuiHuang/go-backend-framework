@@ -22,7 +22,7 @@ func (suite *UserRegisterTestSuite) SetupSuite() {
 	test.RdbmsMigration.Run()
 }
 
-func (suite *UserRegisterTestSuite) TestRegister() {
+func (suite *UserRegisterTestSuite) Test() {
 	reqBody := user.UserRegisterRequest{
 		Name:     "bob",
 		Email:    "bob@test.com",

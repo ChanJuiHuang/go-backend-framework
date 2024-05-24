@@ -17,13 +17,13 @@ type UserUpdatePasswordTestSuite struct {
 	suite.Suite
 }
 
-func (suite *UserUpdatePasswordTestSuite) SetupSuite() {
+func (suite *UserUpdatePasswordTestSuite) SetupTest() {
 	test.RdbmsMigration.Run()
-	test.UserRegister()
+	test.UserService.Register()
 }
 
-func (suite *UserUpdatePasswordTestSuite) TestUpdatePassword() {
-	accessToken := test.UserLogin()
+func (suite *UserUpdatePasswordTestSuite) Test() {
+	accessToken := test.UserService.Login()
 	reqBody := user.UserUpdatePasswordRequest{
 		CurrentPassword: "abcABC123",
 		Password:        "abcABC000",
@@ -75,7 +75,7 @@ func (suite *UserUpdatePasswordTestSuite) TestCsrfMismatch() {
 }
 
 func (suite *UserUpdatePasswordTestSuite) TestRequestValidationFailed() {
-	accessToken := test.UserLogin()
+	accessToken := test.UserService.Login()
 	userUpdateRequest := user.UserUpdatePasswordRequest{
 		Password:        "abcABC123",
 		ConfirmPassword: "abcABC",
@@ -101,7 +101,7 @@ func (suite *UserUpdatePasswordTestSuite) TestRequestValidationFailed() {
 	suite.Equal(response.MessageToCode[response.RequestValidationFailed], respBody.Code)
 }
 
-func (suite *UserUpdatePasswordTestSuite) TearDownSuite() {
+func (suite *UserUpdatePasswordTestSuite) TearDownTest() {
 	test.RdbmsMigration.Reset()
 }
 

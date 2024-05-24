@@ -1,7 +1,9 @@
 package admin
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin"
+	httpapi "github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/http_api"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/permission"
+	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/admin/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -21,29 +23,33 @@ func NewRouter(router *gin.Engine) *Router {
 }
 
 func (r *Router) AttachRoutes() {
-	r.router.GET("user/:userId/grouping-policy", admin.GetUserGroupingPolicy)
-	r.AttachPolicyRoutes()
-	r.AttachPolicySubjectRoutes()
-	r.AttachGroupingPolicyRoutes()
+	r.AttachHttpApiRoutes()
+	r.AttachPermissionRoutes()
+	r.AttachUserRoutes()
 }
 
-func (r *Router) AttachPolicyRoutes() {
-	policyRouter := r.router.Group("policy")
-	policyRouter.POST("", admin.CreatePolicy)
-	policyRouter.DELETE("", admin.DeletePolicy)
-	policyRouter.POST("reload", admin.ReloadPolicy)
+func (r *Router) AttachHttpApiRoutes() {
+	httpApiRouter := r.router.Group("http-api")
+	httpApiRouter.GET("", httpapi.Search)
 }
 
-func (r *Router) AttachPolicySubjectRoutes() {
-	policySubjectRouter := r.router.Group("policy/subject")
-	policySubjectRouter.GET("", admin.SearchPolicySubject)
-	policySubjectRouter.GET(":subject", admin.GetPolicySubject)
-	policySubjectRouter.GET(":subject/user", admin.GetPolicySubjectUser)
-	policySubjectRouter.DELETE("", admin.DeletePolicySubject)
+func (r *Router) AttachPermissionRoutes() {
+	permissionRouter := r.router.Group("permission")
+	permissionRouter.POST("", permission.Create)
+	permissionRouter.GET("", permission.Search)
+	permissionRouter.GET(":id", permission.Get)
+	permissionRouter.PUT(":id", permission.Update)
+	permissionRouter.DELETE("", permission.Delete)
+	permissionRouter.POST("reload", permission.Reload)
+
+	roleRouter := r.router.Group("role")
+	roleRouter.POST("", permission.CreateRole)
+	roleRouter.GET("", permission.SearchRoles)
+	roleRouter.PUT(":id", permission.UpdateRole)
+	roleRouter.DELETE("", permission.DeleteRoles)
 }
 
-func (r *Router) AttachGroupingPolicyRoutes() {
-	groupingPolicyRouter := r.router.Group("grouping-policy")
-	groupingPolicyRouter.POST("", admin.CreateGroupingPolicy)
-	groupingPolicyRouter.DELETE("", admin.DeleteGroupingPolicy)
+func (r *Router) AttachUserRoutes() {
+	userRoleRouter := r.router.Group("user-role")
+	userRoleRouter.PUT("", user.UpdateUserRole)
 }

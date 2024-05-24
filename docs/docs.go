@@ -15,9 +15,8 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/admin/grouping-policy": {
-            "post": {
-                "description": "grant the roles to user",
+        "/api/admin/http-api": {
+            "get": {
                 "consumes": [
                     "application/json"
                 ],
@@ -25,9 +24,176 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "admin-http-api"
                 ],
-                "summary": "grant the roles to user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "path",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 10,
+                        "type": "integer",
+                        "name": "per_page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/httpapi.HttpApiSearchData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(search http apis failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/permission": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin-permission"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "search permissions",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/permission.PermissionSearchRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/permission.PermissionSearchData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(search permissions failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin-permission"
+                ],
                 "parameters": [
                     {
                         "type": "string",
@@ -44,12 +210,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "create grouping policy",
+                        "description": "create permission",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminCreateGroupingPolicyRequest"
+                            "$ref": "#/definitions/permission.PermissionCreateRequest"
                         }
                     }
                 ],
@@ -65,7 +231,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admin.AdminCreateGroupingPolicyData"
+                                            "$ref": "#/definitions/permission.PermissionCreateData"
                                         }
                                     }
                                 }
@@ -73,7 +239,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(add grouping policy is failed), 400-002(request validation failed), 400-006(one of grouping policy is repeat)",
+                        "description": "code: 400-001(create permission failed), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -99,7 +265,6 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "revoke the roles to user",
                 "consumes": [
                     "application/json"
                 ],
@@ -107,9 +272,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "admin-permission"
                 ],
-                "summary": "revoke the roles to user",
                 "parameters": [
                     {
                         "type": "string",
@@ -126,36 +290,28 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "delete grouping policy",
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "delete permissions",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminDeleteGroupingPolicyRequest"
+                            "$ref": "#/definitions/permission.PermissionDeleteRequest"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminDeleteGroupingPolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
+                    "204": {
+                        "description": "no content"
                     },
                     "400": {
-                        "description": "code: 400-001(delete grouping policy failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(delete permissions failed), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -181,9 +337,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/admin/policy": {
+        "/api/admin/permission/reload": {
             "post": {
-                "description": "bind the permissions on the role",
                 "consumes": [
                     "application/json"
                 ],
@@ -191,175 +346,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "admin-permission"
                 ],
-                "summary": "bind the permissions on the role",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "create policy",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/admin.AdminCreatePolicyRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminCreatePolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "code: 400-001(add policy is failed), 400-002(request validation failed), 400-005(one of policy is repeat)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "remove the permissions on the role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "remove the permissions on the role",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "csrf token",
-                        "name": "X-XSRF-TOKEN",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "delete policy",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/admin.AdminDeletePolicyRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/admin.AdminDeletePolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "code: 400-001(delete policy failed), 400-002(request validation failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/admin/policy/reload": {
-            "post": {
-                "description": "reload the policies",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "reload the policies",
                 "parameters": [
                     {
                         "type": "string",
@@ -381,7 +369,7 @@ const docTemplate = `{
                         "description": "no content"
                     },
                     "400": {
-                        "description": "code: 400-001(load policy is failed)",
+                        "description": "code: 400-001(reload permission failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -407,9 +395,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/admin/policy/subject": {
+        "/api/admin/permission/{id}": {
             "get": {
-                "description": "search roles",
                 "consumes": [
                     "application/json"
                 ],
@@ -417,15 +404,21 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "admin-permission"
                 ],
-                "summary": "search roles",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "bearer token",
                         "name": "Authorization",
                         "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -441,11 +434,17 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admin.AdminSearchPolicySubjectData"
+                                            "$ref": "#/definitions/permission.PermissionGetData"
                                         }
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(get permission failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
@@ -468,8 +467,7 @@ const docTemplate = `{
                     }
                 }
             },
-            "delete": {
-                "description": "delete roles",
+            "put": {
                 "consumes": [
                     "application/json"
                 ],
@@ -477,9 +475,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "admin-permission"
                 ],
-                "summary": "delete roles",
                 "parameters": [
                     {
                         "type": "string",
@@ -496,12 +493,19 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "delete policy subject",
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "update permission",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/admin.AdminDeletePolicySubjectRequest"
+                            "$ref": "#/definitions/permission.PermissionUpdateRequest"
                         }
                     }
                 ],
@@ -517,11 +521,17 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admin.AdminDeletePolicySubjectData"
+                                            "$ref": "#/definitions/permission.PermissionUpdateData"
                                         }
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(update permission failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
@@ -531,7 +541,7 @@ const docTemplate = `{
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -545,9 +555,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/admin/policy/subject/{subject}": {
+        "/api/admin/role": {
             "get": {
-                "description": "get permissions in the role",
                 "consumes": [
                     "application/json"
                 ],
@@ -555,9 +564,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "admin-permission"
                 ],
-                "summary": "get permissions in the role",
                 "parameters": [
                     {
                         "type": "string",
@@ -567,11 +575,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "subject",
-                        "name": "subject",
-                        "in": "path",
-                        "required": true
+                        "description": "search roles",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/permission.RoleSearchRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -586,11 +596,17 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admin.AdminGetPolicySubjectData"
+                                            "$ref": "#/definitions/permission.RoleSearchData"
                                         }
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(search roles failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
@@ -612,11 +628,8 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/api/admin/policy/subject/{subject}/user": {
-            "get": {
-                "description": "get user ids in the role",
+            },
+            "post": {
                 "consumes": [
                     "application/json"
                 ],
@@ -624,10 +637,96 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "admin"
+                    "admin-permission"
                 ],
-                "summary": "get user ids in the role",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create role",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/permission.RoleCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/permission.RoleData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(create role failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin-permission"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "bearer token",
@@ -637,10 +736,93 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "subject",
-                        "name": "subject",
+                        "description": "id",
+                        "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "delete roles",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/permission.RoleDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "no content"
+                    },
+                    "400": {
+                        "description": "code: 400-001(delete roles failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "code: 401-001(access token is wrong)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "code: 500-001",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/role/{id}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin-permission"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "update role",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/permission.RoleUpdateRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -655,11 +837,17 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admin.AdminGetPolicySubjectUserData"
+                                            "$ref": "#/definitions/permission.RoleData"
                                         }
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(update role failed), 400-002(request validation failed)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
@@ -669,7 +857,7 @@ const docTemplate = `{
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -683,9 +871,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/admin/user/{userId}/grouping-policy": {
-            "get": {
-                "description": "get roles that belong to user",
+        "/api/admin/user-role": {
+            "put": {
                 "consumes": [
                     "application/json"
                 ],
@@ -695,8 +882,14 @@ const docTemplate = `{
                 "tags": [
                     "admin-user"
                 ],
-                "summary": "get roles that belong to user",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "csrf token",
+                        "name": "X-XSRF-TOKEN",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "bearer token",
@@ -705,11 +898,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "userId",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
+                        "description": "update user role",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserRoleUpdateRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -724,11 +919,17 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/admin.AdminGetUserGroupingPolicyData"
+                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData"
                                         }
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "400": {
+                        "description": "code: 400-001(update user role failed), 400-002(request validation failed), 400-005(permission is repeat)",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
@@ -738,7 +939,7 @@ const docTemplate = `{
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
+                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -815,7 +1016,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/user.UserData"
+                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData"
                                         }
                                     }
                                 }
@@ -944,7 +1145,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/user.UserData"
+                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData"
                                         }
                                     }
                                 }
@@ -1014,66 +1215,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "code: 400-001(update password failed), 400-002(request validation failed)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "code: 401-001(access token is wrong)",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "code: 500-001",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/policy": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/user.UserGetPolicyData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "code: 400-001(get user policy failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1164,203 +1305,300 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "admin.AdminCreateGroupingPolicyData": {
+        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData": {
             "type": "object",
             "required": [
-                "subjects",
-                "user_id"
+                "created_at",
+                "id",
+                "is_public",
+                "name",
+                "updated_at"
             ],
             "properties": {
-                "subjects": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "email",
+                "id",
+                "name",
+                "roles",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "roles": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData"
                     }
                 },
-                "user_id": {
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "permissions",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.PermissionData"
+                    }
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "email",
+                "id",
+                "name",
+                "roles",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData"
+                    }
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "httpapi.HttpApiData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "method",
+                "path",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "httpapi.HttpApiSearchData": {
+            "type": "object",
+            "required": [
+                "http_apis",
+                "last_page",
+                "total"
+            ],
+            "properties": {
+                "http_apis": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/httpapi.HttpApiData"
+                    }
+                },
+                "last_page": {
+                    "type": "integer"
+                },
+                "total": {
                     "type": "integer"
                 }
             }
         },
-        "admin.AdminCreateGroupingPolicyRequest": {
+        "permission.HttpApiData": {
             "type": "object",
             "required": [
-                "subjects",
-                "user_id"
+                "method",
+                "path"
             ],
             "properties": {
-                "subjects": {
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "permission.PermissionCreateData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "http_apis",
+                "id",
+                "name",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "http_apis": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/permission.HttpApiData"
                     }
                 },
-                "user_id": {
+                "id": {
                     "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
                 }
             }
         },
-        "admin.AdminCreatePolicyData": {
+        "permission.PermissionCreateRequest": {
             "type": "object",
             "required": [
-                "rules",
-                "subject"
+                "http_apis",
+                "name"
             ],
             "properties": {
-                "rules": {
+                "http_apis": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
-                        "$ref": "#/definitions/admin.Rule"
+                        "type": "object",
+                        "required": [
+                            "method",
+                            "path"
+                        ],
+                        "properties": {
+                            "method": {
+                                "type": "string"
+                            },
+                            "path": {
+                                "type": "string"
+                            }
+                        }
                     }
                 },
-                "subject": {
+                "name": {
                     "type": "string"
                 }
             }
         },
-        "admin.AdminCreatePolicyRequest": {
+        "permission.PermissionData": {
             "type": "object",
             "required": [
-                "rules",
-                "subject"
+                "created_at",
+                "id",
+                "name",
+                "updated_at"
             ],
             "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
                 },
-                "subject": {
-                    "type": "string"
-                }
-            }
-        },
-        "admin.AdminDeleteGroupingPolicyData": {
-            "type": "object",
-            "required": [
-                "subjects",
-                "user_id"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "user_id": {
+                "id": {
                     "type": "integer"
-                }
-            }
-        },
-        "admin.AdminDeleteGroupingPolicyRequest": {
-            "type": "object",
-            "required": [
-                "subjects",
-                "user_id"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "admin.AdminDeletePolicyData": {
-            "type": "object",
-            "required": [
-                "rules",
-                "subject"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
-                },
-                "subject": {
+                "name": {
                     "type": "string"
-                }
-            }
-        },
-        "admin.AdminDeletePolicyRequest": {
-            "type": "object",
-            "required": [
-                "rules",
-                "subject"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
                 },
-                "subject": {
-                    "type": "string"
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
                 }
             }
         },
-        "admin.AdminDeletePolicySubjectData": {
+        "permission.PermissionDeleteRequest": {
             "type": "object",
             "required": [
-                "subjects"
+                "ids"
             ],
             "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "admin.AdminDeletePolicySubjectRequest": {
-            "type": "object",
-            "required": [
-                "subjects"
-            ],
-            "properties": {
-                "subjects": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "admin.AdminGetPolicySubjectData": {
-            "type": "object",
-            "required": [
-                "rules",
-                "subject"
-            ],
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/admin.Rule"
-                    }
-                },
-                "subject": {
-                    "type": "string"
-                }
-            }
-        },
-        "admin.AdminGetPolicySubjectUserData": {
-            "type": "object",
-            "required": [
-                "user_ids"
-            ],
-            "properties": {
-                "user_ids": {
+                "ids": {
                     "type": "array",
                     "items": {
                         "type": "integer"
@@ -1368,57 +1606,285 @@ const docTemplate = `{
                 }
             }
         },
-        "admin.AdminGetUserGroupingPolicyData": {
+        "permission.PermissionGetData": {
             "type": "object",
             "required": [
-                "subjects",
-                "user_id"
+                "created_at",
+                "http_apis",
+                "id",
+                "name",
+                "updated_at"
             ],
             "properties": {
-                "subjects": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "http_apis": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/permission.HttpApiData"
                     }
                 },
-                "user_id": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "permission.PermissionSearchData": {
+            "type": "object",
+            "required": [
+                "last_page",
+                "permissions",
+                "total"
+            ],
+            "properties": {
+                "last_page": {
+                    "type": "integer"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/permission.PermissionData"
+                    }
+                },
+                "total": {
                     "type": "integer"
                 }
             }
         },
-        "admin.AdminSearchPolicySubjectData": {
+        "permission.PermissionSearchRequest": {
             "type": "object",
             "required": [
-                "subjects"
+                "page",
+                "per_page"
             ],
             "properties": {
-                "subjects": {
+                "name": {
+                    "type": "string"
+                },
+                "order_by": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "per_page": {
+                    "type": "integer",
+                    "minimum": 10
+                }
+            }
+        },
+        "permission.PermissionUpdateData": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "http_apis",
+                "id",
+                "name",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "http_apis": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/permission.HttpApiData"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "permission.PermissionUpdateRequest": {
+            "type": "object",
+            "required": [
+                "http_apis",
+                "name"
+            ],
+            "properties": {
+                "http_apis": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "method",
+                            "path"
+                        ],
+                        "properties": {
+                            "method": {
+                                "type": "string"
+                            },
+                            "path": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "permission.RoleCreateRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "permission_ids"
+            ],
+            "properties": {
+                "is_public": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permission_ids": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "integer"
                     }
                 }
             }
         },
-        "admin.Rule": {
+        "permission.RoleData": {
             "type": "object",
             "required": [
-                "action",
-                "object"
+                "created_at",
+                "id",
+                "is_public",
+                "name",
+                "permissions",
+                "updated_at"
             ],
             "properties": {
-                "action": {
+                "created_at": {
                     "type": "string",
-                    "enum": [
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "PATCH",
-                        "DELETE"
-                    ]
+                    "format": "date-time"
                 },
-                "object": {
+                "id": {
+                    "type": "integer"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "name": {
                     "type": "string"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/permission.PermissionData"
+                    }
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "permission.RoleDeleteRequest": {
+            "type": "object",
+            "required": [
+                "ids"
+            ],
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "permission.RoleSearchData": {
+            "type": "object",
+            "required": [
+                "last_page",
+                "roles",
+                "total"
+            ],
+            "properties": {
+                "last_page": {
+                    "type": "integer"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/permission.RoleData"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "permission.RoleSearchRequest": {
+            "type": "object",
+            "required": [
+                "page",
+                "per_page"
+            ],
+            "properties": {
+                "is_public": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "order_by": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "per_page": {
+                    "type": "integer",
+                    "minimum": 10
+                }
+            }
+        },
+        "permission.RoleUpdateRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "permission_ids"
+            ],
+            "properties": {
+                "is_public": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permission_ids": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -1472,22 +1938,10 @@ const docTemplate = `{
                 "data": {}
             }
         },
-        "user.TokenData": {
-            "type": "object",
-            "required": [
-                "access_token"
-            ],
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UserData": {
+        "user.PermissionData": {
             "type": "object",
             "required": [
                 "created_at",
-                "email",
                 "id",
                 "name",
                 "updated_at"
@@ -1496,9 +1950,6 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string",
                     "format": "date-time"
-                },
-                "email": {
-                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -1512,17 +1963,14 @@ const docTemplate = `{
                 }
             }
         },
-        "user.UserGetPolicyData": {
+        "user.TokenData": {
             "type": "object",
             "required": [
-                "rules"
+                "access_token"
             ],
             "properties": {
-                "rules": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "access_token": {
+                    "type": "string"
                 }
             }
         },
@@ -1558,6 +2006,24 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "minLength": 8
+                }
+            }
+        },
+        "user.UserRoleUpdateRequest": {
+            "type": "object",
+            "required": [
+                "role_ids",
+                "user_id"
+            ],
+            "properties": {
+                "role_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },

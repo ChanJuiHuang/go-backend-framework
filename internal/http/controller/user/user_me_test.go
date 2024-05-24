@@ -19,11 +19,14 @@ type UserMeTestSuite struct {
 
 func (suite *UserMeTestSuite) SetupSuite() {
 	test.RdbmsMigration.Run()
-	test.UserRegister()
+	test.UserService.Register()
 }
 
-func (suite *UserMeTestSuite) TestMe() {
-	accessToken := test.UserLogin()
+func (suite *UserMeTestSuite) Test() {
+	test.PermissionService.AddPermissions()
+	test.PermissionService.GrantRoleToUser(test.UserService.User.Id, "admin")
+
+	accessToken := test.UserService.Login()
 	req := httptest.NewRequest("GET", "/api/user/me", nil)
 	test.AddCsrfToken(req)
 	test.AddBearerToken(req, accessToken)
@@ -47,6 +50,14 @@ func (suite *UserMeTestSuite) TestMe() {
 	suite.NotEmpty(data.Email)
 	suite.NotEmpty(data.CreatedAt)
 	suite.NotEmpty(data.UpdatedAt)
+	suite.NotEmpty(data.Roles[0].Id)
+	suite.NotEmpty(data.Roles[0].Name)
+	suite.NotEmpty(data.Roles[0].CreatedAt)
+	suite.NotEmpty(data.Roles[0].UpdatedAt)
+	suite.NotEmpty(data.Roles[0].Permissions[0].Id)
+	suite.NotEmpty(data.Roles[0].Permissions[0].Name)
+	suite.NotEmpty(data.Roles[0].Permissions[0].CreatedAt)
+	suite.NotEmpty(data.Roles[0].Permissions[0].UpdatedAt)
 }
 
 func (suite *UserMeTestSuite) TestWrongAccessToken() {

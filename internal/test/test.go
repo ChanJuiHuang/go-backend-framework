@@ -20,6 +20,9 @@ func init() {
 	HttpHandler = NewHttpHandler()
 	RdbmsMigration = NewRdbmsMigration()
 	ClickhouseMigration = NewClickhouseMigration()
+	PermissionService = NewPermissionService()
+	UserService = NewUserService()
+	AdminService = NewAdminService()
 }
 
 func loadEnv() {
