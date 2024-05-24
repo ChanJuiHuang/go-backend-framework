@@ -4,17 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http/httptest"
-	"strconv"
 
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
 	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/permission"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
-	"github.com/casbin/casbin/v2"
-	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/mitchellh/mapstructure"
 	"gorm.io/gorm"
 )
@@ -57,52 +52,4 @@ func AdminLogin() string {
 
 	return data.AccessToken
 
-}
-
-func AdminAddPolicies() {
-	policies := []gormadapter.CasbinRule{
-		{Ptype: "p", V0: "admin", V1: "/api/admin/http-api", V2: "GET"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/permission", V2: "POST"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/permission", V2: "GET"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/permission/:id", V2: "GET"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/permission/:id", V2: "PUT"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/permission", V2: "DELETE"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/permission/reload", V2: "POST"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "POST"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "GET"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/role/:id", V2: "PUT"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/role", V2: "DELETE"},
-		{Ptype: "p", V0: "admin", V1: "/api/admin/user-role", V2: "PUT"},
-	}
-	if err := permission.CreateCasbinRule(database.NewTx(), policies); err != nil {
-		panic(err)
-	}
-
-	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	if err := enforcer.LoadPolicy(); err != nil {
-		panic(err)
-	}
-}
-
-func AddRoleToUser(userId uint, role string) {
-	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)
-	result, err := enforcer.AddRoleForUser(strconv.Itoa(int(userId)), role)
-	if err != nil {
-		panic(err)
-	}
-	if !result {
-		panic("add casbin testing policies failed")
-	}
-}
-
-func AdminAddRole() {
-	user := &model.User{}
-	database := service.Registry.Get("database").(*gorm.DB)
-	db := database.Where("email = ?", "admin@test.com").
-		First(user)
-	if err := db.Error; err != nil {
-		panic(err)
-	}
-
-	AddRoleToUser(user.Id, "admin")
 }
