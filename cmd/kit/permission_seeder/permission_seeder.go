@@ -35,7 +35,35 @@ type permissionSeeder struct {
 	roles       []model.Role
 }
 
-func (ps *permissionSeeder) appendPermissions() {
+func (ps *permissionSeeder) addRoles() {
+	currentRoles, err := permission.GetRoles(database.NewTx(), "")
+	if err != nil {
+		panic(err)
+	}
+
+	appendedRoles := []model.Role{}
+	for _, role := range ps.roles {
+		doesAppend := true
+		for _, currentRole := range currentRoles {
+			if role.Name == currentRole.Name {
+				doesAppend = false
+				break
+			}
+		}
+		if doesAppend {
+			appendedRoles = append(appendedRoles, role)
+		}
+	}
+
+	if len(appendedRoles) == 0 {
+		return
+	}
+	if err := permission.CreateRole(database.NewTx(), appendedRoles); err != nil {
+		panic(err)
+	}
+}
+
+func (ps *permissionSeeder) appendPermissionsToRoles() {
 	if len(ps.permissions) == 0 {
 		return
 	}
@@ -114,34 +142,6 @@ func (ps *permissionSeeder) appendPermissions() {
 	}
 }
 
-func (ps *permissionSeeder) addRoles() {
-	currentRoles, err := permission.GetRoles(database.NewTx(), "")
-	if err != nil {
-		panic(err)
-	}
-
-	appendedRoles := []model.Role{}
-	for _, role := range ps.roles {
-		doesAppend := true
-		for _, currentRole := range currentRoles {
-			if role.Name == currentRole.Name {
-				doesAppend = false
-				break
-			}
-		}
-		if doesAppend {
-			appendedRoles = append(appendedRoles, role)
-		}
-	}
-
-	if len(appendedRoles) == 0 {
-		return
-	}
-	if err := permission.CreateRole(database.NewTx(), appendedRoles); err != nil {
-		panic(err)
-	}
-}
-
 func main() {
 	permissions := []model.Permission{
 		{Name: "http-api-read"},
@@ -211,27 +211,26 @@ func main() {
 	permissionSeeder := &permissionSeeder{
 		permissions: appendedPermissions,
 		casbinRules: appendedCasbinRules,
-	}
-
-	permissionSeeder.roles = []model.Role{
-		{Name: "admin"},
+		roles: []model.Role{
+			{Name: "admin"},
+		},
 	}
 
 	app := &cli.App{
 		Commands: []*cli.Command{
 			{
-				Name:  "append-permissions",
-				Usage: "append permissions",
-				Action: func(cCtx *cli.Context) error {
-					permissionSeeder.appendPermissions()
-					return nil
-				},
-			},
-			{
 				Name:  "add-roles",
 				Usage: "add roles",
 				Action: func(cCtx *cli.Context) error {
 					permissionSeeder.addRoles()
+					return nil
+				},
+			},
+			{
+				Name:  "append-permissions-to-roles",
+				Usage: "append permissions to roles",
+				Action: func(cCtx *cli.Context) error {
+					permissionSeeder.appendPermissionsToRoles()
 					return nil
 				},
 			},
