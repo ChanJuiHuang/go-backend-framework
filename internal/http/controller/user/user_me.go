@@ -16,9 +16,9 @@ import (
 // @produce json
 // @param Authorization header string true "bearer token"
 // @success 200 {object} response.Response{data=UserData}
-// @failure 400 {object} response.ErrorResponse "code: 400-001(get user failed)"
-// @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
-// @failure 500 {object} response.ErrorResponse "code: 500-001"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(Bad Request)"
+// @failure 401 {object} response.ErrorResponse "code: 401-001(Unauthorized)"
+// @failure 500 {object} response.ErrorResponse "code: 500-001(Internal Server Error)"
 // @router /api/user/me [get]
 func Me(c *gin.Context) {
 	u, err := user.Get(database.NewTx("Roles.Permissions"), "id = ?", c.GetUint("user_id"))

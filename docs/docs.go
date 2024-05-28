@@ -84,25 +84,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(search http apis failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -159,25 +159,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(search permissions failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -239,25 +239,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(create permission failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -311,25 +311,25 @@ const docTemplate = `{
                         "description": "no content"
                     },
                     "400": {
-                        "description": "code: 400-001(delete permissions failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -369,25 +369,25 @@ const docTemplate = `{
                         "description": "no content"
                     },
                     "400": {
-                        "description": "code: 400-001(reload permission failed)",
+                        "description": "code: 400-001(Bad Request)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -442,25 +442,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(get permission failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -529,25 +529,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(update permission failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -604,25 +604,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(search roles failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -684,25 +684,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(create role failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -756,25 +756,25 @@ const docTemplate = `{
                         "description": "no content"
                     },
                     "400": {
-                        "description": "code: 400-001(delete roles failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -845,25 +845,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(update role failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -927,25 +927,25 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(update user role failed), 400-002(request validation failed), 400-005(permission is repeat)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed), 400-005(permission is repeat)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch, casbin authorization failed)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1024,19 +1024,19 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(update user failed, get user failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1093,19 +1093,19 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(issue access token failed), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed), 400-003(email is wrong), 400-004(password is wrong)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1153,19 +1153,19 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(get user failed)",
+                        "description": "code: 400-001(Bad Request)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1214,19 +1214,19 @@ const docTemplate = `{
                         "description": "no content"
                     },
                     "400": {
-                        "description": "code: 400-001(update password failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "401": {
-                        "description": "code: 401-001(access token is wrong)",
+                        "description": "code: 401-001(Unauthorized)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
@@ -1283,19 +1283,19 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "code: 400-001(issue access token failed), 400-002(request validation failed)",
+                        "description": "code: 400-001(Bad Request), 400-002(request validation failed)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "403": {
-                        "description": "code: 403-001(csrf token mismatch)",
+                        "description": "code: 403-001(Forbidden)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "code: 500-001",
+                        "description": "code: 500-001(Internal Server Error)",
                         "schema": {
                             "$ref": "#/definitions/response.ErrorResponse"
                         }

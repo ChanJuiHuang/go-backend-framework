@@ -17,10 +17,10 @@ import (
 // @param X-XSRF-TOKEN header string true "csrf token"
 // @param Authorization header string true "bearer token"
 // @success 204 "no content"
-// @failure 400 {object} response.ErrorResponse "code: 400-001(reload permission failed)"
-// @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
-// @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch, casbin authorization failed)"
-// @failure 500 {object} response.ErrorResponse "code: 500-001"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(Bad Request)"
+// @failure 401 {object} response.ErrorResponse "code: 401-001(Unauthorized)"
+// @failure 403 {object} response.ErrorResponse "code: 403-001(Forbidden)"
+// @failure 500 {object} response.ErrorResponse "code: 500-001(Internal Server Error)"
 // @router /api/admin/permission/reload [post]
 func Reload(c *gin.Context) {
 	enforcer := service.Registry.Get("casbinEnforcer").(*casbin.SyncedCachedEnforcer)

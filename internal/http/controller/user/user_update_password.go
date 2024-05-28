@@ -27,9 +27,9 @@ type UserUpdatePasswordRequest struct {
 // @param Authorization header string true "bearer token"
 // @param request body user.UserUpdatePasswordRequest true "update user"
 // @success 204 "no content"
-// @failure 400 {object} response.ErrorResponse "code: 400-001(update password failed), 400-002(request validation failed)"
-// @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
-// @failure 500 {object} response.ErrorResponse "code: 500-001"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(Bad Request), 400-002(request validation failed)"
+// @failure 401 {object} response.ErrorResponse "code: 401-001(Unauthorized)"
+// @failure 500 {object} response.ErrorResponse "code: 500-001(Internal Server Error)"
 // @router /api/user/password [put]
 func UpdatePassword(c *gin.Context) {
 	logger := service.Registry.Get("logger").(*zap.Logger)
