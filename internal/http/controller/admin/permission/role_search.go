@@ -33,10 +33,10 @@ type RoleSearchData struct {
 // @param Authorization header string true "bearer token"
 // @param request body permission.RoleSearchRequest true "search roles"
 // @success 200 {object} response.Response{data=permission.RoleSearchData}
-// @failure 400 {object} response.ErrorResponse "code: 400-001(search roles failed), 400-002(request validation failed)"
-// @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
-// @failure 403 {object} response.ErrorResponse "code: 403-001(casbin authorization failed)"
-// @failure 500 {object} response.ErrorResponse "code: 500-001"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(Bad Request), 400-002(request validation failed)"
+// @failure 401 {object} response.ErrorResponse "code: 401-001(Unauthorized)"
+// @failure 403 {object} response.ErrorResponse "code: 403-001(Forbidden)"
+// @failure 500 {object} response.ErrorResponse "code: 500-001(Internal Server Error)"
 // @router /api/admin/role [get]
 func SearchRoles(c *gin.Context) {
 	queryString := new(RoleSearchRequest)

@@ -35,10 +35,10 @@ type RoleUpdateRequest struct {
 // @param id path string true "id"
 // @param request body permission.RoleUpdateRequest true "update role"
 // @success 200 {object} response.Response{data=permission.RoleData}
-// @failure 400 {object} response.ErrorResponse "code: 400-001(update role failed), 400-002(request validation failed)"
-// @failure 401 {object} response.ErrorResponse "code: 401-001(access token is wrong)"
-// @failure 403 {object} response.ErrorResponse "code: 403-001(csrf token mismatch, casbin authorization failed)"
-// @failure 500 {object} response.ErrorResponse "code: 500-001"
+// @failure 400 {object} response.ErrorResponse "code: 400-001(Bad Request), 400-002(request validation failed)"
+// @failure 401 {object} response.ErrorResponse "code: 401-001(Unauthorized)"
+// @failure 403 {object} response.ErrorResponse "code: 403-001(Forbidden)"
+// @failure 500 {object} response.ErrorResponse "code: 500-001(Internal Server Error)"
 // @router /api/admin/role/{id} [put]
 func UpdateRole(c *gin.Context) {
 	reqBody := new(RoleUpdateRequest)
