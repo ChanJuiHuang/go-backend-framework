@@ -2049,6 +2049,10 @@ const docTemplate = `{
         },
         "user.UserUpdateRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "name"
+            ],
             "properties": {
                 "email": {
                     "type": "string"

@@ -14,8 +14,8 @@ import (
 )
 
 type UserUpdateRequest struct {
-	Name  string `json:"name" structs:"name,omitempty"`
-	Email string `json:"email" structs:"email,omitempty"`
+	Name  string `json:"name" binding:"required" structs:"name"`
+	Email string `json:"email" binding:"required" structs:"email"`
 }
 
 // @tags user
