@@ -32,10 +32,6 @@ func (cm *clickhouseMigration) Run(callbacks ...func()) {
 		panic(err)
 	}
 
-	if _, err := conn.Exec(fmt.Sprintf("DROP DATABASE IF EXISTS %s", clickhouseConfig.Database)); err != nil {
-		panic(err)
-	}
-
 	if _, err := conn.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s", clickhouseConfig.Database)); err != nil {
 		panic(err)
 	}
@@ -64,7 +60,15 @@ func (cm *clickhouseMigration) Reset() {
 		panic(err)
 	}
 
-	if _, err := conn.Exec(fmt.Sprintf("DROP DATABASE IF EXISTS %s", clickhouseConfig.Database)); err != nil {
+	if _, err := conn.Exec(fmt.Sprintf("USE %s", clickhouseConfig.Database)); err != nil {
+		panic(err)
+	}
+
+	if err := goose.SetDialect(string(goose.DialectClickHouse)); err != nil {
+		panic(err)
+	}
+
+	if err := goose.Reset(conn, cm.dir); err != nil {
 		panic(err)
 	}
 }
