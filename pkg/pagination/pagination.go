@@ -67,7 +67,7 @@ func (p *Paginator) OrderBy(orderBy string) *Paginator {
 
 func (p *Paginator) GetTotalAndLastPage() (int64, int) {
 	var total int64
-	p.db.Session(&gorm.Session{}).Count(&total)
+	p.db.Session(&gorm.Session{}).Select("*").Count(&total)
 
 	return total, int(math.Ceil(float64(total) / float64(p.perPage)))
 }
