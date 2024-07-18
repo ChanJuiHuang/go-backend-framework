@@ -1,10 +1,10 @@
 logger:
   # define the default logger
-  default: file
+  default: console
   console:
     # log type can be [console], [file]
     type: console
-    level: debug
+    level: error
   file:
     type: file
     logPath: storage/log/app.log
@@ -14,7 +14,7 @@ logger:
     maxAge: 720h
     compress: false
     # log level can be [debug], [info], [warn], [error], [dpanic], [panic], [fatal]
-    level: debug
+    level: error
   access:
     type: console
     logPath: storage/log/access.log
@@ -22,10 +22,10 @@ logger:
     maxBackups: 30
     maxAge: 720h
     compress: false
-    level: debug
+    level: error
 
 database:
-  driver: mysql
+  driver: sqlite
   username: ${DB_USERNAME}
   password: ${DB_PASSWORD}
   host: ${DB_HOST}
@@ -35,7 +35,7 @@ database:
   maxIdleConns: 20
   connMaxLifetime: 2h
   # log level can be [info], [warn], [error], [silent]
-  logLevel: info
+  logLevel: warn
 
 authentication:
   authenticator:

@@ -4,7 +4,6 @@ import (
 	"flag"
 	"os"
 	"path"
-	"runtime"
 	"strings"
 
 	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
@@ -53,25 +52,6 @@ func NewDefaultConfig() *Config {
 	}
 
 	return NewConfig(wd, "config.yml", false, false)
-}
-
-func NewProductionConfig() *Config {
-	wd, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-
-	return NewConfig(wd, "config.production.yml", false, false)
-}
-
-func NewTestingConfig() *Config {
-	_, file, _, ok := runtime.Caller(0)
-	if !ok {
-		panic("runtime caller cannot get file information")
-	}
-	wd := path.Join(path.Dir(file), "../..")
-
-	return NewConfig(wd, "config.testing.yml", false, true)
 }
 
 type NewConfigFunc func() *Config
