@@ -72,11 +72,10 @@ func (p *Paginator) GetTotalAndLastPage() (int64, int) {
 	return total, int(math.Ceil(float64(total) / float64(p.perPage)))
 }
 
-func (p *Paginator) Execute(data any, query any, args ...any) *gorm.DB {
+func (p *Paginator) Execute(data any) *gorm.DB {
 	return p.db.Session(&gorm.Session{}).
-		Offset((p.page-1)*p.perPage).
+		Offset((p.page - 1) * p.perPage).
 		Limit(p.perPage).
-		Select(query, args...).
 		Find(data)
 }
 

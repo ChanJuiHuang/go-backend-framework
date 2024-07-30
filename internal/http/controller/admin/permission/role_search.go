@@ -66,7 +66,7 @@ func SearchRoles(c *gin.Context) {
 
 	roles := []model.Role{}
 	db := paginator.AddWhereConditions(structs.Map(queryString)).
-		Execute(&roles, "*")
+		Execute(&roles)
 	if err := db.Error; err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
 		logger.Warn(errResp.Message, errResp.MakeLogFields(c.Request)...)

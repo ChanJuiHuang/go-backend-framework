@@ -62,7 +62,7 @@ func Search(c *gin.Context) {
 
 	permissions := []model.Permission{}
 	db := paginator.AddWhereConditions(structs.Map(queryString)).
-		Execute(&permissions, "*")
+		Execute(&permissions)
 	if err := db.Error; err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
 		logger.Warn(errResp.Message, errResp.MakeLogFields(c.Request)...)
