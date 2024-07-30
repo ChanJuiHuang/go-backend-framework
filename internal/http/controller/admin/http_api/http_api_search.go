@@ -65,7 +65,7 @@ func Search(c *gin.Context) {
 	paginator.AddWhereConditions(structs.Map(queryString))
 
 	httpApis := []model.HttpApi{}
-	if err := paginator.Execute(&httpApis, "*").Error; err != nil {
+	if err := paginator.Execute(&httpApis).Error; err != nil {
 		errResp := response.NewErrorResponse(response.BadRequest, errors.WithStack(err), nil)
 		logger.Warn(errResp.Message, errResp.MakeLogFields(c.Request)...)
 		c.AbortWithStatusJSON(errResp.StatusCode(), errResp)
