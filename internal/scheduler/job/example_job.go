@@ -14,10 +14,10 @@ func NewExampleJob() *ExampleJob {
 	}
 }
 
-func (ej *ExampleJob) GetFrequency() string {
-	return ej.frequency
+func (job *ExampleJob) GetFrequency() string {
+	return job.frequency
 }
 
-func (ej *ExampleJob) Execute() {
-	fmt.Printf("The %s job is executed\n", ej.name)
+func (job *ExampleJob) Execute() {
+	fmt.Printf("The %s is finished\n", job.name)
 }
