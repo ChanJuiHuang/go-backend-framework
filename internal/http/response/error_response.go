@@ -71,7 +71,7 @@ func (er *ErrorResponse) StatusCode() int {
 	return int(code)
 }
 
-func (er *ErrorResponse) MakeLogFields(req *http.Request) []zap.Field {
+func (er *ErrorResponse) MakeLogFields(req *http.Request, fields ...zap.Field) []zap.Field {
 	requestBody, err := io.ReadAll(req.Body)
 	if err != nil {
 		logger := service.Registry.Get("logger").(*zap.Logger)
@@ -103,14 +103,19 @@ func (er *ErrorResponse) MakeLogFields(req *http.Request) []zap.Field {
 		errorString = debug.err.Error()
 	}
 
-	return []zap.Field{
-		zap.String("code", er.Code),
-		zap.String("error", errorString),
-		zap.Int("status_code", er.StatusCode()),
-		zap.String("method", req.Method),
-		zap.String("path", req.URL.Path),
-		zap.String("query_string", req.URL.Query().Encode()),
-		zap.ByteString("request_body", requestBody),
-		zap.Strings("stacktrace", debug.Stacktrace),
-	}
+	fields = append(
+		[]zap.Field{
+			zap.String("code", er.Code),
+			zap.String("error", errorString),
+			zap.Int("status_code", er.StatusCode()),
+			zap.String("method", req.Method),
+			zap.String("path", req.URL.Path),
+			zap.String("query_string", req.URL.Query().Encode()),
+			zap.ByteString("request_body", requestBody),
+			zap.Strings("stacktrace", debug.Stacktrace),
+		},
+		fields...,
+	)
+
+	return fields
 }
