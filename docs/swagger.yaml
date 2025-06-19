@@ -1,5 +1,5 @@
 definitions:
-  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData:
+  github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_admin_user.RoleData:
     properties:
       created_at:
         format: date-time
@@ -20,7 +20,7 @@ definitions:
     - name
     - updated_at
     type: object
-  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData:
+  github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_admin_user.UserData:
     properties:
       created_at:
         format: date-time
@@ -33,7 +33,7 @@ definitions:
         type: string
       roles:
         items:
-          $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData'
+          $ref: '#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_admin_user.RoleData'
         type: array
       updated_at:
         format: date-time
@@ -46,7 +46,7 @@ definitions:
     - roles
     - updated_at
     type: object
-  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData:
+  github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.RoleData:
     properties:
       created_at:
         format: date-time
@@ -69,7 +69,7 @@ definitions:
     - permissions
     - updated_at
     type: object
-  github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData:
+  github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.UserData:
     properties:
       created_at:
         format: date-time
@@ -82,7 +82,7 @@ definitions:
         type: string
       roles:
         items:
-          $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData'
+          $ref: '#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.RoleData'
         type: array
       updated_at:
         format: date-time
@@ -1105,7 +1105,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData'
+                  $ref: '#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_admin_user.UserData'
               type: object
         "400":
           description: 'code: 400-001(Bad Request), 400-002(request validation failed),
@@ -1166,7 +1166,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData'
+                  $ref: '#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.UserData'
               type: object
         "400":
           description: 'code: 400-001(Bad Request), 400-002(request validation failed)'
@@ -1245,7 +1245,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData'
+                  $ref: '#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.UserData'
               type: object
         "400":
           description: 'code: 400-001(Bad Request)'
