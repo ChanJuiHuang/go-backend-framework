@@ -192,40 +192,6 @@ go-backend-framework
 │       ├── migration.go
 │       ├── test.go
 │       └── user.go
-├── pkg
-│   ├── app
-│   │   └── app.go
-│   ├── argon2
-│   │   ├── argon2.go
-│   │   └── argon2_test.go
-│   ├── authentication
-│   │   ├── authenticator.go
-│   │   ├── authenticator_test.go
-│   │   └── config.go
-│   ├── booter
-│   │   ├── booter.go
-│   │   ├── config
-│   │   │   └── registry.go
-│   │   └── service
-│   │       └── registry.go
-│   ├── database
-│   │   ├── config.go
-│   │   └── database.go
-│   ├── logger
-│   │   ├── config.go
-│   │   └── logger.go
-│   ├── pagination
-│   │   └── pagination.go
-│   ├── random
-│   │   ├── random.go
-│   │   └── random_test.go
-│   ├── redis
-│   │   ├── config.go
-│   │   └── redis.go
-│   ├── scheduler
-│   │   └── scheduler.go
-│   └── stacktrace
-│       └── stacktrace.go
 └── storage
     └── log
         ├── access.log

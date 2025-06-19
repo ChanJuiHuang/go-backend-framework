@@ -9,7 +9,7 @@ import (
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/model"
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/permission"
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/user"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/service"
 	"gorm.io/gorm"
 )
 

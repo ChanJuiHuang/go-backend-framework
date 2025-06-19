@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/response"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/random"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-package/pkg/random"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"

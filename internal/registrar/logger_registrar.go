@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"path"
 
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/config"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/logger"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/config"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-package/pkg/logger"
 )
 
 type LoggerRegistrar struct {

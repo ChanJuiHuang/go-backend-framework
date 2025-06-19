@@ -10,7 +10,7 @@ import (
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/controller/user"
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/response"
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/test"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/service"
 	"github.com/stretchr/testify/suite"
 )
 
