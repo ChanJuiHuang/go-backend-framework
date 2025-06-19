@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/config"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/stacktrace"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/config"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-package/pkg/stacktrace"
 	"go.uber.org/zap"
 )
 

@@ -4,10 +4,10 @@ import (
 	"path"
 
 	"github.com/casbin/casbin/v2"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/config"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/database"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/config"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-package/pkg/database"
 	"github.com/pressly/goose/v3"
 	"gorm.io/gorm"
 )

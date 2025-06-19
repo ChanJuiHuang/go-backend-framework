@@ -10,7 +10,7 @@ import (
 
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/migration/rdbms/seeder"
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/registrar"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter"
 )
 
 func init() {

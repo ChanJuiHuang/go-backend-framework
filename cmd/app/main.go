@@ -10,10 +10,10 @@ import (
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http"
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/registrar"
 	"github.com/chan-jui-huang/go-backend-framework/v2/internal/scheduler"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/app"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/config"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-package/pkg/app"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/config"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/service"
 )
 
 func init() {

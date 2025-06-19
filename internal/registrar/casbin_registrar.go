@@ -4,7 +4,7 @@ import (
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
-	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-package/pkg/booter/service"
 	"gorm.io/gorm"
 )
 
