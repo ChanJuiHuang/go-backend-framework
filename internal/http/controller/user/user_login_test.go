@@ -7,9 +7,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/controller/user"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/controller/user"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/test"
 	"github.com/mitchellh/mapstructure"
 	"github.com/stretchr/testify/suite"
 )

@@ -3,7 +3,7 @@ package httpapi
 import (
 	"time"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/model"
 )
 
 type HttpApiData struct {

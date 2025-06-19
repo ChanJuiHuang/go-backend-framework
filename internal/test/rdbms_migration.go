@@ -3,10 +3,10 @@ package test
 import (
 	"path"
 
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/database"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/database"
 	"github.com/casbin/casbin/v2"
 	"github.com/pressly/goose/v3"
 	"gorm.io/gorm"

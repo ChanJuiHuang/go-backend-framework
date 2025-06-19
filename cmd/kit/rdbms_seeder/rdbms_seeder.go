@@ -8,9 +8,9 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/urfave/cli/v2"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/migration/rdbms/seeder"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/migration/rdbms/seeder"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/registrar"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
 )
 
 func init() {

@@ -3,10 +3,10 @@ package permission
 import (
 	"net/http"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/permission"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/response"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/database"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/permission"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

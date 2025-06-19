@@ -1,11 +1,11 @@
 package registrar
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/middleware"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
 	"github.com/go-playground/form/v4"
 	"github.com/go-playground/mold/v4/modifiers"
 )

@@ -7,13 +7,13 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"go.uber.org/zap"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/scheduler"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/app"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/registrar"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/scheduler"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/app"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
 )
 
 func init() {

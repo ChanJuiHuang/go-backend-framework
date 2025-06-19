@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/middleware"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/route"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

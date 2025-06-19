@@ -3,11 +3,11 @@ package test
 import (
 	"fmt"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/database"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/permission"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/user"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/database"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/model"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/permission"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/user"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"gorm.io/gorm"

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/config"
 	"github.com/gin-gonic/gin"
 )
 

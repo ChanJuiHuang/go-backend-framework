@@ -1,9 +1,9 @@
 package seeder
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/permission"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/route"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/model"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/permission"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
