@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/route"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/registrar"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/route"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/registrar"
+	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter"
 	"github.com/gin-gonic/gin"
 )
 

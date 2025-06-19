@@ -3,10 +3,10 @@ package user
 import (
 	"net/http"
 
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/database"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/user"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/response"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/database"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/user"
+	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

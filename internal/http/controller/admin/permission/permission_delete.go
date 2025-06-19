@@ -3,12 +3,12 @@ package permission
 import (
 	"net/http"
 
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/database"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/model"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/permission"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
 	"github.com/casbin/casbin/v2"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/response"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/database"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/model"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/permission"
+	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/samber/lo"

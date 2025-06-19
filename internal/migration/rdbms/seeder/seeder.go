@@ -3,7 +3,7 @@ package seeder
 import (
 	"fmt"
 
-	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
+	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter/service"
 	"gorm.io/gorm"
 )
 
