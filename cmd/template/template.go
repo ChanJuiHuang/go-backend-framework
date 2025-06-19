@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/registrar"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/registrar"
+	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/booter"
 	_ "github.com/joho/godotenv/autoload"
 )
 

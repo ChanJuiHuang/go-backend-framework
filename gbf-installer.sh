@@ -5,17 +5,17 @@ read PROJECT_NAME
 PROJECT_NAME=${PROJECT_NAME:=go-backend}
 mkdir $PROJECT_NAME
 
-printf "Enter the framework version what you want (release page: https://github.com/ChanJuiHuang/go-backend-framework/releases ):"
+printf "Enter the framework version what you want (release page: https://github.com/chan-jui-huang/go-backend-framework/releases ):"
 read VERSION
 
-curl -L https://github.com/ChanJuiHuang/go-backend-framework/archive/refs/tags/v$VERSION.tar.gz | tar -zxv -C $PROJECT_NAME --strip-components=1
+curl -L https://github.com/chan-jui-huang/go-backend-framework/archive/refs/tags/v$VERSION.tar.gz | tar -zxv -C $PROJECT_NAME --strip-components=1
 cd $PROJECT_NAME
 rm LICENSE
 cp .env.example .env
 cp .env.testing.example .env.testing
 cp .air.exmaple.toml .air.toml
 
-OLD_MODULE_NAME=github.com/ChanJuiHuang/go-backend-framework
+OLD_MODULE_NAME=github.com/chan-jui-huang/go-backend-framework
 printf "Enter your go module name (\e[33mex: github.com/author/my-project\e[0m):"
 read NEW_MODULE_NAME
 

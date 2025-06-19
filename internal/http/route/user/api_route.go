@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/controller/user"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/middleware"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/controller/user"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/middleware"
 	"github.com/gin-gonic/gin"
 )
 

@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"net/http/httptest"
 
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/controller/user"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/response"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/database"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/model"
-	pkgUser "github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/user"
-	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/argon2"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/controller/user"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/http/response"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/database"
+	"github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/model"
+	pkgUser "github.com/chan-jui-huang/go-backend-framework/v2/internal/pkg/user"
+	"github.com/chan-jui-huang/go-backend-framework/v2/pkg/argon2"
 	"github.com/mitchellh/mapstructure"
 )
 
