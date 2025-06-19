@@ -41,22 +41,25 @@ clean:
 	rm -rf ${BIN_DIR}
 
 mysql-migration:
-	goose -dir internal/migration/rdbms -allow-missing mysql "${DB_USERNAME}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_DATABASE}?parseTime=true&loc=UTC" ${args}
+	go tool goose -dir internal/migration/rdbms -allow-missing mysql "${DB_USERNAME}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_DATABASE}?parseTime=true&loc=UTC" ${args}
 
 pgsql-migration:
-	goose -dir internal/migration/rdbms -allow-missing postgres "user=${DB_USERNAME} password=${DB_PASSWORD} host=${DB_HOST} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable" ${args}
+	go tool goose -dir internal/migration/rdbms -allow-missing postgres "user=${DB_USERNAME} password=${DB_PASSWORD} host=${DB_HOST} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable" ${args}
 
 sqlite-migration:
-	goose -dir internal/migration/rdbms -allow-missing sqlite3 ${DB_DATABASE} ${args}
+	go tool goose -dir internal/migration/rdbms -allow-missing sqlite3 ${DB_DATABASE} ${args}
 
 clickhouse-migration:
-	goose -dir internal/migration/clickhouse -allow-missing clickhouse "tcp://${CLICKHOUSE_ADDR_01}/${CLICKHOUSE_DATABASE}?username=${CLICKHOUSE_USERNAME}&password=${CLICKHOUSE_PASSWORD}" ${args}
+	go tool goose -dir internal/migration/clickhouse -allow-missing clickhouse "tcp://${CLICKHOUSE_ADDR_01}/${CLICKHOUSE_DATABASE}?username=${CLICKHOUSE_USERNAME}&password=${CLICKHOUSE_PASSWORD}" ${args}
 
 linter:
-	golangci-lint run ./...
+	go tool golangci-lint run ./...
 
 swagger:
-	swag init -g cmd/app/main.go
+	go tool swag init --pd -g cmd/app/main.go
+
+air:
+	go tool air
 
 test:
 	$(eval args?=./...)
