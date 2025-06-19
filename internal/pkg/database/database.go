@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
 	"gorm.io/gorm"
 )
 

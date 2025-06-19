@@ -1,9 +1,9 @@
 package route
 
 import (
-	_ "github.com/ChanJuiHuang/go-backend-framework/docs"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
+	_ "github.com/ChanJuiHuang/go-backend-framework/v2/docs"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/config"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

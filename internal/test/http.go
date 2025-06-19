@@ -3,10 +3,10 @@ package test
 import (
 	"net/http"
 
-	pkgHttp "github.com/ChanJuiHuang/go-backend-framework/internal/http"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/middleware"
-	"github.com/ChanJuiHuang/go-backend-framework/internal/http/route"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
+	pkgHttp "github.com/ChanJuiHuang/go-backend-framework/v2/internal/http"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/middleware"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/http/route"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/config"
 	"github.com/gin-gonic/gin"
 )
 

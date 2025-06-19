@@ -3,9 +3,9 @@ package seeder
 import (
 	"fmt"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/argon2"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/random"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/model"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/argon2"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/random"
 	"gorm.io/gorm"
 )
 

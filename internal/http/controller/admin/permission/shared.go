@@ -3,7 +3,7 @@ package permission
 import (
 	"time"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/pkg/model"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/pkg/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 )
 

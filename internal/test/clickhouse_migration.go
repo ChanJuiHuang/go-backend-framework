@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"path"
 
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/clickhouse"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/clickhouse"
 	"github.com/pressly/goose/v3"
 )
 

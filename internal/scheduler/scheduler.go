@@ -1,8 +1,8 @@
 package scheduler
 
 import (
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/scheduler"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/scheduler"
 	"go.uber.org/zap"
 )
 

@@ -3,13 +3,13 @@ package registrar_test
 import (
 	"testing"
 
-	_ "github.com/ChanJuiHuang/go-backend-framework/internal/test"
+	_ "github.com/ChanJuiHuang/go-backend-framework/v2/internal/test"
 	"github.com/spf13/viper"
 
-	"github.com/ChanJuiHuang/go-backend-framework/internal/registrar"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/config"
-	"github.com/ChanJuiHuang/go-backend-framework/pkg/booter/service"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/internal/registrar"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/config"
+	"github.com/ChanJuiHuang/go-backend-framework/v2/pkg/booter/service"
 	"github.com/stretchr/testify/suite"
 )
 
