@@ -919,7 +919,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData"
+                                            "$ref": "#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_admin_user.UserData"
                                         }
                                     }
                                 }
@@ -1016,7 +1016,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData"
+                                            "$ref": "#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.UserData"
                                         }
                                     }
                                 }
@@ -1145,7 +1145,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData"
+                                            "$ref": "#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.UserData"
                                         }
                                     }
                                 }
@@ -1305,7 +1305,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData": {
+        "github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_admin_user.RoleData": {
             "type": "object",
             "required": [
                 "created_at",
@@ -1334,7 +1334,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.UserData": {
+        "github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_admin_user.UserData": {
             "type": "object",
             "required": [
                 "created_at",
@@ -1361,7 +1361,7 @@ const docTemplate = `{
                 "roles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_admin_user.RoleData"
+                        "$ref": "#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_admin_user.RoleData"
                     }
                 },
                 "updated_at": {
@@ -1370,7 +1370,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData": {
+        "github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.RoleData": {
             "type": "object",
             "required": [
                 "created_at",
@@ -1402,7 +1402,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.UserData": {
+        "github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.UserData": {
             "type": "object",
             "required": [
                 "created_at",
@@ -1429,7 +1429,7 @@ const docTemplate = `{
                 "roles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_ChanJuiHuang_go-backend-framework_internal_http_controller_user.RoleData"
+                        "$ref": "#/definitions/github_com_chan-jui-huang_go-backend-framework_v2_internal_http_controller_user.RoleData"
                     }
                 },
                 "updated_at": {
