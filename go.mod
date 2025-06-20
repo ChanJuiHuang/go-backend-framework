@@ -1,11 +1,11 @@
 module github.com/chan-jui-huang/go-backend-framework/v2
 
-go 1.24.3
+go 1.24.4
 
 require (
 	github.com/casbin/casbin/v2 v2.107.0
 	github.com/casbin/gorm-adapter/v3 v3.32.0
-	github.com/chan-jui-huang/go-backend-package v1.0.0
+	github.com/chan-jui-huang/go-backend-package v1.0.1
 	github.com/fatih/structs v1.1.0
 	github.com/gin-gonic/gin v1.10.1
 	github.com/go-playground/form/v4 v4.2.1
@@ -284,7 +284,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.18.0 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
-	golang.org/x/exp v0.0.0-20250606033433-dcc06ee1d476 // indirect
+	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250210185358-939b2ce775ac // indirect
 	golang.org/x/mod v0.25.0 // indirect
 	golang.org/x/net v0.41.0 // indirect
